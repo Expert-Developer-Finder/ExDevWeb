@@ -6,8 +6,6 @@ import {
   Typography,
   Link,
   Avatar,
-  Icon,
-  Alert,
 } from "@mui/material";
 import useStyles from "./styles.js";
 import { useLocation } from "react-router-dom";
@@ -102,7 +100,7 @@ function NavBarHome() {
                 alt={user.result.name}
                 src={user.result.imageUrl}
               >
-                {user.result.name.charAt(0)}{" "}
+                {user.result.name.charAt(0).toUpperCase()}{" "}
               </Avatar>
               <Typography className={classes.userName}>
                 {user.result.name}{" "}

@@ -15,7 +15,7 @@ const WelcomeScreen = () => {
 
         </div>
       </div>
-      <img className={classes.img} src={require("../../assets/male01.svg")} />
+      <img alt="A welcoming man" className={classes.img} src={require("../../assets/male01.svg")} />
 
     </Container>
   )

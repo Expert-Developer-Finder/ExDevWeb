@@ -1,11 +1,12 @@
 import React, {useState} from 'react'
-import { Container,  Grid, Typography } from '@mui/material'
+import { Container,  Grid, Typography , Alert, AlertTitle} from '@mui/material'
 import useStyles from "./styles.js";
 import { Input } from '../../components';
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import { useHistory } from 'react-router-dom';
 import { signup } from '../../actions/auth.js';
 import { Button } from '@material-ui/core';
+import { LOGOUT } from '../../constants/actionTypes.js';
 
 const initialState = {firstName: "", lastName: "", email:"", password:"", confirmPassword: "" } ;
 const Register = () => {
@@ -14,14 +15,16 @@ const Register = () => {
     const dispatch =  useDispatch();
     const history = useHistory(); 
     const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);  
   
     const [formData, setFormData] = useState(initialState);
     const handleSubmit = (e)=> {
       e.preventDefault();
+      
+      console.log("Data being sent (Register.jsx):");
       console.log(formData);
       dispatch(signup(formData, history));
+
     };
 
     const handleChange  = (e)=> {
@@ -30,16 +33,27 @@ const Register = () => {
 
     const handlePasswordShow  = ()=>  setShowPassword(! showPassword);
     const handleConfirmPasswordShow  = ()=>  setShowConfirmPassword(! showConfirmPassword);
-
-  
-  
-   
+    const { authData, error } = useSelector((state) => state.auth);
   
   return (
     <Container className={classes.container} >  
-        <img className={classes.img} src={require("../../assets/female01.svg")} />
+        <img alt="A welcoming woman" className={classes.img} src={require("../../assets/female01.svg")} />
 
         <div>
+            {error && authData && (
+              <>
+                <Alert
+                  severity="error"
+                  onClose={() => {
+                    dispatch({ type: LOGOUT });
+                  }}
+                >
+                  <AlertTitle>Error</AlertTitle>
+                  {authData} — <strong>Try again</strong>
+                </Alert>
+                <br/>
+              </>
+            )}
             
             <Typography variant='h3' >Register Now</Typography>
             <form className={classes.form} onSubmit={handleSubmit}>
@@ -57,6 +71,9 @@ const Register = () => {
                         <Button href='login'> Don't have an account? Sign up</Button>
                     </Grid>
                 </Grid>
+
+              
+
             
             </form>
         </div>

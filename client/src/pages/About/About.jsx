@@ -38,7 +38,7 @@ export default function About() {
             <div className="info-card">
               <img
                 src={require("../../assets/about/team-members/bora.jpeg")}
-                alt="A photo of Bora Altınok"
+                alt="Bora Altınok"
               />
               <div className="info-card-text">
                 <h2>Bora Altınok</h2>
@@ -46,7 +46,7 @@ export default function About() {
                 <a href="mailto:boraaltinok26@gmail.com">
                   <p>boraaltinok26@gmail.com</p>
                 </a>
-                <a href="https://github.com/boraaltinok" target="_blank">
+                <a  rel="noopener noreferrer" href="https://github.com/boraaltinok" target="_blank">
                   Visit Bora's GitHub Profile
                 </a>
               </div>
@@ -55,7 +55,7 @@ export default function About() {
             <div className="info-card">
               <img
                 src={require("../../assets/about/team-members/ege.jpg")}
-                alt="A photo of Ege Ergül"
+                alt="Ege Ergül"
               />
 
               <div className="info-card-text">
@@ -64,7 +64,7 @@ export default function About() {
                 <a href="mailto:egeergull2001@gmail.com">
                   <p>egeergull2001@gmail.com</p>
                 </a>
-                <a href="https://github.com/egeergul" target="_blank">
+                <a  rel="noopener noreferrer" href="https://github.com/egeergul" target="_blank">
                   Visit Ege's GitHub Profile
                 </a>
               </div>
@@ -73,7 +73,7 @@ export default function About() {
             <div className="info-card">
               <img
                 src={require("../../assets/about/team-members/ali.jpg")}
-                alt="A photo of Ali Eren Günaltılı"
+                alt="Ali Eren Günaltılı"
               />
 
               <div className="info-card-text">
@@ -83,7 +83,7 @@ export default function About() {
                   <p>eren.gunaltili@ug.bilkent.edu.tr</p>
                 </a>
 
-                <a href="https://github.com/alierengunaltili" target="_blank">
+                <a href="https://github.com/alierengunaltili" target="_blank" rel="noopener noreferrer" >
                   Visit Ali Eren's GitHub Profile
                 </a>
               </div>
@@ -94,7 +94,7 @@ export default function About() {
             <div class="info-card">
               <img
                 src={require("../../assets/about/team-members/ceyda.jpg")}
-                alt="A photo of Ceyda Şahin"
+                alt="Ceyda Şahin"
               />
 
               <div class="info-card-text">
@@ -104,7 +104,7 @@ export default function About() {
                   <p>ceyda.sahin@ug.bilkent.edu.tr</p>
                 </a>
 
-                <a href="https://github.com/ceydas" target="_blank">
+                <a href="https://github.com/ceydas" target="_blank" rel="noopener noreferrer" >
                   Visit Ceyda's GitHub Profile
                 </a>
               </div>
@@ -113,7 +113,7 @@ export default function About() {
             <div class="info-card">
               <img
                 src={require("../../assets/about/team-members/tuna.png")}
-                alt="A photo of Tuna Dalbeler"
+                alt="Tuna Dalbeler"
               />
 
               <div class="info-card-text">
@@ -123,7 +123,7 @@ export default function About() {
                   <p>tuna.dalbeler@ug.bilkent.edu.tr</p>
                 </a>
 
-                <a href="https://github.com/contactLost" target="_blank">
+                <a href="https://github.com/contactLost" target="_blank" rel="noopener noreferrer" >
                   Visit Tunas's GitHub Profile
                 </a>
               </div>
@@ -135,7 +135,7 @@ export default function About() {
               <img
               style={{ objectFit:"contain"}}
                 src={require("../../assets/about/team-members/eray_tuzun.jpg")}
-                alt="A photo of Eray Tüzün"
+                alt="Eray Tüzün"
               />
 
               <div class="info-card-text">
@@ -144,7 +144,7 @@ export default function About() {
                   <p>eraytuzun@cs.bilkent.edu.tr</p>
                 </a>
 
-                <a href="https://www.eraytuzun.com/index.html" target="_blank">
+                <a href="https://www.eraytuzun.com/index.html" target="_blank" rel="noopener noreferrer" >
                   Visit Mr. Tüzün's Website
                 </a>
               </div>
