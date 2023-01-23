@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import NavBarHome from './NavBarHome';
-import NavBarWelcome from './NavBarWelcome';
+import NavBarWelcome from './NavBarWelcome/NavBarWelcome';
 
 const NavBar = () => {
-
+    
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
 
     useEffect(()=> {
