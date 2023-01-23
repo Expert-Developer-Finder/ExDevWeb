@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import NavBarHome from './NavBarHome';
+import NavBarHome from './NavBarHome/NavBarHome';
 import NavBarWelcome from './NavBarWelcome/NavBarWelcome';
 
 const NavBar = () => {
