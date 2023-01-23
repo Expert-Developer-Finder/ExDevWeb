@@ -2,8 +2,9 @@ import React, {useEffect, useState} from 'react';
 import NavBarHome from './NavBarHome/NavBarHome';
 import NavBarWelcome from './NavBarWelcome/NavBarWelcome';
 
+
+
 const NavBar = () => {
-    
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
 
     useEffect(()=> {
@@ -12,7 +13,7 @@ const NavBar = () => {
     }, []);
    
     return (
-        user ? <NavBarHome/> : <NavBarWelcome/>
+        user ? <NavBarHome/> : <NavBarWelcome />
     );
 
     
