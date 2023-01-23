@@ -29,11 +29,8 @@ export default makeStyles((theme) => ({
       width: 'auto',
     },
   },
-
   menuItem: {
     marginLeft: '20px',
   },
-  
-
  
 }));
