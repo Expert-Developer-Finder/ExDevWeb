@@ -1,9 +1,52 @@
-import React from 'react'
+import * as React from "react";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import { Container } from "@mui/material";
 
-const Plans = () => {
-  return (
-    <div>Plans</div>
-  )
+function createData(price, condition) {
+  return { price, condition};
 }
 
-export default Plans
+const rows = [
+  createData("Free", "if we get A+"),
+  createData("1$", "if we get A"),
+  createData("100$", "if we get B+ or lower")
+
+];
+
+export default function Plans() {
+  return (
+    <Container style={{ display:"flex", justifyContent:"center"}} >
+      <TableContainer style={{marginTop:100, maxWidth:500}}   component={Paper} elevation={6}>
+        <Table  aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Price</TableCell>
+              <TableCell align="right">Condition</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow
+                key={row.price}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {row.price}
+                </TableCell>
+                <TableCell align="right">{row.condition}</TableCell>
+                <TableCell align="right">{row.fat}</TableCell>
+
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Container>
+  );
+}
