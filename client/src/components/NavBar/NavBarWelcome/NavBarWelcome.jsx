@@ -12,7 +12,7 @@ function NavBarWelcome(props) {
   const menuItems = [{path:"/", index:0, title: "Home"},{path:"/plans", index: 1, title: "Plans"},{path:"/about", index: 2, title: "About"} ];
 
   useEffect(()=>{
-    const {index} =  menuItems.find((item)=> location.pathname === item.path)
+    const {index} =  menuItems.find((item)=> location.pathname === item.path) || -1;
     setBoldIndex(index);
   }, [location, menuItems]);
 

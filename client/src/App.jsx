@@ -2,9 +2,8 @@ import React from "react";
 import { Box } from "@mui/system";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { NavBar } from "./components";
-import { ComingSoon, WelcomeScreen } from "./pages";
-import About from "./pages/About/About";
-import Plans from "./pages/Plans/Plans";
+import { ComingSoon, WelcomeScreen, About, Plans, Register, Login } from "./pages";
+
 
 const App = () => {
   const user = JSON.parse(localStorage.getItem("profile"));
@@ -17,6 +16,8 @@ const App = () => {
           <Route path="/" exact component={() => (!user ? <WelcomeScreen /> : <ComingSoon />)}/>
           <Route path="/about" exact component={() => (!user ? <About/> : <Redirect to="/" /> )}/>
           <Route path="/plans" exact component={() => (!user ? <Plans/> : <Redirect to="/" /> )}/>
+          <Route path="/register" exact component={() => (!user ? <Register/> : <Redirect to="/" /> )}/>
+          <Route path="/login" exact component={() => (!user ? <Login/> : <Redirect to="/" /> )}/>
         </Switch>
       </Box>
     </BrowserRouter>

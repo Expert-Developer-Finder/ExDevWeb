@@ -10,8 +10,8 @@ const WelcomeScreen = () => {
         <Typography variant='h2'>Welcome to ExDev</Typography>
         <Typography color="secondary" className={classes.subtitle}  ><i> Get help from the best experts</i> </Typography>
         <div className={classes.buttons}>
-          <Button className={classes.button}  variant='contained' >Register</Button>
-          <Button className={classes.button} variant='outlined'>Log In</Button>
+          <Button className={classes.button}  variant='contained' href="/register" >Register</Button>
+          <Button className={classes.button} variant='outlined' href="login">Log In</Button>
 
         </div>
       </div>
