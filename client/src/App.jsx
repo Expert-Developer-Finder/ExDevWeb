@@ -2,7 +2,7 @@ import React from "react";
 import { Box } from "@mui/system";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { NavBar } from "./components";
-import { ComingSoon, WelcomeScreen, About, Plans, Register, Login } from "./pages";
+import { ComingSoon, WelcomeScreen, About, Plans, Register, Login, Profile } from "./pages";
 
 
 const App = () => {
@@ -18,6 +18,7 @@ const App = () => {
           <Route path="/plans" exact component={() => (!user ? <Plans/> : <Redirect to="/" /> )}/>
           <Route path="/register" exact component={() => (!user ? <Register/> : <Redirect to="/" /> )}/>
           <Route path="/login" exact component={() => (!user ? <Login/> : <Redirect to="/" /> )}/>
+          <Route path="/profile" exact component={() => (user ? <Profile/> : <Redirect to="/" /> )}/>
         </Switch>
       </Box>
     </BrowserRouter>

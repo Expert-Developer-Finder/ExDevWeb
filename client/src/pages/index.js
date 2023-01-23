@@ -4,5 +4,6 @@ import Login from "./Login/Login";
 import Register from "./Register/Register";
 import Plans from "./Plans/Plans";
 import About from "./About/About";
+import Profile from "./Profile/Profile";
 
-export {WelcomeScreen, ComingSoon, Login, Register, Plans, About};
+export {WelcomeScreen, ComingSoon, Login, Register, Plans, About, Profile};
