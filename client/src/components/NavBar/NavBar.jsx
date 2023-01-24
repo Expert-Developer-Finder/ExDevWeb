@@ -27,8 +27,8 @@ function NavBar() {
 
   const menuItems = [
     { path: "/", index: 0, title: "Home" },
-    { path: "/plans", index: 1, title: "Plans" },
-    { path: "/about", index: 2, title: "About" },
+    { path: "/join-repo", index: 1, title: "Join" },
+    { path: "/create-repo", index: 2, title: "Create" },
   ];
 
   useEffect(() => {
@@ -72,8 +72,7 @@ function NavBar() {
         ))}
       <div className={classes.main}>
         <Link underline="none" href="/">
-          {" "}
-          <Typography className={classes.heading}>ExDev</Typography>{" "}
+          <Typography className={classes.heading}>ExDev</Typography>
         </Link>
         {show &&
           menuItems.map((item) => {

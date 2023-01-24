@@ -3,7 +3,6 @@ import { Avatar, Button, Container, Divider, Grid, TextField } from  "@mui/mater
 import { useDispatch, useSelector } from "react-redux";
 import FileBase from "react-file-base64";
 import { useHistory } from "react-router-dom";
-import { ClassNames } from "@emotion/react";
 import useStyles from "./styles.js";
 import { Typography } from "@material-ui/core";
 import AlertDialog from "../../components/AlertDialog/AlertDialog.jsx";
@@ -13,7 +12,6 @@ const Profile = () => {
   const history = useHistory();
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-
 
   const [userData, setUserData] = useState(
     JSON.parse(localStorage.getItem("profile")).result
@@ -36,13 +34,12 @@ const Profile = () => {
         onYes= {logout}
       />
 
-
       <Typography className={classes.mt} variant="h3">Profile Settings</Typography>
       <Grid container>
         <Grid item sm={12} md={6}>
           <form autoComplete="off" noValidate onSubmit={()=>{}} className={classes.form}>
             <TextField margin="normal" name="name" variant="outlined" label="Name" fullWidth value={userData?.name} onChange={(e) => {   setUserData({ ...userData, name: e.target.value }); }}/>
-            <TextField margin="normal" name="bio" variant="outlined" label="Bio" fullWidth value={""} onChange={() => {} } />
+            <TextField margin="normal" name="bio" variant="outlined" label="Biography" fullWidth value={userData?.bio} onChange={(e) => {   setUserData({ ...userData, bio: e.target.value })}} />
             <Button variant="contained" color="success" size="small" onClick={()=>{}} fullWidth> Update Profile</Button>
           </form>
         </Grid>
@@ -73,7 +70,7 @@ const Profile = () => {
           <Typography>
             When you delete your account, all of your personal data will be erased as well. Note that this action is non-recoverable 
           </Typography>
-          <Button className={classes.mt} variant="contained" color="error" onClick={()=>{}}>Delete Account</Button>
+          <Button className={classes.mt} variant="contained" color="error" onClick={()=>{}} >Delete Account</Button>
           <br/>
           <br/>
           <Typography variant="h5">Safe Logout</Typography>

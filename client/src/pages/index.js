@@ -4,5 +4,7 @@ import Login from "./Login/Login";
 import Register from "./Register/Register";
 import Profile from "./Profile/Profile";
 import Home from "./Home/Home";
+import Workspace from "./Workspace/Workspace";
+import JoinRepo from "./JoinRepo/JoinRepo";
 
-export {WelcomeScreen, ComingSoon, Login, Register, Profile, Home};
+export {WelcomeScreen, ComingSoon, Login, Register, Profile, Home, Workspace, JoinRepo};

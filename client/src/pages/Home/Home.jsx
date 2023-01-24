@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import {ComingSoon, WelcomeScreen} from "../";
+import {ComingSoon, WelcomeScreen, Workspace} from "../";
 
 const Home = () => {
   const location = useLocation();
@@ -15,7 +15,7 @@ const Home = () => {
   return (
     <>
     {user ? 
-        <ComingSoon/> :
+        <Workspace/> :
         <WelcomeScreen/>
     }
     </>
