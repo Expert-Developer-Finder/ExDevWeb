@@ -1,0 +1,32 @@
+.left {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 50px;
+} 
+
+.left-img {
+    margin-top: 30px;
+    max-width: 100%;
+    border-radius: 20px;
+} 
+
+.right {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 50px;
+    align-items: center;
+} 
+
+.quote {
+    margin-bottom: 25px;
+}
+
+.quote b {
+    margin-left: 25px;
+
+}
+
+.t {background: red;}
+

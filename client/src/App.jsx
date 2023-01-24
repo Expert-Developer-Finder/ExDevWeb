@@ -1,12 +1,20 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { Box } from "@mui/system";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { NavBar } from "./components";
 import { ComingSoon, WelcomeScreen, About, Plans, Register, Login, Profile } from "./pages";
-
+import {useSelector} from "react-redux";
 
 const App = () => {
-  const user = JSON.parse(localStorage.getItem("profile"));
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
+
+  const {authData} = useSelector((state)=> state.auth); 
+
+  useEffect(()=> {
+    // JWT...
+    setUser(JSON.parse(localStorage.getItem("profile")));
+}, [authData]);
+
 
   return (
     <BrowserRouter>

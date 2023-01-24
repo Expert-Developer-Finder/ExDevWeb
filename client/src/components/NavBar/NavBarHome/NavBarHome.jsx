@@ -40,7 +40,7 @@ function NavBarHome() {
     const { index } =
       menuItems.find((item) => location.pathname === item.path) || -1;
     setBoldIndex(index);
-  }, [menuItems]);
+  }, [menuItems, location.pathname]);
 
   useEffect(() => {
     // JWT...
