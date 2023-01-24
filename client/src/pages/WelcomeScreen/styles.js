@@ -2,12 +2,16 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles((theme) => ({
     container: {
-        marginTop: 50,
+        marginTop: 100,
         display:"flex",
         flexDirection:"row",
         [theme.breakpoints.down('sm')]: {
             flexDirection: 'column',
           },
+    },
+
+    mt: {
+        marginTop:85,
     },
 
     buttons: {

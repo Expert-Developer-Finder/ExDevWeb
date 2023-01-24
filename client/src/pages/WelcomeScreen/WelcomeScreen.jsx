@@ -6,7 +6,7 @@ const WelcomeScreen = () => {
   const classes = useStyles();
   return (
     <Container className={classes.container} >
-      <div >
+      <div className={classes.mt} >
         <Typography variant='h2'>Welcome to ExDev</Typography>
         <Typography color="secondary" className={classes.subtitle}  ><i> Get help from the best experts</i> </Typography>
         <div className={classes.buttons}>
