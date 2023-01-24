@@ -27,12 +27,33 @@ export const signin = async (req, res) => {
 
 }
 
+const checkIfPasswordIsStrong = (pwd) => {
+    if (pwd.length < 8) return false;
+
+    var hasCapital = false;
+    if( /[A-Z]/.test(pwd)) hasCapital = true
+    if (!hasCapital) return false;
+    
+    var hasNumeric = false;
+    for (var i = 0; i < pwd.length; i++) 
+        if(pwd.charAt(i) >= '0' &&  pwd.charAt(i) <= '9' ) hasNumeric = true;
+    if (!hasNumeric) return false;
+
+    return (pwd.includes('!') || pwd.includes('@') || pwd.includes('#') || pwd.includes('&') || pwd.includes('*') || pwd.includes('$') || pwd.includes('.'));
+}
+
 export const signup = async (req, res) => {
     const {email, password, firstName, lastName, confirmPassword} = req.body;
 
     try {
         const existingUser = await User.findOne({email});
         if(existingUser) return res.status(400).json({message: "User already exist!"});
+
+        // uncomment when you want to check for strong passwords
+
+        //if (!checkIfPasswordIsStrong(password)) return res.status(400)
+        //.json({message: "Your password should be at least 8 characters, should include at least one numeric character and one upper case letter, and should have one of these special chararcters: !@#$&*."});
+    
         if(password !== confirmPassword) return res.status(400).json({message: "Passwords don't match!"});
 
         
