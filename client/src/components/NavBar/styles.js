@@ -40,7 +40,6 @@ export default makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     textAlign: "center",
-    marginLeft: 15,
   },
 
   purple: {

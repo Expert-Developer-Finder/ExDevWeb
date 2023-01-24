@@ -103,8 +103,9 @@ function NavBar() {
                 alt={user.result.name}
                 src={user.result.imageUrl}
               >
-                {user.result.name.charAt(0).toUpperCase()}{" "}
+                {user.result.name.charAt(0).toUpperCase()}
               </Avatar>
+              &nbsp;&nbsp;
               <Typography className={classes.userName}>
                 {user.result.name}{" "}
               </Typography>
