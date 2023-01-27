@@ -2,14 +2,22 @@ import {   Divider, Grid, Paper,  Typography , Button, Checkbox, TextField,  Inp
 import { Container } from '@mui/system'
 import React, {useState} from 'react'
 import { Input } from '../../components'
+import { useHistory } from "react-router-dom";
 import useStyles from "./styles.js";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import { useDispatch, useSelector } from "react-redux";
+import { joinRepo } from '../../actions/repos';
+
 
 
 const initialState = {ownerName: "", repoName: "", repoURL: "", password: "", isChecked: false}
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 const JoinRepo = () => {
   const classes = useStyles();
+  const history = useHistory();
+  const dispatch = useDispatch();
+
+
   const [formData, setFormData] = useState(initialState);
   const [showPassword, setShowPassword] = useState(false);
   const handlePasswordShow = () => setShowPassword(!showPassword);
@@ -22,8 +30,14 @@ const JoinRepo = () => {
         setFormData({ ...formData, isChecked:false});
     } else {
         setFormData({ ...formData, isChecked:true, password: ""});
-
     }
+  }
+
+  const handleSubbmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+    dispatch(joinRepo(formData, history));
+
   }
 
   const goodToGo = ()=> {
@@ -35,6 +49,10 @@ const JoinRepo = () => {
     
     return repoInfoOk && credentailsOk;
   }
+
+
+  const  repos  = useSelector((state) => state.repos);
+  console.log(repos);
 
   return (
     <Container className={classes.container}>
@@ -79,8 +97,8 @@ const JoinRepo = () => {
                    </Grid>
                     {
                         goodToGo() ? 
-                            <Button variant='contained' className={classes.button}> Join </Button>
-                            :<Button variant='contained' disabled className={classes.button}>Join</Button>
+                            <Button variant='contained' type='submit' className={classes.button} onClick={handleSubbmit} > Join </Button>
+                            :<Button variant='contained'  disabled className={classes.button}>Join</Button>
                     }
                 </Paper>
             </Grid>

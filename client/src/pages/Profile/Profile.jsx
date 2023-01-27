@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Avatar, Button, Container, Divider, Grid, TextField } from  "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import FileBase from "react-file-base64";
 import { useHistory } from "react-router-dom";
 import useStyles from "./styles.js";
