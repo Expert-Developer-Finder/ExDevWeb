@@ -17,11 +17,13 @@ export default makeStyles((theme) => ({
     page :{
         padding: 25,
         marginTop:15,
+        marginBottom: 15
     },
     mt: {
         marginTop: 15,
         
     },
+    mr: {marginRight:10},
     or :{
         textAlign: "center"
     }, 
