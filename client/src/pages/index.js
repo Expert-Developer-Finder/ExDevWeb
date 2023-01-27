@@ -6,5 +6,16 @@ import Profile from "./Profile/Profile";
 import Home from "./Home/Home";
 import Workspace from "./Workspace/Workspace";
 import JoinRepo from "./JoinRepo/JoinRepo";
+import CreateRepo from "./CreateRepo/CreateRepo";
 
-export {WelcomeScreen, ComingSoon, Login, Register, Profile, Home, Workspace, JoinRepo};
+export {
+  WelcomeScreen,
+  ComingSoon,
+  Login,
+  Register,
+  Profile,
+  Home,
+  Workspace,
+  JoinRepo,
+  CreateRepo,
+};

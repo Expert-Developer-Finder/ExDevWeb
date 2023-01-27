@@ -10,7 +10,7 @@ import { joinRepo } from '../../actions/repos';
 
 
 
-const initialState = {ownerName: "", repoName: "", repoURL: "", password: "", isChecked: false}
+const initialState = {ownerName: "", repoName: "", repoURL: "", password: "", isChecked: false};
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 const JoinRepo = () => {
   const classes = useStyles();

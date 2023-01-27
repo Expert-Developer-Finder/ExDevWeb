@@ -2,7 +2,7 @@ import React from "react";
 import { Box } from "@mui/system";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { NavBar } from "./components";
-import {  Register, Login, Profile, Home, JoinRepo } from "./pages";
+import {  Register, Login, Profile, Home, JoinRepo, CreateRepo } from "./pages";
 
 const App = () => {
   const user = JSON.parse(localStorage.getItem("profile"));
@@ -14,6 +14,7 @@ const App = () => {
         <Switch>
           <Route path="/" exact component={()=><Home/>}/>
           <Route path="/join-repo" exact component={() => (user ? <JoinRepo/> : <Redirect to="/" /> )}/>
+          <Route path="/create-repo" exact component={() => (user ? <CreateRepo/> : <Redirect to="/" /> )}/>
           <Route path="/profile" exact component={() => (user ? <Profile/> : <Redirect to="/" /> )}/>
 
           <Route path="/register" exact component={() => (!user ? <Register/> : <Redirect to="/" /> )}/>

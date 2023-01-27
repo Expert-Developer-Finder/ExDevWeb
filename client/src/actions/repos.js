@@ -24,3 +24,20 @@ export const joinRepo = (formData, history) => async (dispatch) => {
 };
 
 
+export const createRepo = (formData, history) => async (dispatch) => {
+  try {
+    const  {data} = await api.createRepo(formData);
+
+  
+    //dispatch({ type: EXAMPLE_JOIN, payload: data });
+
+    history.push("/");
+  } catch (error) {
+    console.log("An error occured during joining repository:");
+    const errMsg = error.response && error.response.data.message
+      ? error.response.data.message
+      : error.message;
+    console.log(errMsg);
+    dispatch({ type: ERROR, data: errMsg });
+  }
+};
