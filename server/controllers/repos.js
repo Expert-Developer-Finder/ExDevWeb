@@ -1,7 +1,8 @@
 import Repo from "../models/repo.js";
+import User from "../models/user.js";
 
 export const createRepo = async (req, res) => {
-  const { repoURL, creator } = req.body;
+  const { repoURL, creator , userId} = req.body;
   const raw = repoURL.substr(19).split("/");
   const ownerName = raw[0];
   const repoName = raw[1];
@@ -12,6 +13,7 @@ export const createRepo = async (req, res) => {
 
   // Check if the repo is in GitHub
 
+  // Create the repository, add the creator as a member and repository owner
   const newRepo = new Repo({
     creator,
     ownerName,
@@ -20,11 +22,19 @@ export const createRepo = async (req, res) => {
     createdAt: new Date().toISOString(),
   });
   newRepo.members.push(creator); // Add member (creator)
-
   newRepo.repoOwners.push(creator); // Make Repo Owner (creator)
 
   try {
     await newRepo.save();
+    // Add repo id to user's joined_repos array
+    const newRepoId = newRepo._id.valueOf();
+    const user = await User.findById(userId);
+    user.owned_repos.push(newRepoId);
+
+    try {
+        await User.findByIdAndUpdate(userId, user, {new: true});
+    } catch (error) {console.log(error);}
+
     res.status(201).json(newRepo);
   } catch (error) {
     res.status(409).json({ message: error.message });
@@ -82,3 +92,18 @@ export const checkIfRepoExists = async (req, res) => {
     }
   });
 };
+
+export const getOwnedRepos = async (req, res) => {
+  const {userId} = req.params;
+
+  try {
+      const ownedRepos = await Repo.find({
+        repoOwners:{$in: userId}
+      });
+
+      res.status(200).json({data: ownedRepos});
+  } catch(err) {
+      res.status(500).json({message: "Something went wrong!"});
+  }
+  
+}

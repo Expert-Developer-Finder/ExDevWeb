@@ -24,7 +24,6 @@ export const signin = async (req, res) => {
 
     }
 
-
 }
 
 const checkIfPasswordIsStrong = (pwd) => {
