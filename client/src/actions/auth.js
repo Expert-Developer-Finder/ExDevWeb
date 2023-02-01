@@ -31,3 +31,5 @@ export const signup = (formData, history) => async (dispatch) => {
     dispatch({ type: ERROR, data: errMsg });
   }
 };
+
+

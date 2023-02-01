@@ -16,6 +16,9 @@ export const signUp =(formData) => API.post("/user/signup", formData);
 
 // REPO
 export const createRepo =(formData) => API.post("/repos/create", formData);
+export const getOwnedRepos =(id) => API.get(`/repos/${id}/owned-repos`);
+
+
 
 
  
