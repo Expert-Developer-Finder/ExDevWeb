@@ -8,6 +8,7 @@ import Workspace from "./Workspace/Workspace";
 import JoinRepo from "./JoinRepo/JoinRepo";
 import CreateRepo from "./CreateRepo/CreateRepo";
 import RepoDetail from "./RepoDetail/RepoDetail";
+import RepoSettings from "./RepoSettings/RepoSettings";
 
 export {
   WelcomeScreen,
@@ -19,5 +20,6 @@ export {
   Workspace,
   JoinRepo,
   CreateRepo,
-  RepoDetail
+  RepoDetail,
+  RepoSettings
 };

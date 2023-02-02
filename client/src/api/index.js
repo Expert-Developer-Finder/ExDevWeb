@@ -21,6 +21,8 @@ export const joinRepo =(formData) => API.post("/repos/join", formData);
 export const getOwnedRepos =(id) => API.get(`/repos/${id}/owned-repos`);
 export const getJoinedRepos =(id) => API.get(`/repos/${id}/joined-repos`);
 
+export const checkAndGetRepoWithId =(repoId, userId) => API.post(`/repos/${repoId}`, userId);
+
 
 
 

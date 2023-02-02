@@ -139,6 +139,24 @@ export const getJoinedRepos = async (req, res) => {
   
 }
 
+export const checkAndGetRepoWithId = async  (req, res) => {
+  const {repoId} = req.params;
+  const {userId} = req.body;
+ 
+  try {
+    const repo = await Repo.findById(repoId);
+    if (!repo.members.includes(userId) && !repo.repoOwners.includes(userId) ) return res.status(401).json({ message: "Unauthorised acces!" });
+  
+    res.status(200).json({data: repo});
+    
+  } catch (error) {
+    res.status(500).json({message: "Something went wrong!"});
+  }
+
+
+}
+
+
 /*Be careful addMember returns the previous repo object(added member is not shown due to findByIdAndUpdate method)*/
 export const addMember = async (req, res) => {
   try {
