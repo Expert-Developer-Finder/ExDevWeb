@@ -45,13 +45,18 @@ export const joinRepo = async (req, res) => {
   const { repoURL, password, ownerName,  repoName, isChecked : willSendJoinRequest, userId: newMemberId} = req.body;
 
   try {
-    // find repo and add the member to its members
-    const repo = await Repo.find({repoURL: repoURL});
+    // find repo 
+    const repos = await Repo.find({repoURL: repoURL});
 
     // check if repo exist
+    if(repos.length == 0) {
+      return res.status(404).json({ message: "No such a repositry has been found!" });
+    }
 
-    const repoId = repo[0]._id.valueOf();
-    repo[0].members.push(newMemberId);
+    // Add the member to repos members list
+    const repo = repos[0];
+    const repoId = repo._id.valueOf();
+    repo.members.push(newMemberId);
     
     // find user and add the repo to his joined repos
     const user = await User.findById(newMemberId);
@@ -59,7 +64,7 @@ export const joinRepo = async (req, res) => {
 
     // update the moruqs
     await User.findByIdAndUpdate(newMemberId, user, {new: true});
-    await Repo.findByIdAndUpdate(repoId, repo[0], {new: true});
+    await Repo.findByIdAndUpdate(repoId, repo, {new: true});
 
     res.status(201).json(repo);
   } catch (error) {
@@ -67,8 +72,6 @@ export const joinRepo = async (req, res) => {
   }
 
   //TODO
-
-  // Check if the repo exists in our DB
 
   // Join with password
 

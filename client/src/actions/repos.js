@@ -5,7 +5,8 @@ import {   ERROR, EXAMPLE_JOIN, CREATE_REPO, GET_OWNED_REPOS} from "../constants
 
 export const joinRepo = (formData, history) => async (dispatch) => {
   try {
-    await api.joinRepo(formData);
+    var res = await api.joinRepo(formData);
+    console.log(res);
     return;
 
 
