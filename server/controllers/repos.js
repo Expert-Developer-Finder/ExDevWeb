@@ -21,7 +21,7 @@ export const createRepo = async (req, res) => {
     repoURL,
     createdAt: new Date().toISOString(),
   });
-  newRepo.members.push(creator); // Add member (creator)
+  // newRepo.members.push(creator); // Add member (creator)
   newRepo.repoOwners.push(creator); // Make Repo Owner (creator)
 
   try {
@@ -46,37 +46,55 @@ export const joinRepo = async (req, res) => {
 
   try {
     // find repo 
-    const repos = await Repo.find({repoURL: repoURL});
+    if (repoURL.length && (ownerName.length || repoName.length) ) {
+      return res.status(405).json({ message: "Enter only repository owner and name as a pair, or the repository URL!" });
+    } 
+    let repos;
+    if (!repoURL.length ) {
+      repos = await Repo.find({repoURL: `https://github.com/${ownerName}/${repoName}`});
+
+    } else {
+      repos = await Repo.find({repoURL: repoURL});
+    }
 
     // check if repo exist
     if(repos.length == 0) {
       return res.status(404).json({ message: "No such a repositry has been found!" });
     }
 
-    // Add the member to repos members list
+    // Get the repo & repoId & user
     const repo = repos[0];
     const repoId = repo._id.valueOf();
-    repo.members.push(newMemberId);
-    
-    // find user and add the repo to his joined repos
     const user = await User.findById(newMemberId);
-    user.joined_repos.push(repoId);
 
-    // update the moruqs
-    await User.findByIdAndUpdate(newMemberId, user, {new: true});
-    await Repo.findByIdAndUpdate(repoId, repo, {new: true});
+    // Check if the member has already joined to the repository
+    if(repo.members.includes(newMemberId)) {
+      return res.status(405).json({ message: "You are already a member of this repository!" });
+    }
+
+
+    // JOIN WITH PASSWORD
+    if (!willSendJoinRequest) {
+      // Add the member to repos members list
+      repo.members.push(newMemberId);
+      
+      // find user and add the repo to his joined repos
+      user.joined_repos.push(repoId);
+
+      // update the moruqs
+      await User.findByIdAndUpdate(newMemberId, user, {new: true});
+      await Repo.findByIdAndUpdate(repoId, repo, {new: true});
+    } 
+    
+    // SEND A JOINING REQUEST
+    else {
+
+    }
 
     res.status(201).json(repo);
   } catch (error) {
     res.status(409).json({ message: error.message });
   }
-
-  //TODO
-
-  // Join with password
-
-  // Create connection request
-
 
 };
 
@@ -147,3 +165,20 @@ export const getOwnedRepos = async (req, res) => {
   }
   
 }
+
+export const getJoinedRepos = async (req, res) => {
+  const {userId} = req.params;
+
+  try {
+      const joinedRepos = await Repo.find({
+        members:{$in: userId}
+      });
+
+      res.status(200).json({data: joinedRepos});
+  } catch(err) {
+      res.status(500).json({message: "Something went wrong!"});
+  }
+  
+}
+
+
