@@ -15,7 +15,7 @@ const OwnedRepoItem = ({repo}) => {
             <Badge badgeContent={4} color="primary">
                 <NotificationsIcon color="action" />
             </Badge>
-            <Button className={classes.button}>Visit</Button>
+            <Button variant='contained' className={classes.button}>Visit</Button>
         </Grid>
     </Grid>
   )

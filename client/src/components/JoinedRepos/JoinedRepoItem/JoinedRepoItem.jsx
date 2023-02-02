@@ -15,7 +15,7 @@ const JoinedRepoItem = ({repo}) => {
             <Badge badgeContent={4} color="primary">
                 <NotificationsIcon color="action" />
             </Badge>
-            <Button>Visit</Button>
+            <Button variant='contained' color='secondary' className={classes.button}>Visit</Button>
         </Grid>
     </Grid>
   )
