@@ -1,9 +1,10 @@
-import { Button, Container, Grid, Paper, TextField, Typography } from '@mui/material';
+import { Alert, AlertTitle, Button, Container,  Paper, TextField, Typography } from '@mui/material';
 import React, {useState} from 'react';
 import useStyles from "./styles.js";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { createRepo } from '../../actions/repos.js';
+import { CLEAR_ERROR } from '../../constants/actionTypes.js';
 
 const CreateRepo = () => {
   const classes = useStyles();
@@ -21,10 +22,26 @@ const CreateRepo = () => {
 
   }
 
+  const  {errorMessage, error}  = useSelector((state) => state.repos);
 
   return (
     <Container className={classes.container}>
       <Typography variant='h3'>Create Repository</Typography>
+      {error && errorMessage && (
+        <>
+          <Alert
+          severity="error"
+          onClose={() => {
+              dispatch({ type: CLEAR_ERROR });
+          }}
+          >
+          <AlertTitle>Error</AlertTitle>
+          {errorMessage} — <strong>Try again</strong>
+          </Alert>
+          <br/>
+        </>
+      )}
+
       <Paper className={classes.page} elevation={3}>
         <form className={classes.form} >
           <TextField onChange={handleChange} name='repoURL' required label="Repository URL" variant='outlined' fullWidth></TextField>

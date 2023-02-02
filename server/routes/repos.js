@@ -2,7 +2,7 @@ import express from "express";
 
 import {
   addMember,
-  checkIfRepoExists,
+
   createRepo,
   getRepo,
   addRepoOwner,
@@ -16,7 +16,6 @@ const repoRouter = express.Router();
 repoRouter.post("/create", createRepo);
 repoRouter.post("/join", joinRepo);
 
-repoRouter.get("/check-if-exists", checkIfRepoExists);
 repoRouter.get("/:userId/owned-repos", getOwnedRepos);
 repoRouter.get("/:userId/joined-repos", getJoinedRepos);
 
