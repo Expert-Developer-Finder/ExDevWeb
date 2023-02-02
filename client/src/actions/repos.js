@@ -5,7 +5,9 @@ import {   ERROR, EXAMPLE_JOIN, CREATE_REPO, GET_OWNED_REPOS} from "../constants
 
 export const joinRepo = (formData, history) => async (dispatch) => {
   try {
-   // const  {data} = await api.signIn(formData);
+    await api.joinRepo(formData);
+    return;
+
 
     var data = {};
     data["ownerName"] = formData.ownerName;
@@ -26,9 +28,6 @@ export const joinRepo = (formData, history) => async (dispatch) => {
 
 export const createRepo = (formData, history) => async (dispatch) => {
   try {
-    const userId = JSON.parse(localStorage.getItem("profile")).result._id;
-    formData["userId"] = userId;
-
     const  {data} = await api.createRepo(formData);
     dispatch({ type: CREATE_REPO, payload: data });
 

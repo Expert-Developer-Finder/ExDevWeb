@@ -2,7 +2,7 @@ import Repo from "../models/repo.js";
 import User from "../models/user.js";
 
 export const createRepo = async (req, res) => {
-  const { repoURL, creator , userId} = req.body;
+  const { repoURL, creator } = req.body;
   const raw = repoURL.substr(19).split("/");
   const ownerName = raw[0];
   const repoName = raw[1];
@@ -28,11 +28,11 @@ export const createRepo = async (req, res) => {
     await newRepo.save();
     // Add repo id to user's joined_repos array
     const newRepoId = newRepo._id.valueOf();
-    const user = await User.findById(userId);
+    const user = await User.findById(creator);
     user.owned_repos.push(newRepoId);
 
     try {
-        await User.findByIdAndUpdate(userId, user, {new: true});
+        await User.findByIdAndUpdate(creator, user, {new: true});
     } catch (error) {console.log(error);}
 
     res.status(201).json(newRepo);
@@ -40,6 +40,43 @@ export const createRepo = async (req, res) => {
     res.status(409).json({ message: error.message });
   }
 };
+
+export const joinRepo = async (req, res) => {
+  const { repoURL, newMember } = req.body;
+  // const { repoURL, newMember, hasPassword, password } = req.body;
+  
+
+
+  try {
+    // find repo and add the member to its members
+    const repo = await Repo.find({repoURL: repoURL})
+    console.log(repo);
+    return;
+
+    // find user and add the repo to his joined repos
+    const user = await User.findById(newMember);
+    user.owned_repos.push(newRepoId);
+
+    // update the moruqs
+    await User.findByIdAndUpdate(newMember, user, {new: true});
+    await Repo.findByIdAndUpdate(repo._id, repo, {new: true});
+    
+    res.status(201).json(repo);
+  } catch (error) {
+    res.status(409).json({ message: error.message });
+  }
+
+  //TODO
+
+  // Check if the repo exists in our DB
+
+  // Join with password
+
+  // Create connection request
+
+
+};
+
 
 export const getRepo = async (req, res) => {
   const repo = await Repo.findById(req.params.id)

@@ -5,12 +5,15 @@ import {
   createRepo,
   getRepo,
   addRepoOwner,
-  getOwnedRepos
+  getOwnedRepos,
+  joinRepo
 } from "../controllers/repos.js";
 
 const repoRouter = express.Router();
 
 repoRouter.post("/create", createRepo);
+repoRouter.post("/join", joinRepo);
+
 repoRouter.get("/check-if-exists", checkIfRepoExists);
 repoRouter.get("/:userId/owned-repos", getOwnedRepos);
 
