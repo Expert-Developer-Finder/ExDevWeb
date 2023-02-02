@@ -3,7 +3,7 @@ import {   ERROR, JOIN_REPO, CREATE_REPO, GET_OWNED_REPOS, GET_JOINED_REPOS} fro
 
 
 const errorHandling = (error) => {
-  console.log("An error occured during login:");
+  console.log("An error occured:");
   const errMsg = error.response && error.response.data.message
     ? error.response.data.message
     : error.message;

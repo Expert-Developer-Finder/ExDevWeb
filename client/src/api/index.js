@@ -13,6 +13,7 @@ API.interceptors.request.use((req)=> {
 // AUTH
 export const signIn =(formData) => API.post("/user/signin", formData);
 export const signUp =(formData) => API.post("/user/signup", formData);
+export const changePassword =(formData, userId) => API.post(`/user/${userId}/change-password`, formData);
 
 // REPO
 export const createRepo =(formData) => API.post("/repos/create", formData);
