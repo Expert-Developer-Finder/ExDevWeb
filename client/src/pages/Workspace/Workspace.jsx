@@ -2,7 +2,7 @@ import { Container, Divider, Typography } from '@mui/material';
 import React from 'react';
 import { useEffect } from 'react';
 import {useDispatch} from "react-redux";
-import { getOwnedRepos } from '../../actions/repos';
+import { getOwnedRepos, getJoinedRepos } from '../../actions/repos';
 import { JoinedRepos, OwnedRepos } from '../../components';
 import useStyle from "./styles.js";
 
@@ -13,6 +13,7 @@ const Workspace = () => {
 
   useEffect(() => {
     dispatch(getOwnedRepos(user._id));
+    dispatch(getJoinedRepos(user._id));
   }, []);
 
   

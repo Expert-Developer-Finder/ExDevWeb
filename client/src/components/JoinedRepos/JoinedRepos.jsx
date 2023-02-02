@@ -5,7 +5,8 @@ import JoinedRepoItem from './JoinedRepoItem/JoinedRepoItem';
 
 
 const JoinedRepos = () => {
-  const repos = useSelector((state)=>state.repos).joinedRepos;
+  const repos = useSelector((state)=>state.repos).joinedRepos.data;
+
 
   return (
     <Container>
@@ -21,7 +22,6 @@ const JoinedRepos = () => {
               }
             </> :<>Loading</>
         }
-         
 
     </Container>
   )

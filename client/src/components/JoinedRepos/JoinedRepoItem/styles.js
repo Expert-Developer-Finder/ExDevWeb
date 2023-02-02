@@ -19,6 +19,9 @@ export default makeStyles((theme) => ({
     },
     bottom: {
         marginTop: 10
+    },
+    button: {
+        marginLeft: 15
     }
   
 }));

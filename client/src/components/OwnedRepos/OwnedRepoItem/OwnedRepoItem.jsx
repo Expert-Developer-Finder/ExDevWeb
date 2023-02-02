@@ -3,6 +3,8 @@ import React from 'react';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import useStyles from "./styles.js";
 
+
+
 const OwnedRepoItem = ({repo}) => {
   const classes = useStyles();
 
@@ -15,7 +17,7 @@ const OwnedRepoItem = ({repo}) => {
             <Badge badgeContent={4} color="primary">
                 <NotificationsIcon color="action" />
             </Badge>
-            <Button className={classes.button}>Visit</Button>
+            <Button variant='contained' href={`repo/${repo._id}`} className={classes.button}  >Visit</Button>
         </Grid>
     </Grid>
   )
