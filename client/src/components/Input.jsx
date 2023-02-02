@@ -39,6 +39,7 @@ const Input = ({name, half, label, autoFocus, type, handlePasswordShow, handleCh
             autoFocus={autoFocus}
             type={type}
             margin="normal"
+
             InputProps={(name === "password" || name === "confirmPassword" )  ? {
                 endAdornment: (
                     <InputAdornment position='end'>
