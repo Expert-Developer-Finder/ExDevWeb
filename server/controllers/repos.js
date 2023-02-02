@@ -42,25 +42,25 @@ export const createRepo = async (req, res) => {
 };
 
 export const joinRepo = async (req, res) => {
-  const { repoURL, newMember } = req.body;
-  // const { repoURL, newMember, hasPassword, password } = req.body;
-  
-
+  const { repoURL, password, ownerName,  repoName, isChecked : willSendJoinRequest, userId: newMemberId} = req.body;
 
   try {
     // find repo and add the member to its members
-    const repo = await Repo.find({repoURL: repoURL})
-    console.log(repo);
-    return;
+    const repo = await Repo.find({repoURL: repoURL});
 
+    // check if repo exist
+
+    const repoId = repo[0]._id.valueOf();
+    repo[0].members.push(newMemberId);
+    
     // find user and add the repo to his joined repos
-    const user = await User.findById(newMember);
-    user.owned_repos.push(newRepoId);
+    const user = await User.findById(newMemberId);
+    user.joined_repos.push(repoId);
 
     // update the moruqs
-    await User.findByIdAndUpdate(newMember, user, {new: true});
-    await Repo.findByIdAndUpdate(repo._id, repo, {new: true});
-    
+    await User.findByIdAndUpdate(newMemberId, user, {new: true});
+    await Repo.findByIdAndUpdate(repoId, repo[0], {new: true});
+
     res.status(201).json(repo);
   } catch (error) {
     res.status(409).json({ message: error.message });

@@ -35,6 +35,9 @@ const JoinRepo = () => {
 
   const handleSubbmit = (e) => {
     e.preventDefault();
+    const user  = JSON.parse(localStorage.getItem("profile")).result;
+    formData["userId"] = user._id;
+    
     console.log(formData);
     dispatch(joinRepo(formData, history));
 
