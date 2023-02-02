@@ -2,7 +2,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 export default makeStyles((theme) => ({
     container: {
-        background: "#D6E9DF",
+        background: "#DAE9F6",
         display:"flex",
         justifyContent:"space-between",
         alignItems:"center",
@@ -19,9 +19,6 @@ export default makeStyles((theme) => ({
     },
     bottom: {
         marginTop: 10
-    },
-    button :{
-        marginLeft: 15
     }
   
 }));

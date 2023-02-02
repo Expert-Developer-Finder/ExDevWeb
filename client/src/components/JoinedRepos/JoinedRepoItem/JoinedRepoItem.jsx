@@ -3,7 +3,7 @@ import React from 'react';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import useStyles from "./styles.js";
 
-const OwnedRepoItem = ({repo}) => {
+const JoinedRepoItem = ({repo}) => {
   const classes = useStyles();
 
   return (
@@ -15,10 +15,10 @@ const OwnedRepoItem = ({repo}) => {
             <Badge badgeContent={4} color="primary">
                 <NotificationsIcon color="action" />
             </Badge>
-            <Button className={classes.button}>Visit</Button>
+            <Button>Visit</Button>
         </Grid>
     </Grid>
   )
 }
 
-export default OwnedRepoItem
+export default JoinedRepoItem
