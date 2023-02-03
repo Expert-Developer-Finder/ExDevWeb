@@ -8,6 +8,7 @@ const repoSchema = mongoose.Schema({
    creator: {type: String, require: true},
    repoOwners: { type: [String],default: []},
    members: { type: [String],default: []},
+   sharedPass : {type: String, required: true},
    id: {type: String},
 });
 

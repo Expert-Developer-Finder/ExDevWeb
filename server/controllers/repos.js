@@ -1,18 +1,46 @@
 import Repo from "../models/repo.js";
 import User from "../models/user.js";
 import fetch from "node-fetch";
+import bcrypt from "bcrypt";
 
 
+
+const checkIfPasswordIsStrong = (pwd) => {
+  if (pwd.length < 8) return false;
+
+  var hasCapital = false;
+  if (/[A-Z]/.test(pwd)) hasCapital = true;
+  if (!hasCapital) return false;
+
+  var hasNumeric = false;
+  for (var i = 0; i < pwd.length; i++)
+    if (pwd.charAt(i) >= "0" && pwd.charAt(i) <= "9") hasNumeric = true;
+  if (!hasNumeric) return false;
+
+  return (
+    pwd.includes("!") ||
+    pwd.includes("@") ||
+    pwd.includes("#") ||
+    pwd.includes("&") ||
+    pwd.includes("*") ||
+    pwd.includes("$") ||
+    pwd.includes(".")
+  );
+};
 
 export const createRepo = async (req, res) => {
-  const { repoURL, creator } = req.body;
+  const { repoURL, creator, sharedPass } = req.body;
+
+  //if (!checkIfPasswordIsStrong(sharedPass)) return res.status(400)
+  //.json({message: "Your password should be at least 8 characters, should include at least one numeric character and one upper case letter, and should have one of these special chararcters: !@#$&*."});
+
+  const hashedPassword = await bcrypt.hash(sharedPass, 12);
 
   const raw = repoURL.substr(19).split("/");
   const ownerName = raw[0];
   const repoName = raw[1];
 
-  //TODO
-
+  
   // Check if the repo already exists in our DB
   const repos = await Repo.find({repoURL: repoURL});
   
@@ -22,18 +50,18 @@ export const createRepo = async (req, res) => {
 
   // Check if the repo is in GitHub
   var response = await checkIfRepoExistsInGithub({ repoURL: repoURL });
-
-  if (!response )  return res.status(409).json({ message: "This is not a valid repoURL" });
-
+  if (!response )  return res.status(409).json({ message: "This is not a valid repository url" });
 
   // Create the repository, add the creator as a member and repository owner
   const newRepo = new Repo({
+    sharedPass: hashedPassword,
     creator,
     ownerName,
     repoName,
     repoURL,
     createdAt: new Date().toISOString(),
   });
+
   // newRepo.members.push(creator); // Add member (creator)
   newRepo.repoOwners.push(creator); // Make Repo Owner (creator)
 
@@ -164,7 +192,6 @@ export const checkAndGetRepoWithId = async  (req, res) => {
 
 }
 
-
 /*Be careful addMember returns the previous repo object(added member is not shown due to findByIdAndUpdate method)*/
 export const addMember = async (req, res) => {
   try {
@@ -194,8 +221,6 @@ export const addRepoOwner = async (req, res) => {
   }
 };
 
-
-
 export const checkIfRepoExistsInGithub = async (req, res) => {
   const { repoURL } = req;
   const userSlashRepo = repoURL.substr(19);
@@ -212,6 +237,7 @@ export const checkIfRepoExistsInGithub = async (req, res) => {
     return false;
   }
 };
+
 export const checkIfRepoExists = async (req, res) => {
   const repoId = req.body.id;
   Repo.countDocuments({ _id: repoId }, function (err, count) {
