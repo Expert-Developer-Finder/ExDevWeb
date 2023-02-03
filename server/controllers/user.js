@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import User from "../models/user.js";
+
 import Repo from "../models/repo.js";
 
 dotenv.config();
@@ -163,6 +164,38 @@ export const removeOwnerFromRepo = async (req, res) => {
       });
       return true;
     }
+    
+}
+
+export const changePassword = async (req, res) => {
+    const {userId} = req.params;
+    const {oldPassword, newPassword, newPasswordAgain}  = req.body;
+
+    if ( newPassword === oldPassword) return res.status(405).json({message: "Enter a different new a password than your old password!"});
+    if(newPassword !== newPasswordAgain ) return res.status(405).json({message: "Newly entered passwords don't match!"});
+
+    try {
+        const currentUser = await User.findOne({_id: userId});
+        const isPwdCorrect = await bcrypt.compare(oldPassword, currentUser.password);
+
+        if(!isPwdCorrect) return res.status(400).json({message: "Old password is incorrect!"});
+
+        //if (!checkIfPasswordIsStrong(newPassword)) return res.status(400)
+        //.json({message: "Your password should be at least 8 characters, should include at least one numeric character and one upper case letter, and should have one of these special chararcters: !@#$&*."});
+    
+        const hashedPassword = await bcrypt.hash(newPassword, 12);
+        currentUser.password =  hashedPassword;
+        await User.findByIdAndUpdate(currentUser._id.valueOf(), currentUser, {new: true});
+
+        res.status(200).json({message: "Password changed succesfully"});
+    } catch(err) {
+        res.status(500).json({message: "Something went wrong!"});
+    }
+    
+
+    
+}
+
   } catch (e) {
     console.log(e);
   }

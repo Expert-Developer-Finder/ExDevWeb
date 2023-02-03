@@ -1,4 +1,4 @@
-import {   Divider, Grid, Paper,  Typography , Button, Checkbox, TextField,  InputAdornment, IconButton,} from '@mui/material'
+import {   Divider, Grid, Paper,  Typography , Button, Checkbox, TextField,  InputAdornment, IconButton, Alert, AlertTitle,} from '@mui/material'
 import { Container } from '@mui/system'
 import React, {useState} from 'react'
 import { Input } from '../../components'
@@ -7,6 +7,7 @@ import useStyles from "./styles.js";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import { useDispatch, useSelector } from "react-redux";
 import { joinRepo } from '../../actions/repos';
+import { CLEAR_ERROR } from '../../constants/actionTypes';
 
 
 
@@ -35,6 +36,9 @@ const JoinRepo = () => {
 
   const handleSubbmit = (e) => {
     e.preventDefault();
+    const user  = JSON.parse(localStorage.getItem("profile")).result;
+    formData["userId"] = user._id;
+    
     console.log(formData);
     dispatch(joinRepo(formData, history));
 
@@ -51,14 +55,27 @@ const JoinRepo = () => {
   }
 
 
-  const  repos  = useSelector((state) => state.repos);
-  console.log(repos);
+  const  {errorMessage, error}  = useSelector((state) => state.repos);
 
   return (
     <Container className={classes.container}>
         <Grid container  >
             <Grid item sm={12} md={6} className={classes.left}>
                 <Typography variant='h3'>Join a Repository</Typography>
+                {error && errorMessage && (
+                    <>
+                        <Alert
+                        severity="error"
+                        onClose={() => {
+                            dispatch({ type: CLEAR_ERROR });
+                        }}
+                        >
+                        <AlertTitle>Error</AlertTitle>
+                        {errorMessage} — <strong>Try again</strong>
+                        </Alert>
+                        <br/>
+                    </>
+                )}
                 <Paper elevation={3} className={classes.page}>
                     <Typography variant='h5'>Enter Repository Information</Typography>
                     <Grid container>
