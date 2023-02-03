@@ -2,6 +2,8 @@ import Repo from "../models/repo.js";
 import User from "../models/user.js";
 import fetch from "node-fetch";
 
+
+
 export const createRepo = async (req, res) => {
   const { repoURL, creator } = req.body;
 
@@ -20,12 +22,9 @@ export const createRepo = async (req, res) => {
 
   // Check if the repo is in GitHub
   var response = await checkIfRepoExistsInGithub({ repoURL: repoURL });
-  if (response == true) {
-    res.status(200).json({ message: "Success" });
-  } else {
-    res.status(409).json({ message: "This is not a valid repoURL" });
-    return;
-  }
+
+  if (!response )  return res.status(409).json({ message: "This is not a valid repoURL" });
+
 
   // Create the repository, add the creator as a member and repository owner
   const newRepo = new Repo({
@@ -48,7 +47,6 @@ export const createRepo = async (req, res) => {
     try {
         await User.findByIdAndUpdate(creator, user, {new: true});
     } catch (error) {console.log(error);}
-
 
     res.status(201).json(newRepo);
   } catch (error) {
@@ -196,6 +194,24 @@ export const addRepoOwner = async (req, res) => {
   }
 };
 
+
+
+export const checkIfRepoExistsInGithub = async (req, res) => {
+  const { repoURL } = req;
+  const userSlashRepo = repoURL.substr(19);
+  const url = `https://api.github.com/repos/${userSlashRepo}`;
+
+  try {
+    const response = await fetch(url);
+    if (response.status == 200) 
+      return true;
+    
+    return false;
+    
+  } catch (err) {
+    return false;
+  }
+};
 export const checkIfRepoExists = async (req, res) => {
   const repoId = req.body.id;
   Repo.countDocuments({ _id: repoId }, function (err, count) {
@@ -211,41 +227,4 @@ export const checkIfRepoExists = async (req, res) => {
       }
     }
   });
-};
-
-export const getOwnedRepos = async (req, res) => {
-  const { userId } = req.params;
-
-  try {
-    const ownedRepos = await Repo.find({
-      repoOwners: { $in: userId },
-    });
-
-    res.status(200).json({ data: ownedRepos });
-  } catch (err) {
-    res.status(500).json({ message: "Something went wrong!" });
-  }
-};
-
-export const checkIfRepoExistsInGithub = async (req, res) => {
-  console.log(req.repoURL);
-  const { repoURL } = req;
-  const userSlashRepo = repoURL.substr(19);
-  const url = `https://api.github.com/repos/${userSlashRepo}`;
-
-  const response = await fetch(url);
-  try {
-    const response = await fetch(url);
-    const result = await response.json();
-
-    if (response.status == 200) {
-      return true;
-    } else if (response.status == 404) {
-      return false;
-    } else {
-      return false;
-    }
-  } catch (err) {
-    return false;
-  }
 };

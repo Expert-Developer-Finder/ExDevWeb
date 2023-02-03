@@ -164,8 +164,10 @@ export const removeOwnerFromRepo = async (req, res) => {
       });
       return true;
     }
-    
-}
+  }  catch (e) {
+    console.log(e);
+  }
+};
 
 export const changePassword = async (req, res) => {
     const {userId} = req.params;
@@ -196,7 +198,4 @@ export const changePassword = async (req, res) => {
     
 }
 
-  } catch (e) {
-    console.log(e);
-  }
-};
+  

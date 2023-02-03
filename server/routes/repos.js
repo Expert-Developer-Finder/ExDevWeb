@@ -1,6 +1,4 @@
 import express from "express";
-
-
 import {
   addMember,
   createRepo,
@@ -9,7 +7,8 @@ import {
   getOwnedRepos,
   joinRepo,
   getJoinedRepos,
-  checkAndGetRepoWithId
+  checkAndGetRepoWithId,
+  checkIfRepoExists,
   checkIfRepoExistsInGithub,
 } from "../controllers/repos.js";
 
@@ -19,7 +18,7 @@ repoRouter.post("/create", createRepo);
 repoRouter.post("/join", joinRepo);
 repoRouter.post(`/:repoId`, checkAndGetRepoWithId);
 
-repoRouter.get("/check-if-exists-in-github", checkIfRepoExistsInGithub);
+//repoRouter.get("/check-if-exists-in-github", checkIfRepoExistsInGithub);
 
 repoRouter.get("/check-if-exists", checkIfRepoExists);
 repoRouter.get("/:userId/owned-repos", getOwnedRepos);
