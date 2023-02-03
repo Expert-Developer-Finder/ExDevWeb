@@ -60,3 +60,17 @@ export const getJoinedRepos = (id) => async (dispatch) => {
     dispatch({ type: ERROR, data: errMsg });
   }
 };
+
+export const changeSharedPass = (formData, history, repoId) => async (dispatch) => {
+  try {
+    const {data} = await api.changeSharedPass(formData, repoId);
+    console.log(data.message);
+    alert(data.message);
+    history.push(`/repo/${repoId}`);
+
+  } catch (error) {
+    const errMsg = errorHandling(error);
+    dispatch({ type: ERROR, data: errMsg });
+  }
+};
+

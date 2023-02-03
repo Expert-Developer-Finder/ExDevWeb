@@ -80,6 +80,37 @@ export const createRepo = async (req, res) => {
   }
 };
 
+export const changeSharedPass = async (req, res) => {
+ 
+  const {repoId} = req.params;
+  const {oldPassword, newPassword, newPasswordAgain}  = req.body;
+
+  if(newPassword !== newPasswordAgain ) return res.status(405).json({message: "Newly entered shared passes  don't match!"});
+
+  try {
+      const currentRepo = await Repo.findOne({_id: repoId});
+      const isPwdCorrect = await bcrypt.compare(oldPassword, currentRepo.sharedPass);
+
+      if(!isPwdCorrect) return res.status(400).json({message: "Old shared pass is incorrect!"});
+
+
+      //if (!checkIfPasswordIsStrong(newPassword)) return res.status(400)
+      //.json({message: "Your shared pass should be at least 8 characters, should include at least one numeric character and one upper case letter, and should have one of these special chararcters: !@#$&*."});
+  
+      if ( newPassword === oldPassword) return res.status(405).json({message: "Enter a new shared pass different than your old one!"});
+
+      const hashedPassword = await bcrypt.hash(newPassword, 12);
+      currentRepo.sharedPass =  hashedPassword;
+      await Repo.findByIdAndUpdate(repoId, currentRepo, {new: true});
+
+      res.status(200).json({message: "Shared Pass changed succesfully"});
+  } catch(err) {
+      res.status(500).json({message: "Something went wrong!"});
+  }
+}
+
+
+
 export const joinRepo = async (req, res) => {
   const { repoURL,  password:sharedPass, ownerName,  repoName, isChecked : willSendJoinRequest, userId: newMemberId} = req.body;
 

@@ -31,10 +31,7 @@ const RepoDetail = () => {
     getRepo();
   }, []);
 
-  console.log('====================================');
-  console.log(repo);
-  console.log('====================================');
-  
+
   return (
     <>
     {showError? 

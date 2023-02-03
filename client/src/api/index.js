@@ -20,6 +20,7 @@ export const createRepo =(formData) => API.post("/repos/create", formData);
 export const joinRepo =(formData) => API.post("/repos/join", formData);
 export const getOwnedRepos =(id) => API.get(`/repos/${id}/owned-repos`);
 export const getJoinedRepos =(id) => API.get(`/repos/${id}/joined-repos`);
+export const changeSharedPass =(formData, repoId) => API.post(`/repos/${repoId}/change-shared-pass`, formData);
 
 export const checkAndGetRepoWithId =(repoId, userId) => API.post(`/repos/${repoId}`, userId);
 

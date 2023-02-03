@@ -10,6 +10,7 @@ import {
   checkAndGetRepoWithId,
   checkIfRepoExists,
   checkIfRepoExistsInGithub,
+  changeSharedPass
 } from "../controllers/repos.js";
 
 const repoRouter = express.Router();
@@ -17,6 +18,10 @@ const repoRouter = express.Router();
 repoRouter.post("/create", createRepo);
 repoRouter.post("/join", joinRepo);
 repoRouter.post(`/:repoId`, checkAndGetRepoWithId);
+repoRouter.post(`/:repoId`, checkAndGetRepoWithId);
+repoRouter.post(`/:repoId/change-shared-pass`, changeSharedPass);
+
+
 
 //repoRouter.get("/check-if-exists-in-github", checkIfRepoExistsInGithub);
 
