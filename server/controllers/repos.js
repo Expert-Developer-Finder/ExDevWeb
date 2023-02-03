@@ -3,8 +3,6 @@ import User from "../models/user.js";
 import fetch from "node-fetch";
 import bcrypt from "bcrypt";
 
-
-
 const checkIfPasswordIsStrong = (pwd) => {
   if (pwd.length < 8) return false;
 
@@ -83,7 +81,7 @@ export const createRepo = async (req, res) => {
 };
 
 export const joinRepo = async (req, res) => {
-  const { repoURL, password, ownerName,  repoName, isChecked : willSendJoinRequest, userId: newMemberId} = req.body;
+  const { repoURL,  password:sharedPass, ownerName,  repoName, isChecked : willSendJoinRequest, userId: newMemberId} = req.body;
 
   try {
     // find repo 
@@ -118,7 +116,11 @@ export const joinRepo = async (req, res) => {
     if (!willSendJoinRequest) {
       // Add the member to repos members list
       repo.members.push(newMemberId);
-      
+
+      const isSharedPassCorrect = await bcrypt.compare(sharedPass, repo.sharedPass);
+      if (!isSharedPassCorrect)
+        return res.status(401).json({ message: "Wrong shared pass!" });
+
       // find user and add the repo to his joined repos
       user.joined_repos.push(repoId);
 
