@@ -166,7 +166,7 @@ const RepoSettings = () => {
       >
         <Grid item xs={7} md={4}>
           <Typography>
-            Developers who opened issues a bout the code part
+            Developers who opened issues about the code part
           </Typography>
         </Grid>
         <Grid item xs={4}>

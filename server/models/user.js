@@ -7,6 +7,17 @@ const userSchema = mongoose.Schema({
    bio: {type: String},
    id: {type: String},
    joined_repos: { type: [String],default: []},
+   join_requests: {type: [{
+      userId : {type: String, required: true},
+      userName : {type: String, required: true},
+      repoId : {type: String, required: true},
+      repoName : {type: String, required: true},
+      ownerName : {type: String, required: true},
+      repoURL : {type: String, required: true},
+      status : {type: String, default: "pending"},
+      createdAt: {type: Date, default: new Date()},
+      updatedAt: {type: Date, default: null},
+   }] , default: []},
    owned_repos: { type: [String],default: []},
 });
 

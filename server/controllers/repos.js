@@ -3,6 +3,9 @@ import User from "../models/user.js";
 import fetch from "node-fetch";
 import bcrypt from "bcrypt";
 
+
+
+
 const checkIfPasswordIsStrong = (pwd) => {
   if (pwd.length < 8) return false;
 
@@ -110,8 +113,8 @@ export const changeSharedPass = async (req, res) => {
 }
 
 
-
 export const joinRepo = async (req, res) => {
+  console.log(req.body);
   const { repoURL,  password:sharedPass, ownerName,  repoName, isChecked : willSendJoinRequest, userId: newMemberId} = req.body;
 
   try {
@@ -120,10 +123,23 @@ export const joinRepo = async (req, res) => {
       return res.status(405).json({ message: "Enter only repository owner and name as a pair, or the repository URL!" });
     } 
     let repos;
+    
+    let obtainedRepoName;
+    let obtainedRepoOwner;
+    let obtainedRepoURL;
     if (!repoURL.length ) {
-      repos = await Repo.find({repoURL: `https://github.com/${ownerName}/${repoName}`});
+      // we don't have the repo url
+      obtainedRepoURL =  `https://github.com/${ownerName}/${repoName}`;
+      obtainedRepoName = repoName;
+      obtainedRepoOwner = ownerName;
+      repos = await Repo.find({repoURL: obtainedRepoURL});
 
     } else {
+      obtainedRepoURL =  repoURL;
+      const trimmedURL = repoURL.substring(19);
+      const a = trimmedURL.split("/");
+      obtainedRepoOwner = a[0];
+      obtainedRepoName = a[1];
       repos = await Repo.find({repoURL: repoURL});
     }
 
@@ -141,7 +157,6 @@ export const joinRepo = async (req, res) => {
     if(repo.members.includes(newMemberId)) {
       return res.status(405).json({ message: "You are already a member of this repository!" });
     }
-
 
     // JOIN WITH PASSWORD
     if (!willSendJoinRequest) {
@@ -162,7 +177,22 @@ export const joinRepo = async (req, res) => {
     
     // SEND A JOINING REQUEST
     else {
+      const newJoinRequest ={
+        userId : newMemberId,
+        userName : user.name,
+        repoId,
+        repoName: obtainedRepoName,
+        repoURL: obtainedRepoURL,
+        ownerName: obtainedRepoOwner,
+      };
 
+      repo.join_requests.push(newJoinRequest);
+      user.join_requests.push(newJoinRequest);
+      
+      // TODO çok istersen adam bir requesti varkene bi daha request atamasın diye bakabilirsin
+
+      await User.findByIdAndUpdate(newMemberId, user, {new: true});
+      await Repo.findByIdAndUpdate(repoId, repo, {new: true});
     }
 
     res.status(201).json(repo);
