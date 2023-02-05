@@ -47,6 +47,17 @@ export const changePassword = (formData, history, userId) => async (dispatch) =>
   }
 };
 
+export const restoreUser = (userId) => async (dispatch) => {
+  try {
+    const {data} = await api.getUserById( userId);
+    dispatch({ type: AUTH, data });
+
+  } catch (error) {
+    const errMsg = errorHandle(error);
+    dispatch({ type: ERROR, data: errMsg });
+  }
+};
+
 
 
 

@@ -8,6 +8,7 @@ import RepoSettings from "./RepoSettings/RepoSettings";
 import RepoDetail from "./RepoDetail/RepoDetail";
 import RepoJoinRequests from "./RepoJoinRequests/RepoJoinRequests";
 import RequestItem from "./RequestItem/RequestItem";
+import JoinRequests from "./JoinRequests/JoinRequests";
 
 export {
   NavBar,
@@ -19,5 +20,6 @@ export {
   RepoSettings,
   RepoDetail,
   RepoJoinRequests,
-  RequestItem
+  RequestItem,
+  JoinRequests
 };

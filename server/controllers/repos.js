@@ -113,7 +113,7 @@ export const changeSharedPass = async (req, res) => {
 
 
 export const joinRepo = async (req, res) => {
-  console.log(req.body);
+
   const { repoURL,  password:sharedPass, ownerName,  repoName, isChecked : willSendJoinRequest, userId: newMemberId} = req.body;
 
   try {
@@ -353,23 +353,13 @@ export const rejectJoinRequest = async (req, res) => {
   try {
     const repo = await Repo.findById(repoId);
     const user = await User.findById(userId);
-    console.log(user);
 
     const filteredRequests = repo.join_requests.filter((request)=>   !(request.repoId == repoId && request.userId === userId));
-console.log("cp1");
-  
     repo.join_requests = filteredRequests;
-    console.log("cp2");
-
 
     const filteredRequests2 = user.join_requests.filter((request)=>   !(request.repoId == repoId && request.userId === userId));
-    console.log("cp3");
-    
-    user.join_requests = filteredRequests2;
-    console.log("cp4");
-
-
-    console.log(filteredRequests);
+    user.join_requests = filteredRequests2;;
+  
     await Repo.findByIdAndUpdate(repoId, repo, {new: true});
     await User.findByIdAndUpdate(userId, user, {new: true});
     res.status(200).json({message: "Member rejected from repository!"});

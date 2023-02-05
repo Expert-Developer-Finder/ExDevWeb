@@ -26,7 +26,7 @@ const RequestItem = ({request, repoView}) => {
     <Container className={classes.container}>
       <Grid container className={classes.gridContainer} >
         <Grid xs={6} item md = {3}>
-          {repoView ?  request.userName :`${request.ownerName}/${request.repoName}`}
+          <Typography>{repoView ?  request.userName :`${request.ownerName}/${request.repoName}`}</Typography>
         </Grid>
         <Grid item xs={6} md = {3}>
           <Typography>{ getFormattedDate(request.createdAt)}</Typography>

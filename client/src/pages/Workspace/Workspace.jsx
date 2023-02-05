@@ -3,7 +3,7 @@ import React from 'react';
 import { useEffect } from 'react';
 import {useDispatch} from "react-redux";
 import { getOwnedRepos, getJoinedRepos } from '../../actions/repos';
-import { JoinedRepos, OwnedRepos } from '../../components';
+import { JoinedRepos, OwnedRepos , JoinRequests} from '../../components';
 import useStyle from "./styles.js";
 
 const Workspace = () => {
@@ -19,7 +19,9 @@ const Workspace = () => {
   
   
   return (
-    <Container className= {classes.container} >
+   <>
+     { !user ? <>Loading</> : 
+      <Container className= {classes.container} >
         <Typography variant='h3'>Welcome {user.name.split(" ")[0]} </Typography>
         <Divider className={classes.divider} />
         
@@ -32,12 +34,12 @@ const Workspace = () => {
         <Divider className={classes.divider}/>
 
         <Typography variant='h4'>Join Requests </Typography>
-        <JoinedRepos />
-
-
-
+        <JoinRequests/>
 
     </Container>
+    }
+   </>
+   
   )
 }
 

@@ -8,7 +8,7 @@ import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import { useDispatch, useSelector } from "react-redux";
 import { joinRepo } from '../../actions/repos';
 import { CLEAR_ERROR } from '../../constants/actionTypes';
-
+import {restoreUser} from "../../actions/auth";
 
 
 const initialState = {ownerName: "", repoName: "", repoURL: "", password: "", isChecked: false};
@@ -38,10 +38,7 @@ const JoinRepo = () => {
     e.preventDefault();
     const user  = JSON.parse(localStorage.getItem("profile")).result;
     formData["userId"] = user._id;
-    
-    console.log(formData);
-    dispatch(joinRepo(formData, history));
-
+    dispatch(joinRepo(formData, history, user._id));
   }
 
   const goodToGo = ()=> {

@@ -1,5 +1,6 @@
 import * as api from "../api";
-import {   ERROR, JOIN_REPO, CREATE_REPO, GET_OWNED_REPOS, GET_JOINED_REPOS} from "../constants/actionTypes";
+import {   ERROR, JOIN_REPO, CREATE_REPO, GET_OWNED_REPOS, GET_JOINED_REPOS, LOGOUT} from "../constants/actionTypes";
+import {restoreUser} from "./auth";
 
 
 const errorHandling = (error) => {
@@ -12,11 +13,13 @@ const errorHandling = (error) => {
 }
 
 
-export const joinRepo = (formData, history) => async (dispatch) => {
+export const joinRepo = (formData, history, userId) => async (dispatch) => {
   try {
     var {data} = await api.joinRepo(formData);
-    dispatch({ type: JOIN_REPO, payload: data });
+    await dispatch({ type: JOIN_REPO, payload: data });
+    await dispatch(restoreUser(userId));
     history.push("/");
+
   } catch (error) {
     const errMsg = errorHandling(error);
     dispatch({ type: ERROR, data: errMsg });
