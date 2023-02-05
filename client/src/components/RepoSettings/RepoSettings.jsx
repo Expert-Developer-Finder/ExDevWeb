@@ -1,21 +1,8 @@
 import React, { useState } from "react";
-import {
-  Grid,
-  Button,
-  TextField,
-  IconButton,
-  Typography,
-  Container,
-  Box,
-  Badge,
-  Divider,
-} from "@material-ui/core";
+import { Grid, Button, TextField, Typography, Container, Divider} from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useParams } from "react-router-dom";
+import {  useParams } from "react-router-dom";
 import useStyle from "./styles";
-import SettingsIcon from "@mui/icons-material/Settings";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import HomeIcon from "@mui/icons-material/Home";
 import "react-widgets/styles.css";
 import NumberPicker from "react-widgets/NumberPicker";
 import { changeSharedPass } from "../../actions/repos";
@@ -28,10 +15,9 @@ const passwordChangeInitialState = {
   newPasswordAgain: "",
 };
 
-const RepoSettings = ({ repo }) => {
+const RepoSettings = ({ repo, setSelectedRoute }) => {
   const classes = useStyle();
   const dispatch = useDispatch();
-  const history = useHistory();
   let { id: repoId } = useParams();
 
   const { error, errorMessage } = useSelector((state) => state.repos);
@@ -40,10 +26,11 @@ const RepoSettings = ({ repo }) => {
   const handlePasswordChange = (e) => {
     setPasswordForm({ ...passwordForm, [e.target.name]: e.target.value });
   };
-  const handlePasswordSubmit = (e) => {
+  const  handlePasswordSubmit =   (e) => {
     e.preventDefault();
     console.log(passwordForm);
-    dispatch(changeSharedPass(passwordForm, history, repoId));
+    dispatch(changeSharedPass(passwordForm, repoId,  setSelectedRoute));
+
   };
 
   return (
@@ -59,16 +46,16 @@ const RepoSettings = ({ repo }) => {
         <Grid item xs={12}>
           <Typography variant="h5">
             How many developers should be recommended after the algroithm is
-            runned?{" "}
+            runned?
           </Typography>
         </Grid>
         <Grid className={classes.mt} item xs={4}>
           <NumberPicker
             className={classes.picker}
-            defaultValue={0}
+            defaultValue={1}
             step={1}
             max={5}
-            min={0}
+            min={1}
           />
         </Grid>
       </Grid>
@@ -88,13 +75,12 @@ const RepoSettings = ({ repo }) => {
           <Typography>Developers who modified the code part</Typography>
         </Grid>
         <Grid item xs={4}>
-          {" "}
           <NumberPicker
             className={classes.picker}
-            defaultValue={0}
+            defaultValue={1}
             step={1}
             max={5}
-            min={0}
+            min={1}
           />
         </Grid>
       </Grid>
@@ -111,10 +97,10 @@ const RepoSettings = ({ repo }) => {
         <Grid item xs={4}>
           <NumberPicker
             className={classes.picker}
-            defaultValue={0}
+            defaultValue={1}
             step={1}
             max={5}
-            min={0}
+            min={1}
           />
         </Grid>
       </Grid>
@@ -131,10 +117,10 @@ const RepoSettings = ({ repo }) => {
         <Grid item xs={4}>
           <NumberPicker
             className={classes.picker}
-            defaultValue={0}
+            defaultValue={1}
             step={1}
             max={5}
-            min={0}
+            min={1}
           />
         </Grid>
       </Grid>
@@ -153,10 +139,10 @@ const RepoSettings = ({ repo }) => {
         <Grid item xs={4}>
           <NumberPicker
             className={classes.picker}
-            defaultValue={0}
+            defaultValue={1}
             step={1}
             max={5}
-            min={0}
+            min={1}
           />
         </Grid>
       </Grid>

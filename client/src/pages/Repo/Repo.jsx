@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
 import { checkAndGetRepoWithId } from '../../api';
-import { Grid, TextField, InputAdornment, IconButton, Typography, Container, Box, Badge, Divider } from '@material-ui/core';
+import {  IconButton, Typography, Container, Box, Badge } from '@material-ui/core';
 import useStyle from "./styles";
 import SettingsIcon from '@mui/icons-material/Settings';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import HomeIcon from '@mui/icons-material/Home';
-import { RepoDetail, RepoJoinRequests, RepoMembers, RepoSettings } from '../../components';
+import { RepoDetail, RepoJoinRequests,  RepoSettings } from '../../components';
 
 
 const Repo = () => {
@@ -33,6 +33,8 @@ const Repo = () => {
   
       getRepo();
     }, []);
+
+
   return (
     <>
     {showError? 
@@ -53,7 +55,7 @@ const Repo = () => {
             </IconButton>
 
             <IconButton  onClick={()=> setSelectedRoute("/requests")} className={classes.mr}>
-                <Badge badgeContent={4} color="primary" >
+                <Badge badgeContent={repo.join_requests.length } color="primary" >
                 <NotificationsIcon fontSize="large"  color= {selectedRoute === "/requests" ? "primary": "action"} />
                 </Badge>
             </IconButton>
@@ -66,10 +68,10 @@ const Repo = () => {
 
         {
             selectedRoute === "/settings" ? 
-            <RepoSettings repo={repo}/> :
+            <RepoSettings repo={repo} setSelectedRoute={setSelectedRoute} selectedRoute={selectedRoute}/> :
             selectedRoute === "/requests" ?
             <RepoJoinRequests  repo={repo}/>:
-            <RepoDetail  repo={repo}/>
+            <RepoDetail  repo={repo} />
 
         }
 
