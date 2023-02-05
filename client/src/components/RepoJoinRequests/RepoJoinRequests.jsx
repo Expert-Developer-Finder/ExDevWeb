@@ -23,7 +23,9 @@ const RepoJoinRequests = ({ repo }) => {
     <Container className={classes.container}>
       <Typography variant="h3">Pending Requests</Typography>
       {
-        requests.map((request)=>  (<RequestItem request={request} repoView={true} />))
+        requests.length ?
+        requests.map((request)=>  (<RequestItem request={request} repoView={true}  />)) :
+        <Typography>No pending joining requests</Typography>
       }
 
     </Container>

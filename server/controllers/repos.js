@@ -316,3 +316,67 @@ export const checkIfRepoExists = async (req, res) => {
     }
   });
 };
+
+export const acceptJoinRequest = async (req, res) => {
+  const {userId} = req.body;
+  const {repoId} = req.params;
+
+  try {
+    const repo = await Repo.findById(repoId);
+    const user = await User.findById(userId);
+
+    repo.members.push(userId);
+    user.joined_repos.push(repoId);
+
+    const filteredRequests = repo.join_requests.filter((request)=>   !(request.repoId == repoId && request.userId === userId));
+    repo.join_requests = filteredRequests;
+
+    const filteredRequests2 = user.join_requests.filter((request)=>   !(request.repoId == repoId && request.userId === userId));
+    user.join_requests = filteredRequests2;
+    
+    console.log(filteredRequests);
+    await Repo.findByIdAndUpdate(repoId, repo, {new: true});
+    await User.findByIdAndUpdate(userId, user, {new: true});
+    res.status(200).json({message: "Member accepted to repository!"});
+    
+  } catch (error) {
+    res.status(500).json({message: error.message}); 
+  }
+  
+};
+
+export const rejectJoinRequest = async (req, res) => {
+  const {userId} = req.body;
+  console.log(req.body);
+  const {repoId} = req.params;
+
+  try {
+    const repo = await Repo.findById(repoId);
+    const user = await User.findById(userId);
+    console.log(user);
+
+    const filteredRequests = repo.join_requests.filter((request)=>   !(request.repoId == repoId && request.userId === userId));
+console.log("cp1");
+  
+    repo.join_requests = filteredRequests;
+    console.log("cp2");
+
+
+    const filteredRequests2 = user.join_requests.filter((request)=>   !(request.repoId == repoId && request.userId === userId));
+    console.log("cp3");
+    
+    user.join_requests = filteredRequests2;
+    console.log("cp4");
+
+
+    console.log(filteredRequests);
+    await Repo.findByIdAndUpdate(repoId, repo, {new: true});
+    await User.findByIdAndUpdate(userId, user, {new: true});
+    res.status(200).json({message: "Member rejected from repository!"});
+
+    
+  } catch (error) {
+    res.status(500).json({message: error.message}); 
+  }
+  
+};

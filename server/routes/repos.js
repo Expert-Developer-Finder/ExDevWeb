@@ -10,7 +10,9 @@ import {
   checkAndGetRepoWithId,
   checkIfRepoExists,
   checkIfRepoExistsInGithub,
-  changeSharedPass
+  changeSharedPass,
+  acceptJoinRequest,
+  rejectJoinRequest
 } from "../controllers/repos.js";
 
 const repoRouter = express.Router();
@@ -20,6 +22,10 @@ repoRouter.post("/join", joinRepo);
 repoRouter.post(`/:repoId`, checkAndGetRepoWithId);
 repoRouter.post(`/:repoId`, checkAndGetRepoWithId);
 repoRouter.post(`/:repoId/change-shared-pass`, changeSharedPass);
+repoRouter.post(`/:repoId/accept-join-request`, acceptJoinRequest);
+repoRouter.post(`/:repoId/reject-join-request`, rejectJoinRequest);
+
+
 
 
 

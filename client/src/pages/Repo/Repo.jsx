@@ -68,9 +68,9 @@ const Repo = () => {
 
         {
             selectedRoute === "/settings" ? 
-            <RepoSettings repo={repo} setSelectedRoute={setSelectedRoute} selectedRoute={selectedRoute}/> :
+            <RepoSettings repo={repo} /> :
             selectedRoute === "/requests" ?
-            <RepoJoinRequests  repo={repo}/>:
+            <RepoJoinRequests  repo={repo} setSelectedRoute={setSelectedRoute} />:
             <RepoDetail  repo={repo} />
 
         }

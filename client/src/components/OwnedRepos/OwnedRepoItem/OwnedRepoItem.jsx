@@ -14,7 +14,7 @@ const OwnedRepoItem = ({repo}) => {
             <Typography> {`${repo.ownerName}/${repo.repoName}`} </Typography>
         </Grid>
         <Grid item className={classes.bottom} >
-            <Badge badgeContent={4} color="primary">
+            <Badge badgeContent={repo.join_requests.length} color="primary">
                 <NotificationsIcon color="action" />
             </Badge>
             <Button variant='contained' href={`repo/${repo._id}`} className={classes.button}  >Visit</Button>

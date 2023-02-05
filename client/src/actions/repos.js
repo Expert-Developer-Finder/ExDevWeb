@@ -74,3 +74,28 @@ export const changeSharedPass = (formData, repoId, setSelectedRoute) => async (d
   }
 };
 
+export const acceptJoinRequest = ( repoId, userId, setSelectedRoute) => async (dispatch) => {
+  try {
+    const {data} = await api.acceptJoinRequest( repoId, {userId:userId});
+    console.log(data.message);
+    alert(data.message);
+    window.location.reload(true);
+
+  } catch (error) {
+    const errMsg = errorHandling(error);
+    dispatch({ type: ERROR, data: errMsg });
+  }
+};
+
+export const rejectJoinRequest = ( repoId, userId, setSelectedRoute) => async (dispatch) => {
+  try {
+    const {data} = await api.rejectJoinRequest( repoId,  {userId:userId});
+    console.log(data.message);
+    alert(data.message);
+    window.location.reload(true);
+
+  } catch (error) {
+    const errMsg = errorHandling(error);
+    dispatch({ type: ERROR, data: errMsg });
+  }
+};
