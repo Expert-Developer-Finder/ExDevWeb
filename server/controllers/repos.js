@@ -62,6 +62,8 @@ export const createRepo = async (req, res) => {
     createdAt: new Date().toISOString(),
   });
 
+  // fetchData(repoUrl)
+
   // newRepo.members.push(creator); // Add member (creator)
   newRepo.repoOwners.push(creator); // Make Repo Owner (creator)
 

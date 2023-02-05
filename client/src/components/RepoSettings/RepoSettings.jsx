@@ -182,7 +182,7 @@ const RepoSettings = ({ repo, setSelectedRoute }) => {
           margin="normal"
           name="oldPassword"
           variant="outlined"
-          label="Current Password"
+          label="Current Shared Pass"
           fullWidth
           value={passwordForm?.oldPassword}
           onChange={handlePasswordChange}
@@ -193,7 +193,7 @@ const RepoSettings = ({ repo, setSelectedRoute }) => {
           margin="normal"
           name="newPassword"
           variant="outlined"
-          label="New Password"
+          label="New Shared Pass"
           fullWidth
           value={passwordForm?.newPassword}
           onChange={handlePasswordChange}
@@ -204,7 +204,7 @@ const RepoSettings = ({ repo, setSelectedRoute }) => {
           margin="normal"
           name="newPasswordAgain"
           variant="outlined"
-          label="Confirm New Password"
+          label="Confirm New Shared Pass"
           fullWidth
           value={passwordForm?.newPasswordAgain}
           onChange={handlePasswordChange}
