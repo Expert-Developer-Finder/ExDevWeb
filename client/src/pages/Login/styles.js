@@ -9,7 +9,7 @@ export default makeStyles((theme) => ({
         alignItems: "center",
         [theme.breakpoints.down('sm')]: {
             flexDirection: 'column-reverse',
-          },
+        },
     },
     form: {
         marginTop:35

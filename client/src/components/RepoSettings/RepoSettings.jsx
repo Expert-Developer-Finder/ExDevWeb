@@ -11,8 +11,7 @@ import {
   Divider,
 } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory ,useParams} from "react-router-dom";
-
+import { useHistory, useParams } from "react-router-dom";
 import useStyle from "./styles";
 import SettingsIcon from "@mui/icons-material/Settings";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -29,14 +28,13 @@ const passwordChangeInitialState = {
   newPasswordAgain: "",
 };
 
-
-const RepoSettings = () => {
+const RepoSettings = ({ repo }) => {
   const classes = useStyle();
   const dispatch = useDispatch();
   const history = useHistory();
   let { id: repoId } = useParams();
 
-  const {error, errorMessage} = useSelector((state)=> state.repos);
+  const { error, errorMessage } = useSelector((state) => state.repos);
 
   const [passwordForm, setPasswordForm] = useState(passwordChangeInitialState);
   const handlePasswordChange = (e) => {
@@ -50,22 +48,6 @@ const RepoSettings = () => {
 
   return (
     <Container className={classes.container}>
-      <Box className={classes.menu}>
-        <IconButton className={classes.mr} href={`/repo/${repoId}`}>
-          <HomeIcon color="action" fontSize="large" />
-        </IconButton>
-
-        <IconButton className={classes.mr}>
-          <Badge badgeContent={4} color="primary">
-            <NotificationsIcon fontSize="large" color="action" />
-          </Badge>
-        </IconButton>
-
-        <IconButton>
-          <SettingsIcon fontSize="large" color="primary" />
-        </IconButton>
-      </Box>
-
       <Typography variant="h3">Settings</Typography>
 
       <Grid
@@ -81,7 +63,6 @@ const RepoSettings = () => {
           </Typography>
         </Grid>
         <Grid className={classes.mt} item xs={4}>
-          {" "}
           <NumberPicker
             className={classes.picker}
             defaultValue={0}
@@ -190,68 +171,67 @@ const RepoSettings = () => {
       </Button>
 
       <Divider className={classes.divider} />
-      
+
       <Typography variant="h4"> Change Shared Pass</Typography>
 
-      {error  && (
-          <>
-            <Alert
-              severity="error"
-              onClose={() => {
-                dispatch({ type: CLEAR_ERROR });
-              }}
-            >
-              <AlertTitle>Error</AlertTitle>
-              {errorMessage} — <strong>Try again</strong>
-            </Alert>
-            <br/>
-          </>
-        )}
+      {error && (
+        <>
+          <Alert
+            severity="error"
+            onClose={() => {
+              dispatch({ type: CLEAR_ERROR });
+            }}
+          >
+            <AlertTitle>Error</AlertTitle>
+            {errorMessage} — <strong>Try again</strong>
+          </Alert>
+          <br />
+        </>
+      )}
 
       <form onSubmit={handlePasswordSubmit}>
-      <TextField
-        required
-        type="password"
-        margin="normal"
-        name="oldPassword"
-        variant="outlined"
-        label="Current Password"
-        fullWidth
-        value={passwordForm?.oldPassword}
-        onChange={handlePasswordChange}
-      />
-      <TextField
-        required
-        type="password"
-        margin="normal"
-        name="newPassword"
-        variant="outlined"
-        label="New Password"
-        fullWidth
-        value={passwordForm?.newPassword}
-        onChange={handlePasswordChange}
-      />
-      <TextField
-        required
-        type="password"
-        margin="normal"
-        name="newPasswordAgain"
-        variant="outlined"
-        label="Confirm New Password"
-        fullWidth
-        value={passwordForm?.newPasswordAgain}
-        onChange={handlePasswordChange}
-      />
-      <Button
-        type="submit"
-        variant="contained"
-        color="primary"
-        size="small"
-        fullWidth
-      >
-        Change Password
-      </Button>
-
+        <TextField
+          required
+          type="password"
+          margin="normal"
+          name="oldPassword"
+          variant="outlined"
+          label="Current Password"
+          fullWidth
+          value={passwordForm?.oldPassword}
+          onChange={handlePasswordChange}
+        />
+        <TextField
+          required
+          type="password"
+          margin="normal"
+          name="newPassword"
+          variant="outlined"
+          label="New Password"
+          fullWidth
+          value={passwordForm?.newPassword}
+          onChange={handlePasswordChange}
+        />
+        <TextField
+          required
+          type="password"
+          margin="normal"
+          name="newPasswordAgain"
+          variant="outlined"
+          label="Confirm New Password"
+          fullWidth
+          value={passwordForm?.newPasswordAgain}
+          onChange={handlePasswordChange}
+        />
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          size="small"
+          fullWidth
+        >
+          Change Password
+        </Button>
       </form>
       <Divider className={classes.divider} />
 

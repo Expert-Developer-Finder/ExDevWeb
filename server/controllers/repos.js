@@ -5,7 +5,6 @@ import bcrypt from "bcrypt";
 
 
 
-
 const checkIfPasswordIsStrong = (pwd) => {
   if (pwd.length < 8) return false;
 

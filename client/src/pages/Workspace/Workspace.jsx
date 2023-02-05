@@ -29,6 +29,11 @@ const Workspace = () => {
         
         <Typography variant='h4'>Joined Repositories </Typography>
         <JoinedRepos />
+        <Divider className={classes.divider}/>
+
+        <Typography variant='h4'>Join Requests </Typography>
+        <JoinedRepos />
+
 
 
 
