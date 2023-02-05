@@ -2,6 +2,9 @@ export const AUTH = "AUTH";
 export const LOGOUT = "LOGOUT";
 export const ERROR = "ERROR";
 export const CLEAR_ERROR = "CLEAR_ERROR";
+export const RESTORE = "RESTORE";
+
+
 
 
 export const CREATE_REPO = "CREATE_REPO";

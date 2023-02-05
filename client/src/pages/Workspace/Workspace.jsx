@@ -9,6 +9,7 @@ import useStyle from "./styles.js";
 const Workspace = () => {
   const classes = useStyle();
   const user = JSON.parse(localStorage.getItem("profile")).result;
+  console.log(user);
   const dispatch = useDispatch();
 
   useEffect(() => {

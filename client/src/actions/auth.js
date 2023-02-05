@@ -1,5 +1,5 @@
 import * as api from "../api";
-import { AUTH , ERROR} from "../constants/actionTypes";
+import { AUTH , ERROR, RESTORE} from "../constants/actionTypes";
 
 const errorHandle = (error)=> {
   console.log("An error occured:");
@@ -50,7 +50,9 @@ export const changePassword = (formData, history, userId) => async (dispatch) =>
 export const restoreUser = (userId) => async (dispatch) => {
   try {
     const {data} = await api.getUserById( userId);
-    dispatch({ type: AUTH, data });
+    const user = data.result;
+    dispatch({ type: RESTORE,  user });
+
 
   } catch (error) {
     const errMsg = errorHandle(error);
