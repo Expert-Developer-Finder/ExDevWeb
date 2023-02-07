@@ -85,16 +85,17 @@ a:hover {
 }
 .info-card-text {
   padding: 10px;
+  font-size:smaller;
 }
 .info-card-text a {
   font-weight: bold;
 }
-.info-card-text h2 {
+.info-card-text h5 {
   margin-top: 3px;
   margin-bottom: 3px;
 }
 .info-card-text p {
-  margin: 7px;
+  margin: 3px;
 }
 
 .footer {
