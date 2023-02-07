@@ -209,4 +209,12 @@ export const getUserById = async (req, res) => {
   }  
 }
   
-
+export const getUser = async (req, res) => {
+  console.log(req.body.id);
+  try {
+    const user = await User.findById(req.body.id).then((user) => user);
+    return user;
+  } catch (e) {
+    console.log(e);
+  }
+};

@@ -2,6 +2,7 @@ import Repo from "../models/repo.js";
 import User from "../models/user.js";
 import fetch from "node-fetch";
 import bcrypt from "bcrypt";
+import {getUser} from "./user.js";
 
 
 
@@ -372,3 +373,20 @@ export const rejectJoinRequest = async (req, res) => {
   }
   
 };
+
+export const getJoinedMembers = async (req, res) => {
+  const {repoId} = req.params;
+  var memberList = [];
+  try {
+    const repo = await Repo.findById(repoId);
+    for (let i = 0; i < repo.members.length; i++) {
+      const joinedMember = await getUser({
+        body: { id: repo.members[i] },
+      });
+      memberList.push(joinedMember);
+    }
+
+    res.status(200).json({ joinedMembers: memberList });
+  } catch (e) {
+    res.status(500).json({ error: e });
+  }  }

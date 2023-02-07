@@ -19,15 +19,15 @@ import HomeIcon from "@mui/icons-material/Home";
 import { RepoMembers } from "../../components";
 
 const RepoDetail = ( {repo}) => {
-  let { id: repoId } = useParams();
   const user = JSON.parse(localStorage.getItem("profile")).result;
+  console.log(repo);
 
   const classes = useStyle();
 
   return (
     <Container className={classes.container}>
       <Typography variant="h3">Members </Typography>
-      <RepoMembers />
+      <RepoMembers repo={repo} />
     </Container>
   );
 };
