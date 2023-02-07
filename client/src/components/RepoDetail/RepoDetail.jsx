@@ -16,7 +16,7 @@ import useStyle from "./styles";
 import SettingsIcon from "@mui/icons-material/Settings";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import HomeIcon from "@mui/icons-material/Home";
-import { RepoMembers } from "../../components";
+import { RepoMembers, RepoOwners } from "../../components";
 
 const RepoDetail = ( {repo}) => {
   const user = JSON.parse(localStorage.getItem("profile")).result;
@@ -26,8 +26,12 @@ const RepoDetail = ( {repo}) => {
 
   return (
     <Container className={classes.container}>
-      <Typography variant="h3">Members </Typography>
+      <Typography variant="h4">Repository Owners </Typography>
+      <RepoOwners repo={repo} />
+
+      <Typography variant="h4">Members </Typography>
       <RepoMembers repo={repo} />
+
     </Container>
   );
 };

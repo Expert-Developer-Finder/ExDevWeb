@@ -210,11 +210,72 @@ export const getUserById = async (req, res) => {
 }
   
 export const getUser = async (req, res) => {
-  console.log(req.body.id);
   try {
     const user = await User.findById(req.body.id).then((user) => user);
     return user;
   } catch (e) {
     console.log(e);
+  }
+};
+
+export const promoteMember = async (req, res) => {
+  const { userId, ownerId, repoId } = req.body;
+  try {
+
+    const repo = await Repo.findById(repoId);
+
+    const repoOwners = repo.repoOwners;
+    const isPromoterValid = repoOwners.includes(ownerId);
+
+    if (isPromoterValid) {
+
+      const user = await User.findByIdAndUpdate(userId, {
+        $pull: { joined_repos: repoId },
+        $push: { owned_repos: repoId },
+      });
+
+
+      const repo = await Repo.findByIdAndUpdate(repoId, {
+        $push: { repoOwners: userId },
+        $pull: { members: userId },
+      });
+
+
+      res.status(200).json({ message: "Promoted Succesfully" });
+    } else {
+      res.status(401).json({ message: "Not authorized to promote" });
+    }
+  } catch (e) {
+    res.status(500).json({ message: "Something went wrong!" });
+  }
+};
+
+export const demoteOwner = async (req, res) => {
+  const { userId, ownerId, repoId } = req.body;
+
+  try {
+    const repo = await Repo.findById(repoId);
+
+    const repoOwners = repo.repoOwners;
+    const isDemoterValid = repoOwners.includes(ownerId);
+
+    if (isDemoterValid) {
+      const user = await User.findByIdAndUpdate(userId, {
+        $push: { joined_repos: repoId },
+        $pull: { owned_repos: repoId },
+      });
+
+
+      const repo = await Repo.findByIdAndUpdate(repoId, {
+        $pull: { repoOwners: userId },
+        $push: { members: userId },
+      });
+
+      res.status(200).json({ message: "Demoted Succesfully" });
+    } else {
+      res.status(401).json({ message: "Not authorized to demote" });
+    }
+  } catch (e) {
+    res.status(500).json({ message: "Something went wrong!" });
   }
 };

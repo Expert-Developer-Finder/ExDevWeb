@@ -9,19 +9,26 @@ import {
   changePassword,
   getOwnedRepos,
   getUserById,
-  getUser
+  getUser,
+  promoteMember,
+  demoteOwner
 } from "../controllers/user.js";
 
 const userRouter = express.Router();
+userRouter.post("/promote", promoteMember);
+userRouter.post("/demote", demoteOwner);
 
 userRouter.post("/signin", signin);
 userRouter.post("/signup", signup);
-userRouter.post("/:userId/change-password", changePassword);
-userRouter.post("/:userId", getUserById);
-userRouter.get("/", getUser);
-
 userRouter.put("/update-bio", updateBio);
 userRouter.delete("/delete-user", deleteAccount);
 userRouter.get("/owned-repos", getOwnedRepos);
+userRouter.get("/", getUser);
+
+
+userRouter.post("/:userId/change-password", changePassword);
+userRouter.post("/:userId", getUserById);
+
+
 
 export default userRouter;

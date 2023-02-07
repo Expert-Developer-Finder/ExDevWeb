@@ -15,6 +15,9 @@ export const signIn =(formData) => API.post("/user/signin", formData);
 export const signUp =(formData) => API.post("/user/signup", formData);
 export const getUserById =(userId) => API.post(`/user/${userId}`);
 export const changePassword =(formData, userId) => API.post(`/user/${userId}/change-password`, formData);
+export const promote = (data) => API.post("/user/promote" , data);
+export const demote = (data) => API.post("/user/demote" , data);
+
 
 // REPO
 export const createRepo =(formData) => API.post("/repos/create", formData);
@@ -25,6 +28,7 @@ export const changeSharedPass =(formData, repoId) => API.post(`/repos/${repoId}/
 export const acceptJoinRequest =( repoId, userId) => API.post(`/repos/${repoId}/accept-join-request`, userId );
 export const rejectJoinRequest =( repoId, userId) => API.post(`/repos/${repoId}/reject-join-request`, userId );
 export const getJoinedMembers =( repoId) => API.get(`/repos/${repoId}/joined-members` );
+export const getRepoOwners =( repoId) => API.get(`/repos/${repoId}/repo-owners` );
 
 
 export const checkAndGetRepoWithId =(repoId, userId) => API.post(`/repos/${repoId}`, userId);

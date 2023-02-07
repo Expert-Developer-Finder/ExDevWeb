@@ -2,9 +2,7 @@ import Repo from "../models/repo.js";
 import User from "../models/user.js";
 import fetch from "node-fetch";
 import bcrypt from "bcrypt";
-import {getUser} from "./user.js";
-
-
+import { getUser } from "./user.js";
 
 const checkIfPasswordIsStrong = (pwd) => {
   if (pwd.length < 8) return false;
@@ -41,17 +39,21 @@ export const createRepo = async (req, res) => {
   const ownerName = raw[0];
   const repoName = raw[1];
 
-  
   // Check if the repo already exists in our DB
-  const repos = await Repo.find({repoURL: repoURL});
-  
-  if(repos.length ) {
-    return res.status(405).json({ message: "This repository already has been created!" });
+  const repos = await Repo.find({ repoURL: repoURL });
+
+  if (repos.length) {
+    return res
+      .status(405)
+      .json({ message: "This repository already has been created!" });
   }
 
   // Check if the repo is in GitHub
   var response = await checkIfRepoExistsInGithub({ repoURL: repoURL });
-  if (!response )  return res.status(409).json({ message: "This is not a valid repository url" });
+  if (!response)
+    return res
+      .status(409)
+      .json({ message: "This is not a valid repository url" });
 
   // Create the repository, add the creator as a member and repository owner
   const newRepo = new Repo({
@@ -76,8 +78,10 @@ export const createRepo = async (req, res) => {
     user.owned_repos.push(newRepoId);
 
     try {
-        await User.findByIdAndUpdate(creator, user, {new: true});
-    } catch (error) {console.log(error);}
+      await User.findByIdAndUpdate(creator, user, { new: true });
+    } catch (error) {
+      console.log(error);
+    }
 
     res.status(201).json(newRepo);
   } catch (error) {
@@ -86,68 +90,89 @@ export const createRepo = async (req, res) => {
 };
 
 export const changeSharedPass = async (req, res) => {
- 
-  const {repoId} = req.params;
-  const {oldPassword, newPassword, newPasswordAgain}  = req.body;
+  const { repoId } = req.params;
+  const { oldPassword, newPassword, newPasswordAgain } = req.body;
 
-  if(newPassword !== newPasswordAgain ) return res.status(405).json({message: "Newly entered shared passes  don't match!"});
+  if (newPassword !== newPasswordAgain)
+    return res
+      .status(405)
+      .json({ message: "Newly entered shared passes  don't match!" });
 
   try {
-      const currentRepo = await Repo.findOne({_id: repoId});
-      const isPwdCorrect = await bcrypt.compare(oldPassword, currentRepo.sharedPass);
+    const currentRepo = await Repo.findOne({ _id: repoId });
+    const isPwdCorrect = await bcrypt.compare(
+      oldPassword,
+      currentRepo.sharedPass
+    );
 
-      if(!isPwdCorrect) return res.status(400).json({message: "Old shared pass is incorrect!"});
+    if (!isPwdCorrect)
+      return res.status(400).json({ message: "Old shared pass is incorrect!" });
 
+    //if (!checkIfPasswordIsStrong(newPassword)) return res.status(400)
+    //.json({message: "Your shared pass should be at least 8 characters, should include at least one numeric character and one upper case letter, and should have one of these special chararcters: !@#$&*."});
 
-      //if (!checkIfPasswordIsStrong(newPassword)) return res.status(400)
-      //.json({message: "Your shared pass should be at least 8 characters, should include at least one numeric character and one upper case letter, and should have one of these special chararcters: !@#$&*."});
-  
-      if ( newPassword === oldPassword) return res.status(405).json({message: "Enter a new shared pass different than your old one!"});
+    if (newPassword === oldPassword)
+      return res
+        .status(405)
+        .json({
+          message: "Enter a new shared pass different than your old one!",
+        });
 
-      const hashedPassword = await bcrypt.hash(newPassword, 12);
-      currentRepo.sharedPass =  hashedPassword;
-      await Repo.findByIdAndUpdate(repoId, currentRepo, {new: true});
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
+    currentRepo.sharedPass = hashedPassword;
+    await Repo.findByIdAndUpdate(repoId, currentRepo, { new: true });
 
-      res.status(200).json({message: "Shared Pass changed succesfully"});
-  } catch(err) {
-      res.status(500).json({message: "Something went wrong!"});
+    res.status(200).json({ message: "Shared Pass changed succesfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Something went wrong!" });
   }
-}
-
+};
 
 export const joinRepo = async (req, res) => {
-
-  const { repoURL,  password:sharedPass, ownerName,  repoName, isChecked : willSendJoinRequest, userId: newMemberId} = req.body;
+  const {
+    repoURL,
+    password: sharedPass,
+    ownerName,
+    repoName,
+    isChecked: willSendJoinRequest,
+    userId: newMemberId,
+  } = req.body;
 
   try {
-    // find repo 
-    if (repoURL.length && (ownerName.length || repoName.length) ) {
-      return res.status(405).json({ message: "Enter only repository owner and name as a pair, or the repository URL!" });
-    } 
+    // find repo
+    if (repoURL.length && (ownerName.length || repoName.length)) {
+      return res
+        .status(405)
+        .json({
+          message:
+            "Enter only repository owner and name as a pair, or the repository URL!",
+        });
+    }
     let repos;
-    
+
     let obtainedRepoName;
     let obtainedRepoOwner;
     let obtainedRepoURL;
-    if (!repoURL.length ) {
+    if (!repoURL.length) {
       // we don't have the repo url
-      obtainedRepoURL =  `https://github.com/${ownerName}/${repoName}`;
+      obtainedRepoURL = `https://github.com/${ownerName}/${repoName}`;
       obtainedRepoName = repoName;
       obtainedRepoOwner = ownerName;
-      repos = await Repo.find({repoURL: obtainedRepoURL});
-
+      repos = await Repo.find({ repoURL: obtainedRepoURL });
     } else {
-      obtainedRepoURL =  repoURL;
+      obtainedRepoURL = repoURL;
       const trimmedURL = repoURL.substring(19);
       const a = trimmedURL.split("/");
       obtainedRepoOwner = a[0];
       obtainedRepoName = a[1];
-      repos = await Repo.find({repoURL: repoURL});
+      repos = await Repo.find({ repoURL: repoURL });
     }
 
     // check if repo exist
-    if(repos.length == 0) {
-      return res.status(404).json({ message: "No such a repositry has been found!" });
+    if (repos.length == 0) {
+      return res
+        .status(404)
+        .json({ message: "No such a repositry has been found!" });
     }
 
     // Get the repo & repoId & user
@@ -156,8 +181,10 @@ export const joinRepo = async (req, res) => {
     const user = await User.findById(newMemberId);
 
     // Check if the member has already joined to the repository
-    if(repo.members.includes(newMemberId)) {
-      return res.status(405).json({ message: "You are already a member of this repository!" });
+    if (repo.members.includes(newMemberId)) {
+      return res
+        .status(405)
+        .json({ message: "You are already a member of this repository!" });
     }
 
     // JOIN WITH PASSWORD
@@ -165,7 +192,10 @@ export const joinRepo = async (req, res) => {
       // Add the member to repos members list
       repo.members.push(newMemberId);
 
-      const isSharedPassCorrect = await bcrypt.compare(sharedPass, repo.sharedPass);
+      const isSharedPassCorrect = await bcrypt.compare(
+        sharedPass,
+        repo.sharedPass
+      );
       if (!isSharedPassCorrect)
         return res.status(401).json({ message: "Wrong shared pass!" });
 
@@ -173,15 +203,15 @@ export const joinRepo = async (req, res) => {
       user.joined_repos.push(repoId);
 
       // update the moruqs
-      await User.findByIdAndUpdate(newMemberId, user, {new: true});
-      await Repo.findByIdAndUpdate(repoId, repo, {new: true});
-    } 
-    
+      await User.findByIdAndUpdate(newMemberId, user, { new: true });
+      await Repo.findByIdAndUpdate(repoId, repo, { new: true });
+    }
+
     // SEND A JOINING REQUEST
     else {
-      const newJoinRequest ={
-        userId : newMemberId,
-        userName : user.name,
+      const newJoinRequest = {
+        userId: newMemberId,
+        userName: user.name,
         repoId,
         repoName: obtainedRepoName,
         repoURL: obtainedRepoURL,
@@ -190,18 +220,17 @@ export const joinRepo = async (req, res) => {
 
       repo.join_requests.push(newJoinRequest);
       user.join_requests.push(newJoinRequest);
-      
+
       // TODO çok istersen adam bir requesti varkene bi daha request atamasın diye bakabilirsin
 
-      await User.findByIdAndUpdate(newMemberId, user, {new: true});
-      await Repo.findByIdAndUpdate(repoId, repo, {new: true});
+      await User.findByIdAndUpdate(newMemberId, user, { new: true });
+      await Repo.findByIdAndUpdate(repoId, repo, { new: true });
     }
 
     res.status(201).json(repo);
   } catch (error) {
     res.status(409).json({ message: error.message });
   }
-
 };
 
 export const getRepo = async (req, res) => {
@@ -211,51 +240,47 @@ export const getRepo = async (req, res) => {
 };
 
 export const getOwnedRepos = async (req, res) => {
-  const {userId} = req.params;
+  const { userId } = req.params;
 
   try {
-      const ownedRepos = await Repo.find({
-        repoOwners:{$in: userId}
-      });
+    const ownedRepos = await Repo.find({
+      repoOwners: { $in: userId },
+    });
 
-      res.status(200).json({data: ownedRepos});
-  } catch(err) {
-      res.status(500).json({message: "Something went wrong!"});
+    res.status(200).json({ data: ownedRepos });
+  } catch (err) {
+    res.status(500).json({ message: "Something went wrong!" });
   }
-  
-}
+};
 
 export const getJoinedRepos = async (req, res) => {
-  const {userId} = req.params;
+  const { userId } = req.params;
 
   try {
-      const joinedRepos = await Repo.find({
-        members:{$in: userId}
-      });
+    const joinedRepos = await Repo.find({
+      members: { $in: userId },
+    });
 
-      res.status(200).json({data: joinedRepos});
-  } catch(err) {
-      res.status(500).json({message: "Something went wrong!"});
+    res.status(200).json({ data: joinedRepos });
+  } catch (err) {
+    res.status(500).json({ message: "Something went wrong!" });
   }
-  
-}
+};
 
-export const checkAndGetRepoWithId = async  (req, res) => {
-  const {repoId} = req.params;
-  const {userId} = req.body;
- 
+export const checkAndGetRepoWithId = async (req, res) => {
+  const { repoId } = req.params;
+  const { userId } = req.body;
+
   try {
     const repo = await Repo.findById(repoId);
-    if (!repo.members.includes(userId) && !repo.repoOwners.includes(userId) ) return res.status(401).json({ message: "Unauthorised acces!" });
-  
-    res.status(200).json({data: repo});
-    
+    if (!repo.members.includes(userId) && !repo.repoOwners.includes(userId))
+      return res.status(401).json({ message: "Unauthorised acces!" });
+
+    res.status(200).json({ data: repo });
   } catch (error) {
-    res.status(500).json({message: "Something went wrong!"});
+    res.status(500).json({ message: "Something went wrong!" });
   }
-
-
-}
+};
 
 /*Be careful addMember returns the previous repo object(added member is not shown due to findByIdAndUpdate method)*/
 export const addMember = async (req, res) => {
@@ -293,11 +318,9 @@ export const checkIfRepoExistsInGithub = async (req, res) => {
 
   try {
     const response = await fetch(url);
-    if (response.status == 200) 
-      return true;
-    
+    if (response.status == 200) return true;
+
     return false;
-    
   } catch (err) {
     return false;
   }
@@ -321,8 +344,8 @@ export const checkIfRepoExists = async (req, res) => {
 };
 
 export const acceptJoinRequest = async (req, res) => {
-  const {userId} = req.body;
-  const {repoId} = req.params;
+  const { userId } = req.body;
+  const { repoId } = req.params;
 
   try {
     const repo = await Repo.findById(repoId);
@@ -331,51 +354,54 @@ export const acceptJoinRequest = async (req, res) => {
     repo.members.push(userId);
     user.joined_repos.push(repoId);
 
-    const filteredRequests = repo.join_requests.filter((request)=>   !(request.repoId == repoId && request.userId === userId));
+    const filteredRequests = repo.join_requests.filter(
+      (request) => !(request.repoId == repoId && request.userId === userId)
+    );
     repo.join_requests = filteredRequests;
 
-    const filteredRequests2 = user.join_requests.filter((request)=>   !(request.repoId == repoId && request.userId === userId));
+    const filteredRequests2 = user.join_requests.filter(
+      (request) => !(request.repoId == repoId && request.userId === userId)
+    );
     user.join_requests = filteredRequests2;
-    
+
     console.log(filteredRequests);
-    await Repo.findByIdAndUpdate(repoId, repo, {new: true});
-    await User.findByIdAndUpdate(userId, user, {new: true});
-    res.status(200).json({message: "Member accepted to repository!"});
-    
+    await Repo.findByIdAndUpdate(repoId, repo, { new: true });
+    await User.findByIdAndUpdate(userId, user, { new: true });
+    res.status(200).json({ message: "Member accepted to repository!" });
   } catch (error) {
-    res.status(500).json({message: error.message}); 
+    res.status(500).json({ message: error.message });
   }
-  
 };
 
 export const rejectJoinRequest = async (req, res) => {
-  const {userId} = req.body;
+  const { userId } = req.body;
   console.log(req.body);
-  const {repoId} = req.params;
+  const { repoId } = req.params;
 
   try {
     const repo = await Repo.findById(repoId);
     const user = await User.findById(userId);
 
-    const filteredRequests = repo.join_requests.filter((request)=>   !(request.repoId == repoId && request.userId === userId));
+    const filteredRequests = repo.join_requests.filter(
+      (request) => !(request.repoId == repoId && request.userId === userId)
+    );
     repo.join_requests = filteredRequests;
 
-    const filteredRequests2 = user.join_requests.filter((request)=>   !(request.repoId == repoId && request.userId === userId));
-    user.join_requests = filteredRequests2;;
-  
-    await Repo.findByIdAndUpdate(repoId, repo, {new: true});
-    await User.findByIdAndUpdate(userId, user, {new: true});
-    res.status(200).json({message: "Member rejected from repository!"});
+    const filteredRequests2 = user.join_requests.filter(
+      (request) => !(request.repoId == repoId && request.userId === userId)
+    );
+    user.join_requests = filteredRequests2;
 
-    
+    await Repo.findByIdAndUpdate(repoId, repo, { new: true });
+    await User.findByIdAndUpdate(userId, user, { new: true });
+    res.status(200).json({ message: "Member rejected from repository!" });
   } catch (error) {
-    res.status(500).json({message: error.message}); 
+    res.status(500).json({ message: error.message });
   }
-  
 };
 
 export const getJoinedMembers = async (req, res) => {
-  const {repoId} = req.params;
+  const { repoId } = req.params;
   var memberList = [];
   try {
     const repo = await Repo.findById(repoId);
@@ -389,4 +415,23 @@ export const getJoinedMembers = async (req, res) => {
     res.status(200).json({ joinedMembers: memberList });
   } catch (e) {
     res.status(500).json({ error: e });
-  }  }
+  }
+};
+
+export const getRepoOwners = async (req, res) => {
+  const { repoId } = req.params;
+  var ownerList = [];
+  try {
+    const repo = await Repo.findById(repoId);
+    for (let i = 0; i < repo.repoOwners.length; i++) {
+      const owner = await getUser({
+        body: { id: repo.repoOwners[i] },
+      });
+      ownerList.push(owner);
+    }
+
+    res.status(200).json({ repoOwners: ownerList });
+  } catch (e) {
+    res.status(500).json({ error: e });
+  }
+};

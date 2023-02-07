@@ -9,6 +9,7 @@ import RepoDetail from "./RepoDetail/RepoDetail";
 import RepoJoinRequests from "./RepoJoinRequests/RepoJoinRequests";
 import RequestItem from "./RequestItem/RequestItem";
 import JoinRequests from "./JoinRequests/JoinRequests";
+import RepoOwners from "./RepoOwners/RepoOwners";
 
 export {
   NavBar,
@@ -21,5 +22,6 @@ export {
   RepoDetail,
   RepoJoinRequests,
   RequestItem,
-  JoinRequests
+  JoinRequests,
+  RepoOwners
 };
