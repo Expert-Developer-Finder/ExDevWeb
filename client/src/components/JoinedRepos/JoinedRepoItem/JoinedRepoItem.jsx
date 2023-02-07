@@ -12,10 +12,7 @@ const JoinedRepoItem = ({repo}) => {
             <Typography> {`${repo.ownerName}/${repo.repoName}`} </Typography>
         </Grid>
         <Grid item className={classes.bottom} >
-            <Badge badgeContent={4} color="primary">
-                <NotificationsIcon color="action" />
-            </Badge>
-            <Button variant='contained' color='secondary' className={classes.button}>Visit</Button>
+            <Button href = {`repo/${repo._id}`} variant='contained' color='secondary' className={classes.button}>Visit</Button>
         </Grid>
     </Grid>
   )

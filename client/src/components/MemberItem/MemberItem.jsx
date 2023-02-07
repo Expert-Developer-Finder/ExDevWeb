@@ -7,7 +7,7 @@ import useStyle from "./styles";
 // Todo şu anda kendini falan demote edebiliyon ondan yana bir check yok
 // repo da no owner kalabiliyo
 
-const MemberItem = ({member, isOwner, repoId} ) => {
+const MemberItem = ({member, isOwner, repoId, isMember} ) => {
 
   const classes = useStyle();
 
@@ -57,6 +57,7 @@ const MemberItem = ({member, isOwner, repoId} ) => {
         </Grid>
         <Grid item xs = {4} style={{display: "flex", justifyContent: "flex-end"}} >
          {
+          isMember ? <></> :
           isOwner ? 
           <Button className={classes.button} onClick={demote}  variant='outlined' color='primary' >
             Demote

@@ -4,7 +4,7 @@ import MemberItem from "../MemberItem/MemberItem";
 import * as api from "../../api";
 
 
-const RepoOwners = ({repo}) => {
+const RepoOwners = ({repo, isMember}) => {
 
   const [owners, setOwners ] = useState(null);
 
@@ -31,7 +31,7 @@ const RepoOwners = ({repo}) => {
         <>
 
           {
-            owners.map((member)=> <MemberItem member={member} isOwner ={true} repoId={repo._id} />
+            owners.map((member)=> <MemberItem member={member} isMember={isMember} isOwner ={true} repoId={repo._id} />
 
             )
           }

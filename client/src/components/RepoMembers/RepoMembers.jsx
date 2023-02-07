@@ -4,16 +4,19 @@ import MemberItem from "../MemberItem/MemberItem";
 import * as api from "../../api";
 
 
-const RepoMembers = ({repo}) => {
+const RepoMembers = ({repo, isMember}) => {
 
   const [members, setMembers ] = useState(null);
+
+
+  console.log("EGE:");
+  console.log(isMember);
+
 
   useEffect(() => {
 
     const fcn = async ()  => {
       const {data} = await api.getJoinedMembers(repo._id);
-
-      console.log(data.joinedMembers);
       setMembers(data.joinedMembers);
     }
 
@@ -31,7 +34,7 @@ const RepoMembers = ({repo}) => {
         <>
 
           {
-            members.map((member)=> <MemberItem member={member} isOwner ={false} repoId={repo._id} />
+            members.map((member)=> <MemberItem member={member} isMember={isMember}  isOwner ={isMember} repoId={repo._id} />
 
             )
           }

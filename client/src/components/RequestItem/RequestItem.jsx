@@ -5,7 +5,7 @@ import { acceptJoinRequest, rejectJoinRequest } from '../../actions/repos';
 import useStyle from "./styles";
 
 
-const RequestItem = ({request, repoView}) => {
+const RequestItem = ({request, repoView, isMember }) => {
   const classes = useStyle();
   const dispatch = useDispatch();
 
@@ -38,7 +38,7 @@ const RequestItem = ({request, repoView}) => {
         </Grid>
         <Grid display="flex" xs={6}  justifyContent="flex-end" item md = {3}>
           {
-            repoView ? <>
+            isMember ? <></> : repoView ? <>
               <Button onClick={accept} className={classes.button} variant='outlined' color='primary'>Accept</Button>
               <Button onClick={reject} className={classes.button} variant="outlined" color='secondary'>Reject</Button>
             </> : 

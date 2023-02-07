@@ -18,7 +18,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import HomeIcon from "@mui/icons-material/Home";
 import { RepoMembers, RepoOwners } from "../../components";
 
-const RepoDetail = ( {repo}) => {
+const RepoDetail = ( {repo, isMember}) => {
   const user = JSON.parse(localStorage.getItem("profile")).result;
   console.log(repo);
 
@@ -27,10 +27,10 @@ const RepoDetail = ( {repo}) => {
   return (
     <Container className={classes.container}>
       <Typography variant="h4">Repository Owners </Typography>
-      <RepoOwners repo={repo} />
+      <RepoOwners isMember={isMember} repo={repo} />
 
       <Typography variant="h4">Members </Typography>
-      <RepoMembers repo={repo} />
+      <RepoMembers isMember={isMember}  repo={repo} />
 
     </Container>
   );

@@ -15,7 +15,7 @@ const passwordChangeInitialState = {
   newPasswordAgain: "",
 };
 
-const RepoSettings = ({ repo, setSelectedRoute }) => {
+const RepoSettings = ({ repo, setSelectedRoute , isMember }) => {
   const classes = useStyle();
   const dispatch = useDispatch();
   let { id: repoId } = useParams();
@@ -32,6 +32,14 @@ const RepoSettings = ({ repo, setSelectedRoute }) => {
     dispatch(changeSharedPass(passwordForm, repoId,  setSelectedRoute));
 
   };
+
+  if (isMember) {
+    return <>
+      <Container>
+        <Typography variant="h2" >You are not a repository owner!</Typography>
+      </Container>
+    </>
+  }
 
   return (
     <Container className={classes.container}>

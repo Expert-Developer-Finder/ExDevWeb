@@ -17,6 +17,7 @@ const Repo = () => {
   
     const [repo, setRepo] = useState(null);
     const [showError, setShowError] = useState(false);
+    const [isMember, setIsMember] = useState(false);
 
     const [selectedRoute, setSelectedRoute] = useState("/");
     
@@ -26,7 +27,12 @@ const Repo = () => {
         try {
           const {data: {data}} = await checkAndGetRepoWithId(repoId, {userId: user._id}); 
           setRepo(data);
+          if ( data.members.includes(user._id)) {
+            console.log("TUREE");
+            setIsMember(true);
+          }
         } catch (error) {
+  
           setShowError(true);
         }
       }
@@ -68,10 +74,10 @@ const Repo = () => {
 
         {
             selectedRoute === "/settings" ? 
-            <RepoSettings repo={repo} /> :
+            <RepoSettings repo={repo} isMember={isMember}/> :
             selectedRoute === "/requests" ?
-            <RepoJoinRequests  repo={repo} setSelectedRoute={setSelectedRoute} />:
-            <RepoDetail  repo={repo} />
+            <RepoJoinRequests  repo={repo} setSelectedRoute={setSelectedRoute} isMember={isMember}/>:
+            <RepoDetail  repo={repo} isMember={isMember} />
 
         }
 
