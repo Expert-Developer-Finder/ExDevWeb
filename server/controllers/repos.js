@@ -112,11 +112,9 @@ export const changeSharedPass = async (req, res) => {
     //.json({message: "Your shared pass should be at least 8 characters, should include at least one numeric character and one upper case letter, and should have one of these special chararcters: !@#$&*."});
 
     if (newPassword === oldPassword)
-      return res
-        .status(405)
-        .json({
-          message: "Enter a new shared pass different than your old one!",
-        });
+      return res.status(405).json({
+        message: "Enter a new shared pass different than your old one!",
+      });
 
     const hashedPassword = await bcrypt.hash(newPassword, 12);
     currentRepo.sharedPass = hashedPassword;
@@ -141,12 +139,10 @@ export const joinRepo = async (req, res) => {
   try {
     // find repo
     if (repoURL.length && (ownerName.length || repoName.length)) {
-      return res
-        .status(405)
-        .json({
-          message:
-            "Enter only repository owner and name as a pair, or the repository URL!",
-        });
+      return res.status(405).json({
+        message:
+          "Enter only repository owner and name as a pair, or the repository URL!",
+      });
     }
     let repos;
 
@@ -429,9 +425,56 @@ export const getRepoOwners = async (req, res) => {
       });
       ownerList.push(owner);
     }
-
     res.status(200).json({ repoOwners: ownerList });
   } catch (e) {
     res.status(500).json({ error: e });
   }
 };
+
+export const getRandomX = async (req, res) => {
+  const { repoId } = req.params;
+  var ownerList = [];
+  var memberList = [];
+  var count = 3;
+
+  try {
+    const repo = await Repo.findById(repoId);
+    for (let i = 0; i < repo.repoOwners.length; i++) {
+      const owner = await getUser({
+        body: { id: repo.repoOwners[i] },
+      });
+      ownerList.push(owner);
+    }
+    for (let i = 0; i < repo.members.length; i++) {
+      const member = await getUser({
+        body: { id: repo.members[i] },
+      });
+      memberList.push(member);
+    }
+
+    var allContributors = memberList.concat(ownerList);
+    var selectedContributors = memberList.concat(ownerList);
+    console.log(allContributors.length);
+    if (allContributors.length > count) {
+      selectedContributors = getUnique(count, allContributors);
+    }
+
+    res.status(200).json({ randomContributors: selectedContributors });
+  } catch (e) {
+    res.status(500).json({ error: e });
+  }
+};
+
+function getUnique(count, arr) {
+  // Make a copy of the array
+  var tmp = arr.slice(arr);
+  var ret = [];
+
+  for (var i = 0; i < count; i++) {
+    var index = Math.floor(Math.random() * tmp.length);
+    var removed = tmp.splice(index, 1);
+    // Since we are only removing one element
+    ret.push(removed[0]);
+  }
+  return ret;
+}

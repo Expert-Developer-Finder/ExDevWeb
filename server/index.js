@@ -3,7 +3,12 @@ import bodyParser from "body-parser";
 import mongoose, { mongo } from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
-import { dataCollectorRouter, repoRouter, userRouter } from "./routes/index.js";
+import {
+  contactRouter,
+  dataCollectorRouter,
+  repoRouter,
+  userRouter,
+} from "./routes/index.js";
 
 const app = express();
 dotenv.config();
@@ -17,6 +22,7 @@ app.use(cors());
 app.use("/user", userRouter);
 app.use("/repos", repoRouter);
 app.use("/data-collector", dataCollectorRouter);
+app.use("/contact", contactRouter);
 
 const PORT = process.env.PORT;
 

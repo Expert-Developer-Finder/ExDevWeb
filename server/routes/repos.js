@@ -14,7 +14,8 @@ import {
   acceptJoinRequest,
   rejectJoinRequest,
   getJoinedMembers,
-  getRepoOwners
+  getRepoOwners,
+  getRandomX,
 } from "../controllers/repos.js";
 
 const repoRouter = express.Router();
@@ -28,7 +29,7 @@ repoRouter.post(`/:repoId/accept-join-request`, acceptJoinRequest);
 repoRouter.post(`/:repoId/reject-join-request`, rejectJoinRequest);
 repoRouter.get("/:repoId/joined-members", getJoinedMembers);
 repoRouter.get("/:repoId/repo-owners", getRepoOwners);
-
+repoRouter.get("/:repoId/get-random", getRandomX);
 
 //repoRouter.get("/check-if-exists-in-github", checkIfRepoExistsInGithub);
 
