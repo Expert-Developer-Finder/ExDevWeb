@@ -11,10 +11,12 @@ import {
   getUserById,
   getUser,
   promoteMember,
-  demoteOwner
+  demoteOwner,
+  getAllUsers
 } from "../controllers/user.js";
 
 const userRouter = express.Router();
+
 userRouter.post("/promote", promoteMember);
 userRouter.post("/demote", demoteOwner);
 
@@ -23,7 +25,17 @@ userRouter.post("/signup", signup);
 userRouter.put("/update-bio", updateBio);
 userRouter.delete("/delete-user", deleteAccount);
 userRouter.get("/owned-repos", getOwnedRepos);
+
+userRouter.get("/all", getAllUsers);
+
 userRouter.get("/", getUser);
+
+/**
+ * getContacts
+ * removeContact
+ * addContact
+ * rateUser
+ **/ 
 
 
 userRouter.post("/:userId/change-password", changePassword);

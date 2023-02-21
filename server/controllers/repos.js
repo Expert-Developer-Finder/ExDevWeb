@@ -435,3 +435,19 @@ export const getRepoOwners = async (req, res) => {
     res.status(500).json({ error: e });
   }
 };
+
+export const getAllRepos = async (req, res) => {
+  try {
+    Repo.find({}, function(err, repos) {
+      var repoArr = [];
+  
+      repos.forEach(function(repo) {
+        repoArr.push(repo);
+      });
+  
+      res.send(repoArr);  
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};

@@ -14,7 +14,8 @@ import {
   acceptJoinRequest,
   rejectJoinRequest,
   getJoinedMembers,
-  getRepoOwners
+  getRepoOwners,
+  getAllRepos
 } from "../controllers/repos.js";
 
 const repoRouter = express.Router();
@@ -35,6 +36,9 @@ repoRouter.get("/:repoId/repo-owners", getRepoOwners);
 repoRouter.get("/check-if-exists", checkIfRepoExists);
 repoRouter.get("/:userId/owned-repos", getOwnedRepos);
 repoRouter.get("/:userId/joined-repos", getJoinedRepos);
+
+
+repoRouter.get("/all", getAllRepos);
 
 repoRouter.put("/add-member", addMember);
 
