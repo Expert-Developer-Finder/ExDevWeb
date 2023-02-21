@@ -141,6 +141,22 @@ export const getOwnedRepos = async (req, res) => {
   }
 };
 
+export const getAllUsers = async (req, res) => {
+  try {
+    User.find({}, function(err, users) {
+      var userArr = [];
+  
+      users.forEach(function(user) {
+        userArr.push(user);
+      });
+  
+      res.send(userArr);  
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 export const removeOwnerFromRepo = async (req, res) => {
   const { userId, repoId } = req;
   console.log("checkmate1");
