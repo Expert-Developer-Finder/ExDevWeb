@@ -3,16 +3,21 @@ import { getUser } from "./user.js";
 
 export const addContact = async (req, res) => {
   const { userId, expertId, repoId } = req.body;
+
+  const existingContact = await Contact.findOne({userId, expertId, repoId});
+  if(existingContact)
+    return res.status(405).json({ message: "Contact already exists" });
+
   const newContact = new Contact({
-    userId: userId,
-    expertId: expertId,
-    repoId: repoId,
-    createdAt: new Date().toISOString(),
+      userId: userId,
+      expertId: expertId,
+      repoId: repoId,
+      createdAt: new Date().toISOString(),
   });
+
   try {
     await newContact.save();
-
-    res.status(201).json(newContact);
+    res.status(201).json({ message: "Contact has been added!" });
   } catch (e) {
     res.status(500).json({ message: "Something went wrong!" });
   }
@@ -20,6 +25,11 @@ export const addContact = async (req, res) => {
 
 export const deleteContact = async (req, res) => {
   const { userId, expertId, repoId } = req.body;
+
+  const existingContact = await Contact.findOne({userId, expertId, repoId});
+  if(!existingContact)
+    return res.status(404).json({ message: "No such a contact exists to be deleted" });
+  
 
   try {
     const contact = await Contact.find({
@@ -38,8 +48,6 @@ export const deleteContact = async (req, res) => {
 };
 
 export const returnContacts = async (req, res) => {
-  console.log(req.body);
-
   const { userId, repoId } = req.body;
   const contacts = await Contact.find({
     userId: userId,

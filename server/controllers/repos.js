@@ -431,7 +431,6 @@ export const getRepoOwners = async (req, res) => {
   }
 };
 
-<<<<<<< HEAD
 export const getRandomX = async (req, res) => {
   const { repoId } = req.params;
   var ownerList = [];
@@ -479,7 +478,6 @@ function getUnique(count, arr) {
   }
   return ret;
 }
-=======
 export const getAllRepos = async (req, res) => {
   try {
     Repo.find({}, function(err, repos) {
@@ -495,4 +493,3 @@ export const getAllRepos = async (req, res) => {
     console.log(e);
   }
 };
->>>>>>> 413ee84323a2b7d162d8d41c28dc26e82af4af63

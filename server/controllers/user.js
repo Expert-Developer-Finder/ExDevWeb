@@ -9,8 +9,8 @@ import { returnContacts } from "./contact.js";
 dotenv.config();
 
 export const signin = async (req, res) => {
+  
   const { email, password } = req.body;
-
   try {
     const existingUser = await User.findOne({ email });
     if (!existingUser)
@@ -305,7 +305,7 @@ export const demoteOwner = async (req, res) => {
 };
 
 export const getContacts = async (req, res) => {
-  const { userId, repoId } = req.body;
+  const { userId, repoId } = req.body;;
   var contacts = [];
   try {
     var contactList = await returnContacts({
@@ -316,7 +316,7 @@ export const getContacts = async (req, res) => {
       contacts.push(contactList[i]);
     }
 
-    res.status(200).json({ contacts: contacts });
+    res.status(200).json( contacts );
   } catch (e) {
     res.status(500).json({ message: "Something went wrong!!" });
   }

@@ -11,11 +11,8 @@ import {
   getUser,
   promoteMember,
   demoteOwner,
-<<<<<<< HEAD
   getContacts,
-=======
   getAllUsers
->>>>>>> 413ee84323a2b7d162d8d41c28dc26e82af4af63
 } from "../controllers/user.js";
 
 const userRouter = express.Router();
@@ -28,15 +25,12 @@ userRouter.post("/signup", signup);
 userRouter.put("/update-bio", updateBio);
 userRouter.delete("/delete-user", deleteAccount);
 userRouter.get("/owned-repos", getOwnedRepos);
-<<<<<<< HEAD
-userRouter.get("/contacts", getContacts);
-userRouter.get("/", getUser);
 
-=======
-
+userRouter.post("/contacts", getContacts);
 userRouter.get("/all", getAllUsers);
-
 userRouter.get("/", getUser);
+
+
 
 /**
  * getContacts
@@ -46,7 +40,7 @@ userRouter.get("/", getUser);
  **/ 
 
 
->>>>>>> 413ee84323a2b7d162d8d41c28dc26e82af4af63
+
 userRouter.post("/:userId/change-password", changePassword);
 userRouter.post("/:userId", getUserById);
 
