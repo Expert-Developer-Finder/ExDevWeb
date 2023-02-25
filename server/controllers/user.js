@@ -321,3 +321,23 @@ export const getContacts = async (req, res) => {
     res.status(500).json({ message: "Something went wrong!!" });
   }
 };
+
+
+export const getRepos = async (req, res) => {
+  const { userId } = req.body;;
+  try {
+    const user = await User.findById(userId);
+    var reposIdsOfUser = [...user.joined_repos, ...user.owned_repos];
+    
+    var reposOfUser = [];
+    for(var i = 0; i <reposIdsOfUser.length ; i++){
+      reposOfUser.push(await Repo.findById(reposIdsOfUser[i]));
+    }
+    res.status(200).json( reposOfUser );
+    
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong!!" });
+    
+  }
+  
+};

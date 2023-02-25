@@ -12,7 +12,8 @@ import {
   promoteMember,
   demoteOwner,
   getContacts,
-  getAllUsers
+  getAllUsers,
+  getRepos
 } from "../controllers/user.js";
 
 const userRouter = express.Router();
@@ -27,6 +28,7 @@ userRouter.delete("/delete-user", deleteAccount);
 userRouter.get("/owned-repos", getOwnedRepos);
 
 userRouter.post("/contacts", getContacts);
+userRouter.post("/repos", getRepos);
 userRouter.get("/all", getAllUsers);
 userRouter.get("/", getUser);
 
