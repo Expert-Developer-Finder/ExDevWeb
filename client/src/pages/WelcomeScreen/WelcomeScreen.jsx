@@ -1,7 +1,6 @@
 import { Button, Container, Typography } from '@mui/material';
 import React from 'react';
 import useStyles from "./styles.js";
-import * as api from "../../api";
 
 const WelcomeScreen = () => {
   const classes = useStyles();
@@ -14,14 +13,7 @@ const WelcomeScreen = () => {
         <div className={classes.buttons}>
           <Button className={classes.button}  variant='contained' href="/register" >Register</Button>
           <Button className={classes.button} variant='outlined' href="login">Log In</Button>
-
         </div>
-
-        <Button onClick={()=> {
-          api.example();
-
-
-        }} > Example</Button>
       </div>
       <img alt="A welcoming man" className={classes.img} src={require("../../assets/male01.svg")} />
 
