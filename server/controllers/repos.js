@@ -3,6 +3,7 @@ import User from "../models/user.js";
 import fetch from "node-fetch";
 import bcrypt from "bcrypt";
 import { getUser } from "./user.js";
+import createGraph from "../neo4j/graph_manager/createGraph.js";
 
 const checkIfPasswordIsStrong = (pwd) => {
   if (pwd.length < 8) return false;
@@ -65,9 +66,6 @@ export const createRepo = async (req, res) => {
     createdAt: new Date().toISOString(),
   });
 
-  // fetchData(repoUrl)
-
-  // newRepo.members.push(creator); // Add member (creator)
   newRepo.repoOwners.push(creator); // Make Repo Owner (creator)
 
   try {
@@ -82,6 +80,15 @@ export const createRepo = async (req, res) => {
     } catch (error) {
       console.log(error);
     }
+
+    // TODO: token lar alınacak
+    // at this point, we can start creating the graph at Neo4j
+    createGraph(ownerName, repoName, [
+      "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",
+      "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",
+      "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",
+      "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"
+    ])
 
     res.status(201).json(newRepo);
   } catch (error) {

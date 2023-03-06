@@ -5,7 +5,6 @@ import cors from "cors";
 import dotenv from "dotenv";
 import {
   contactRouter,
-  dataCollectorRouter,
   repoRouter,
   userRouter,
 } from "./routes/index.js";
@@ -22,7 +21,6 @@ app.use(cors());
 
 app.use("/user", userRouter);
 app.use("/repos", repoRouter);
-app.use("/data-collector", dataCollectorRouter);
 app.use("/contact", contactRouter);
 
 const PORT = process.env.PORT;
