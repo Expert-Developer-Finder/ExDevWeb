@@ -6,7 +6,7 @@ import { useHistory } from "react-router-dom";
 import useStyles from "./styles.js";
 import { Typography } from "@material-ui/core";
 import AlertDialog from "../../components/AlertDialog/AlertDialog.jsx";
-import { changePassword } from "../../actions/auth.js";
+import { changePassword, updateProfile } from "../../actions/auth.js";
 
 
 const passwordChangeInitialState = { oldPassword: "", newPassword: "" , newPasswordAgain:""};
@@ -31,6 +31,17 @@ const Profile = () => {
     dispatch(changePassword(passwordForm, history, userData._id));
   };
 
+  const updateProfileSubmit = ()=> {
+
+    if ( !userData?.name){
+      alert("Name field cannot be empty!")
+      return
+    }
+    console.log(userData);
+    dispatch(updateProfile(userData, history, userData._id));
+    return
+    
+  }
   const logout = () => {
     dispatch({ type: "LOGOUT" });
     setOpen(false);
@@ -51,15 +62,15 @@ const Profile = () => {
       <Typography className={classes.mt} variant="h3">Profile Settings</Typography>
       <Grid container>
         <Grid item sm={12} md={6}>
-          <form autoComplete="off" noValidate onSubmit={()=>{}} className={classes.form}>
+          <form autoComplete="off" noValidate className={classes.form}>
             <TextField margin="normal" name="name" variant="outlined" label="Name" fullWidth value={userData?.name} onChange={(e) => {   setUserData({ ...userData, name: e.target.value }); }}/>
             <TextField margin="normal" name="bio" variant="outlined" label="Biography" fullWidth value={userData?.bio} onChange={(e) => {   setUserData({ ...userData, bio: e.target.value })}} />
-            <Button variant="contained" color="success" size="small" onClick={()=>{}} fullWidth> Update Profile</Button>
+            <Button variant="contained" color="success" size="small" onClick={updateProfileSubmit} fullWidth> Update Profile</Button>
           </form>
         </Grid>
         <Grid display="flex"  alignItems="center"  item sm={12} md={6}>
           <div className={classes.square}>
-            <Avatar className={classes.avatar}>?  </Avatar>
+            <Avatar className={classes.avatar} src={userData?.avatarUrl} >?  </Avatar>
           </div>
         </Grid>
       </Grid>

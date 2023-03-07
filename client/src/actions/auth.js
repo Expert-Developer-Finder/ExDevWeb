@@ -36,7 +36,22 @@ export const signup = (formData, history) => async (dispatch) => {
 export const changePassword = (formData, history, userId) => async (dispatch) => {
   try {
     const {data} = await api.changePassword(formData, userId);
-    console.log(data.message);
+    alert(data.message);
+    history.push("/");
+
+
+  } catch (error) {
+    const errMsg = errorHandle(error);
+    dispatch({ type: ERROR, data: errMsg });
+  }
+};
+
+export const updateProfile = (formData, history, userId) => async (dispatch) => {
+  try {
+    const {data} = await api.updateProfile(formData, userId);
+    console.log(formData);
+    const user = formData
+    await dispatch({ type: RESTORE,  user });
     alert(data.message);
     history.push("/");
 

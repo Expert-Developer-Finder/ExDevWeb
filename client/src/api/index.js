@@ -15,6 +15,7 @@ export const signIn =(formData) => API.post("/user/signin", formData);
 export const signUp =(formData) => API.post("/user/signup", formData);
 export const getUserById =(userId) => API.post(`/user/${userId}`);
 export const changePassword =(formData, userId) => API.post(`/user/${userId}/change-password`, formData);
+export const updateProfile =(formData, userId) => API.post(`/user/${userId}/update-profile`, formData);
 export const promote = (data) => API.post("/user/promote" , data);
 export const demote = (data) => API.post("/user/demote" , data);
 

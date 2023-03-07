@@ -13,7 +13,8 @@ import {
   demoteOwner,
   getContacts,
   getAllUsers,
-  getRepos
+  getRepos,
+  updateProfile
 } from "../controllers/user.js";
 
 const userRouter = express.Router();
@@ -44,6 +45,9 @@ userRouter.get("/", getUser);
 
 
 userRouter.post("/:userId/change-password", changePassword);
+userRouter.post("/:userId/update-profile", updateProfile);
+
+
 userRouter.post("/:userId", getUserById);
 
 export default userRouter;
