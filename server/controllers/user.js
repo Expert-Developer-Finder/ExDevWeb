@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import User from "../models/user.js";
-
+import fetch from "node-fetch";
 import Repo from "../models/repo.js";
 import { returnContacts } from "./contact.js";
 
@@ -57,17 +57,30 @@ const checkIfPasswordIsStrong = (pwd) => {
 };
 
 export const signup = async (req, res) => {
-  const { email, password, firstName, lastName, confirmPassword } = req.body;
+  const { email, password, firstName, lastName, confirmPassword, githubUsername, githubPAT } = req.body;
 
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser)
       return res.status(400).json({ message: "User already exist!" });
 
+    const githubUser = await fetch(`https://api.github.com/users/${githubUsername}`).then(async res => {
+        if ( res.status == 404) {
+          return;
+        } else {
+          return await res.json();
+        }
+      }
+    )
+    if(!githubUser ) 
+      return res.status(404).json({ message: "No user at GitHub could be found with the given GitHub username!" });
+
+
     // uncomment when you want to check for strong passwords
 
     //if (!checkIfPasswordIsStrong(password)) return res.status(400)
     //.json({message: "Your password should be at least 8 characters, should include at least one numeric character and one upper case letter, and should have one of these special chararcters: !@#$&*."});
+    console.log(githubUser.avatar_url);
 
     if (password !== confirmPassword)
       return res.status(400).json({ message: "Passwords don't match!" });
@@ -77,7 +90,10 @@ export const signup = async (req, res) => {
       email,
       password: hashedPassword,
       name: `${firstName} ${lastName}`,
-      bio: "",
+      bio: githubUser.bio,
+      avatarUrl: githubUser.avatar_url,
+      githubUsername,
+      githubPAT
     });
     const token = jwt.sign({ email: result.email, id: result._id }, "test", {
       expiresIn: "1h",

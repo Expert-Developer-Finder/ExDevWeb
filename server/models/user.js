@@ -6,6 +6,9 @@ const userSchema = mongoose.Schema({
    password : {type: String, required: true},
    bio: {type: String},
    id: {type: String},
+   githubUsername: {type: String},
+   githubPAT: {type: String},
+   avatarUrl: {type: String},
    joined_repos: { type: [String],default: []},
    join_requests: {type: [{
       userId : {type: String, required: true},

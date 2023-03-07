@@ -82,7 +82,7 @@ const Login = () => {
             <Grid item>
               <Button href="/register">
                 {" "}
-                Already have an account? Register
+                Don't have an account? Register
               </Button>
             </Grid>
           </Grid>
