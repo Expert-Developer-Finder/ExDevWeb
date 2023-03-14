@@ -12,7 +12,7 @@ const CreateRepo = () => {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
-  const initialState = {repoURL: "", sharedPass: "", creator: JSON.parse(localStorage.getItem("profile")).result._id};
+  const initialState = {repoURL: "", sharedPass: "", creator: JSON.parse(localStorage.getItem("profile")).result};
   const [formData, setFormData] = useState(initialState);
   const [show, setShow] = useState(false);
   const handleChange = (e) => {
@@ -65,7 +65,6 @@ const CreateRepo = () => {
           <Button type='submit' variant='contained' onClick={handleSubmit}>Create Repo</Button>
         </form>
       </Paper>
-      <Typography>TODO: private repo ise muhtemelen github token vs isteyebiliriz</Typography>
     </Container>
   )
 }

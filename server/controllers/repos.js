@@ -50,16 +50,30 @@ export const createRepo = async (req, res) => {
   }
 
   // Check if the repo is in GitHub
-  var response = await checkIfRepoExistsInGithub({ repoURL: repoURL });
-  if (!response)
-    return res
-      .status(409)
-      .json({ message: "This is not a valid repository url" });
+  const checkAPIUrl = `https://api.github.com/repos/${ownerName}/${repoName}`;
 
+  // First check if it a public repo
+  const checkApiRes = await fetch(checkAPIUrl);  
+  if (checkApiRes.status != 200) {
+
+    // Then may be it is a private repo of mine
+    const config = {
+      headers: { Authorization: `Bearer ${creator.githubPAT}` },
+    };
+
+    const checkApiRes2 = await fetch(checkAPIUrl, config); 
+
+    if (checkApiRes2.status != 200) {
+      return res
+      .status(404)
+      .json({ message: "This is not a valid repository url" });
+    }
+  }
+    
   // Create the repository, add the creator as a member and repository owner
   const newRepo = new Repo({
     sharedPass: hashedPassword,
-    creator,
+    creator: creator._id,
     ownerName,
     repoName,
     repoURL,
@@ -83,12 +97,14 @@ export const createRepo = async (req, res) => {
 
     // TODO: token lar alınacak
     // at this point, we can start creating the graph at Neo4j
+    console.log("CREATE REPOYA gidiyoz");
     createGraph(ownerName, repoName, [
-      "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",
-      "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",
-      "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",
-      "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"
+      creator.githubPAT
     ])
+
+    console.log("CREATE REPO bitse de bitmese de biz beklemiyoruz");
+
+
 
     res.status(201).json(newRepo);
   } catch (error) {

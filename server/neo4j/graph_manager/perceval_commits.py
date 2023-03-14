@@ -16,6 +16,7 @@ repo = Git(uri=repoURL, gitpath="/tmp/" + repoOwner + "/"  + repoName +".git")
 
 # fetch all commits as an iterator, and iterate it printing each hash
 for commit in repo.fetch():
+    
     f.write(json.dumps(commit, separators=(",", ":")) + "\n")
 
 

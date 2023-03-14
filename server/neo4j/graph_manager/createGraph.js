@@ -5,7 +5,7 @@ const fetchIssuesAndPRs = async (repoOwner, repoName, tokens) => {
 
     return new Promise((resolveFunc) => {
         console.log("issue başladı");
-        const pyFile = "perceval_issues_and_prs.py";
+        const pyFile = "neo4j/graph_manager/perceval_issues_and_prs.py";
         const args = [repoOwner, repoName, tokens];
         args.unshift(pyFile);
 
@@ -36,7 +36,7 @@ const fetchCommits = async (repoOwner, repoName) => {
         console.log("commit başladı");
 
     
-        const pyFile = "perceval_commits.py";
+        const pyFile = "neo4j/graph_manager/perceval_commits.py";
         const args = [repoOwner, repoName];
         args.unshift(pyFile);
     
@@ -63,6 +63,8 @@ const fetchCommits = async (repoOwner, repoName) => {
 
 
 const createGraph = async (repoOwner, repoName, tokens) => {
+
+    console.log("STARTING: " + repoOwner + "/" + repoName);
     const commitsReturned =  fetchCommits(repoOwner, repoName);
     const issuesAndPRsReturned =  fetchIssuesAndPRs(repoOwner, repoName, tokens);
 
@@ -82,4 +84,4 @@ createGraph("egeergul", "github-actions-tut", [
     "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",
     "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",
     "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"
-]);
+]); 

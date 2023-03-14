@@ -9,11 +9,13 @@ tokens = sys.argv[3].split(",")
 print(repoOwner)
 print(repoName)
 
-f_issue = open(  repoOwner + "_" + repoName + "_issues.json" , "w")
+f_issue = open( repoOwner + "_" + repoName + "_issues.json" , "w")
 
 f_pr = open(  repoOwner + "_" + repoName + "_prs.json" , "w")
 
 print("TOKENS: ", tokens)
+
+
 
 # create a GitHub object, pointing to repo_url, using repo_dir for cloning
 repo = GitHub(
@@ -23,6 +25,8 @@ repo = GitHub(
     sleep_for_rate=True,        
     sleep_time=300
 )
+
+
 
 # fetch all issues/pull requests as an iterator, and iterate it printing
 # their number, and whether they are issues or pull requests
