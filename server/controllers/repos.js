@@ -3,7 +3,9 @@ import User from "../models/user.js";
 import fetch from "node-fetch";
 import bcrypt from "bcrypt";
 import { getUser } from "./user.js";
-import createGraph from "../neo4j/graph_manager/createGraph.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const checkIfPasswordIsStrong = (pwd) => {
   if (pwd.length < 8) return false;
@@ -97,12 +99,16 @@ export const createRepo = async (req, res) => {
 
     // TODO: token lar alınacak
     // at this point, we can start creating the graph at Neo4j
-    console.log("CREATE REPOYA gidiyoz");
-    createGraph(ownerName, repoName, [
-      creator.githubPAT
-    ])
+    fetch(`${process.env.GRAPH_BASE_URL}/create/${ownerName}/${repoName}`, {
+      method: "POST",
+      body: JSON.stringify({"list": [creator.githubPAT]}),
+      headers: {
+          "Content-type": "application/json; charset=UTF-8"
+      }
+})
+ 
 
-    console.log("CREATE REPO bitse de bitmese de biz beklemiyoruz");
+   
 
 
 
