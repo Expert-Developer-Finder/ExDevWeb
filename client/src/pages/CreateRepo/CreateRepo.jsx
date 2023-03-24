@@ -7,6 +7,7 @@ import { createRepo } from '../../actions/repos.js';
 import { CLEAR_ERROR } from '../../constants/actionTypes.js';
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import { getBranches } from '../../api/index.js';
 
 const CreateRepo = () => {
   const classes = useStyles();
@@ -20,7 +21,33 @@ const CreateRepo = () => {
   };
   const handleSubmit = (e)=> {
     e.preventDefault();
+    if( !formData.sharedPass) {
+      alert("Please provide a shared repository first!")
+    }
     dispatch(createRepo(formData, history));
+  }
+
+  const [branches, setBranches] = useState(null);
+  const [selectedBranch, setSelectedBranch] = useState(null);
+  
+  const showBranches = async (e)=> {
+    if(!formData.repoURL) {
+      alert("First provide a GitHub Repository URL");
+      return;
+    } 
+
+    const repo = formData.repoURL.split("github.com/")[1];
+    const repoOwner = repo.split("/")[0];
+    const repoName = repo.split("/")[1];
+      
+    const {data} = await getBranches(repoOwner, repoName, {"token": formData.creator.githubPAT});
+
+    if(data)
+      setBranches(data);
+    else {
+      alert("This repository URL is not valid or it is a private repository that you do not have access to!");
+    }     
+    return;
   }
 
   const  {errorMessage, error}  = useSelector((state) => state.repos);
@@ -61,8 +88,32 @@ const CreateRepo = () => {
             }}
             type={show?"text": "password"} onChange={handleChange} name='sharedPass' required label="Shared Pass" variant='outlined' fullWidth></TextField>
           <br/>
-        
-          <Button type='submit' variant='contained' onClick={handleSubmit}>Create Repo</Button>
+
+          {
+            !selectedBranch ?
+              branches ? 
+              <>
+                <Typography variant='h6'>Which is the main branch of your repository? (e.g. main, master, etc.)</Typography>
+                <Typography><i>While making a recommendation, this repository will be used</i></Typography>
+                {
+                  branches?.map((branch)=> 
+                    <div className={classes.branchItem} onClick={()=> setSelectedBranch(branch.name)}>
+                      <Typography> {branch.name}  </Typography>
+                  </div>
+                )}
+              </>
+              :  
+              <Button variant='contained' onClick={showBranches}>Select Branch</Button>
+            :
+            <Typography>Selected Branch: {selectedBranch} </Typography>
+          }
+          <br/>
+          {
+            selectedBranch ? 
+            <Button type='submit' variant='contained' onClick={handleSubmit}>Create Repo</Button> :
+            <Button disabled="true" type='submit' variant='contained' onClick={handleSubmit}>Create Repo</Button>  
+          }
+
         </form>
       </Paper>
     </Container>

@@ -524,3 +524,32 @@ export const getAllRepos = async (req, res) => {
     console.log(e);
   }
 };
+
+export const getReposBranches = async (req, res) => {
+  const {repoOwner, repoName} = req.params;
+  const  {token} = req.body;
+
+  try {
+
+    let branches; 
+    const config = {
+      headers: { Authorization: `Bearer ${token}` },
+    };
+    await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/branches`, config)
+    .then(async res => {
+      if ( res.status == 404) {
+        return;
+      } else {
+        branches =  await res.json();
+      }
+    })
+
+    return res.status(200).json(branches)
+  } catch (e) {
+    console.log(e);
+    return res.status(404).json({"message": "Something went wrong"})
+  }
+
+
+};
+

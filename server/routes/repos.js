@@ -17,6 +17,7 @@ import {
   getRepoOwners,
   getRandomX,
   getAllRepos,
+  getReposBranches
 } from "../controllers/repos.js";
 
 const repoRouter = express.Router();
@@ -37,6 +38,9 @@ repoRouter.get("/:repoId/get-random", getRandomX);
 repoRouter.get("/check-if-exists", checkIfRepoExists);
 repoRouter.get("/:userId/owned-repos", getOwnedRepos);
 repoRouter.get("/:userId/joined-repos", getJoinedRepos);
+repoRouter.post("/:repoOwner/:repoName/branches", getReposBranches);
+
+
 
 repoRouter.get("/all", getAllRepos);
 

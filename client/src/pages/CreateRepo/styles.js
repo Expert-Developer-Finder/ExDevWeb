@@ -21,6 +21,16 @@ export default makeStyles((theme) => ({
         display:"flex",
         justifyContent: "center",
         flexDirection: "column",
-    }
+    },
+    branchItem: {
+        padding: 10,
+        border: "1px solid black",
+        borderRadius: 10,
+        marginTop: 10,
+        "&:hover": {
+            backgroundColor: 'rgb(7, 177, 77, 0.42)'
+          }
+    },
+   
   
 }));
