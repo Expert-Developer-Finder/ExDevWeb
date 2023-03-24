@@ -42,6 +42,7 @@ export const createRepo = async (req, res) => {
   const ownerName = raw[0];
   const repoName = raw[1];
 
+  
   // Check if the repo already exists in our DB
   const repos = await Repo.find({ repoURL: repoURL });
 
@@ -99,19 +100,20 @@ export const createRepo = async (req, res) => {
 
     // TODO: token lar alınacak
     // at this point, we can start creating the graph at Neo4j
-    fetch(`${process.env.GRAPH_BASE_URL}/create/${ownerName}/${repoName}`, {
+    fetch(`${process.env.GRAPH_BASE_URL}/graph/create`, {
       method: "POST",
-      body: JSON.stringify({"list": [creator.githubPAT]}),
+      body: JSON.stringify(
+        {
+          "repoOwner": ownerName,
+          "repoName" : repoName,
+          "tokens": [creator.githubPAT],
+          "branch": "main"
+        }
+      ),
       headers: {
           "Content-type": "application/json; charset=UTF-8"
       }
-})
- 
-
-   
-
-
-
+    }) 
     res.status(201).json(newRepo);
   } catch (error) {
     res.status(409).json({ message: error.message });
