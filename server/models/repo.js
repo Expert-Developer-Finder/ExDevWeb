@@ -10,6 +10,8 @@ const repoSchema = mongoose.Schema({
    repoOwners: { type: [String],default: []},
    members: { type: [String],default: []},
    sharedPass : {type: String, required: true},
+   branch: {type: String, required: true},
+   status: {type:String, default: "creating"},
    join_requests: {type: [{
       userId : {type: String, required: true},
       userName : {type: String, required: true},

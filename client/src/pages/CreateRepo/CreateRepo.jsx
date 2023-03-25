@@ -13,7 +13,12 @@ const CreateRepo = () => {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
-  const initialState = {repoURL: "", sharedPass: "", creator: JSON.parse(localStorage.getItem("profile")).result};
+  const initialState = {
+    repoURL: "", 
+    sharedPass: "", 
+    creator: JSON.parse(localStorage.getItem("profile")).result, 
+    branch: ""
+  };
   const [formData, setFormData] = useState(initialState);
   const [show, setShow] = useState(false);
   const handleChange = (e) => {
@@ -24,6 +29,7 @@ const CreateRepo = () => {
     if( !formData.sharedPass) {
       alert("Please provide a shared repository first!")
     }
+    formData.branch = selectedBranch   
     dispatch(createRepo(formData, history));
   }
 
@@ -42,8 +48,9 @@ const CreateRepo = () => {
       
     const {data} = await getBranches(repoOwner, repoName, {"token": formData.creator.githubPAT});
 
-    if(data)
+    if(data) {
       setBranches(data);
+    }
     else {
       alert("This repository URL is not valid or it is a private repository that you do not have access to!");
     }     
@@ -97,7 +104,7 @@ const CreateRepo = () => {
                 <Typography><i>While making a recommendation, this repository will be used</i></Typography>
                 {
                   branches?.map((branch)=> 
-                    <div className={classes.branchItem} onClick={()=> setSelectedBranch(branch.name)}>
+                    <div key={branch.name} className={classes.branchItem} onClick={()=>setSelectedBranch(branch.name)}>
                       <Typography> {branch.name}  </Typography>
                   </div>
                 )}

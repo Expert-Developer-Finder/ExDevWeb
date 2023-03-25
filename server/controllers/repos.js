@@ -4,6 +4,7 @@ import fetch from "node-fetch";
 import bcrypt from "bcrypt";
 import { getUser } from "./user.js";
 import dotenv from "dotenv";
+import nodemailer from 'nodemailer';
 
 dotenv.config();
 
@@ -31,7 +32,9 @@ const checkIfPasswordIsStrong = (pwd) => {
 };
 
 export const createRepo = async (req, res) => {
-  const { repoURL, creator, sharedPass } = req.body;
+  const { repoURL, creator, sharedPass , branch} = req.body;
+
+  console.log("BRANCH: " + branch);
 
   //if (!checkIfPasswordIsStrong(sharedPass)) return res.status(400)
   //.json({message: "Your password should be at least 8 characters, should include at least one numeric character and one upper case letter, and should have one of these special chararcters: !@#$&*."});
@@ -80,6 +83,7 @@ export const createRepo = async (req, res) => {
     ownerName,
     repoName,
     repoURL,
+    branch,
     createdAt: new Date().toISOString(),
   });
 
@@ -107,7 +111,7 @@ export const createRepo = async (req, res) => {
           "repoOwner": ownerName,
           "repoName" : repoName,
           "tokens": [creator.githubPAT],
-          "branch": "main"
+          "branch": branch
         }
       ),
       headers: {
@@ -509,6 +513,7 @@ function getUnique(count, arr) {
   }
   return ret;
 }
+
 export const getAllRepos = async (req, res) => {
   try {
     Repo.find({}, function(err, repos) {
@@ -553,3 +558,76 @@ export const getReposBranches = async (req, res) => {
 
 };
 
+export const updateStatus = async (req, res) => {
+  const {repoOwner, repoName} = req.params;
+  const  {newStatus} = req.body;
+
+  try {
+    // find the repository from its repoOwner/repoName relation
+    const repo = await Repo.findOne({ ownerName: repoOwner, repoName });
+    const repoId = repo._id.toString();
+    const repoOwnerIds = repo.repoOwners;
+
+    
+    if (repo.status == "creating" && newStatus == "ready") {
+      // if update from creating to ready, we need to inform the repository owners
+      for (var i = 0; i < repoOwnerIds.length; i++){
+        const ownerId = repoOwnerIds[i];
+        const owner = await User.findById(ownerId);
+        var ownerEmail = owner.email;
+  
+        var textStr = "Dear " +  owner.name + ",\n"
+        textStr = textStr + "Your repository of " + repoOwner + "/" + repoName + " is ready to operate. Now, you can use our VS Code extension to start getting help as well as other members of your repository!\n"     
+        textStr = textStr + "Best Wishes,\nExpert Developer Finder Team"
+  
+        // TODO DELETE THE NEXT LINE
+        ownerEmail = "kavunici1balik@gmail.com"
+        sendMail( ownerEmail, "ExDev: Your repository is ready!", textStr)
+      }
+
+    }
+
+    // Finally, actually update the status of the repository
+    repo.status = newStatus
+    await Repo.findByIdAndUpdate(repoId, repo, { new: true });
+    
+    return res.status(200).json("Ok")
+  } catch (error) {
+    return res.status(error.status).json({"message": error.message})
+  }
+
+    
+
+
+};
+
+const sendMail = (toStr , subjectStr, textStr) => {
+
+    // Configure mailler transporter
+    var transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true, // use SSL
+      auth: {
+          user: process.env.MAIL_ADDRESS,
+          pass: process.env.MAIL_PASS,
+      }
+    });
+
+    var mailOptions = {
+      from: process.env.MAIL_ADDRESS,
+      to: toStr,
+      subject: subjectStr,
+      text: textStr
+    };
+
+
+    transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+
+}
