@@ -5,6 +5,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import {
   contactRouter,
+  queryRouter,
   repoRouter,
   userRouter,
 } from "./routes/index.js";
@@ -22,6 +23,7 @@ app.use(cors());
 app.use("/user", userRouter);
 app.use("/repos", repoRouter);
 app.use("/contact", contactRouter);
+app.use("/query", queryRouter);
 
 const PORT = process.env.PORT;
 

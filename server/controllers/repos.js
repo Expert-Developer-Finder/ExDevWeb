@@ -580,8 +580,6 @@ export const updateStatus = async (req, res) => {
         textStr = textStr + "Your repository of " + repoOwner + "/" + repoName + " is ready to operate. Now, you can use our VS Code extension to start getting help as well as other members of your repository!\n"     
         textStr = textStr + "Best Wishes,\nExpert Developer Finder Team"
   
-        // TODO DELETE THE NEXT LINE
-        ownerEmail = "kavunici1balik@gmail.com"
         sendMail( ownerEmail, "ExDev: Your repository is ready!", textStr)
       }
 
