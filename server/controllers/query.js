@@ -1,3 +1,4 @@
+import User from "../models/user.js";
 
 
 export const getRecommendations = async (req, res) => {
@@ -30,14 +31,31 @@ export const getRecommendations = async (req, res) => {
         // o user lerin db deki karşılıklarını bul
         // var users = [];
 
-        var users =  [];
-        experts.forEach(exp => {
-            users.push({
-                "linked": false,
-                "data": exp
-            })
-        });
 
+
+        var users =  [];
+
+        for(var i = 0; i < experts.length; i++) {
+            const expertFromDb = await User.findOne({githubUsername: experts[i]});
+
+            if (expertFromDb) {
+                users.push({
+                    "linked": true,
+                    "data": expertFromDb
+                });
+            } else {
+                // the user is not found on our database
+                users.push({
+                    "linked": false,
+                    "data": exp.data
+                });
+            }
+            
+        };
+
+
+        console.log("Being returned: ");
+        console.log(users);
 
         // query ve result ını kaydet
 

@@ -353,15 +353,23 @@ export const getContacts = async (req, res) => {
 
 
 export const getRepos = async (req, res) => {
-  const { userId } = req.body;;
+  const { userId } = req.body;
+
   try {
     const user = await User.findById(userId);
+    if (user == null) {
+      res.status(404).json( "User not found!" );
+    }
     var reposIdsOfUser = [...user.joined_repos, ...user.owned_repos];
-    
+
     var reposOfUser = [];
     for(var i = 0; i <reposIdsOfUser.length ; i++){
-      reposOfUser.push(await Repo.findById(reposIdsOfUser[i]));
+      var foundRepo = await Repo.findById(reposIdsOfUser[i]);
+      if (foundRepo) {
+        reposOfUser.push(foundRepo);
+      }
     }
+
     res.status(200).json( reposOfUser );
     
   } catch (error) {
