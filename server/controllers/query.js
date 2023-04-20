@@ -101,3 +101,18 @@ const saveQuery = async (source, path, queryOwnerId, repoId, returnedUsers)=> {
 
 
 }
+
+export const getQueries = async (req, res) => {
+    const { userId, repoId } = req.body;
+    try {
+        const queries = await Query.find({
+            queryOwnerId: userId,
+            repoId: repoId,
+        });
+        return res.status(200).json(queries);
+    } catch(e) {
+        return res.status(404).json("Something went wrong");
+    }
+
+}
+
