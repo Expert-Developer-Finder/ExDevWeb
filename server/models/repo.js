@@ -13,6 +13,7 @@ const repoSchema = mongoose.Schema({
    branch: {type: String, required: true},
    status: {type:String, default: "creating"},
    hasSlack: {type: String, required: true},
+   slackURL: {type: String, default: ""},
    join_requests: {type: [{
       userId : {type: String, required: true},
       userName : {type: String, required: true},

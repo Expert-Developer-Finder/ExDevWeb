@@ -19,7 +19,8 @@ const CreateRepo = () => {
     creator: JSON.parse(localStorage.getItem("profile")).result, 
     branch: "",
     hasSlack: true,
-    slackUsername: ""
+    slackUsername: "",
+    slackURL: ""
   };
   const [formData, setFormData] = useState(initialState);
   const [show, setShow] = useState(false);
@@ -106,6 +107,7 @@ const CreateRepo = () => {
                 if ( hasSlack ) {
                   setFormData({ ...formData, ["hasSlack"]: false });
                   setFormData({ ...formData, ["slackUsernames"]: "" });              
+                  setFormData({ ...formData, ["slackURL"]: "" });              
                 } else {
                   setFormData({ ...formData, ["hasSlack"]: true });
                 }
@@ -117,11 +119,14 @@ const CreateRepo = () => {
           {
             hasSlack? 
             <div className="">
-              <Typography>Enter your Slack username for that workspace. Don't know where to find your username?  
+              <Typography>Enter your repository's Slack URL and your Slack member id for that workspace. Don't know where to find these information?  
                 <a href='#' target='_blank'> Look at this demo.</a>
               </Typography>
               <br />
-              <TextField label= "Slack Username" name='slackUsername' fullWidth required onChange={handleChange}></TextField>
+              <TextField label= "Slack URL" name='slackURL' fullWidth required onChange={handleChange}></TextField>
+              <br />
+              <br />
+              <TextField label= "Slack Member Id" name='slackUsername' fullWidth required onChange={handleChange}></TextField>
               <br />
               <br />
 

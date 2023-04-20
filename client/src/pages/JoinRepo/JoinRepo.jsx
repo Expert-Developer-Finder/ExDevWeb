@@ -11,7 +11,7 @@ import { CLEAR_ERROR } from '../../constants/actionTypes';
 import {restoreUser} from "../../actions/auth";
 
 
-const initialState = {ownerName: "", repoName: "", repoURL: "", password: "", isChecked: false};
+const initialState = {ownerName: "", repoName: "", repoURL: "", password: "", isChecked: false, slackUsername:""};
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 const JoinRepo = () => {
   const classes = useStyles();
@@ -81,6 +81,12 @@ const JoinRepo = () => {
                     </Grid>
                     <Typography variant='h6' className={classes.or} >OR</Typography>
                     <Input handleChange={handleChange} name="repoURL" label="Repository URL" required={false}  />
+                    <Divider/>
+                    <br/>
+                    <Typography variant='h6'>If this repository has a Slack workspace and you are in it, 
+                    enter your Slack Member Id. Don't know where to find your Slack Member Id? <a href='#'>View this demo.</a></Typography>
+                    <Input handleChange={handleChange} fullWidth name="slackUsername" label="Slack Member Id" required={false} >
+                    </Input>
                     <Divider/>
                     <br/>
                     <Typography variant='h5'>Enter Credentials</Typography>

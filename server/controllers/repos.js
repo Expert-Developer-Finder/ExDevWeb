@@ -32,7 +32,7 @@ const checkIfPasswordIsStrong = (pwd) => {
 };
 
 export const createRepo = async (req, res) => {
-  const { repoURL, creator, sharedPass , branch, hasSlack, slackUsername} = req.body;
+  const { repoURL, creator, sharedPass , branch, hasSlack, slackUsername, slackURL} = req.body;
 
   console.log("BRANCH: " + branch);
   console.log("hasSlack: " + hasSlack);
@@ -89,6 +89,7 @@ export const createRepo = async (req, res) => {
     repoURL,
     branch,
     hasSlack,
+    slackURL,
     createdAt: new Date().toISOString(),
   });
 
@@ -201,7 +202,9 @@ export const joinRepo = async (req, res) => {
     repoName,
     isChecked: willSendJoinRequest,
     userId: newMemberId,
+    slackUsername
   } = req.body;
+
 
   try {
     // find repo
@@ -249,6 +252,19 @@ export const joinRepo = async (req, res) => {
         .status(405)
         .json({ message: "You are already a member of this repository!" });
     }
+
+    // Add slackUsername and repoId pair to user
+    var existingSlackUserNames = user.slackUsernames;
+  
+    var repoIdSlackUsername = {
+      "repoId": repo._id.valueOf(),
+      "slackUsername": slackUsername
+    }
+    
+    existingSlackUserNames.push(repoIdSlackUsername)
+    user.slackUsernames = existingSlackUserNames;
+    console.log(user);
+
 
     // JOIN WITH PASSWORD
     if (!willSendJoinRequest) {
