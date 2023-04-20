@@ -1,3 +1,4 @@
+import Query from "../models/query.js";
 import User from "../models/user.js";
 
 
@@ -32,8 +33,8 @@ export const getRecommendations = async (req, res) => {
         // var users = [];
 
 
-
         var users =  [];
+
 
         for(var i = 0; i < experts.length; i++) {
             const expertFromDb = await User.findOne({githubUsername: experts[i]});
@@ -53,11 +54,12 @@ export const getRecommendations = async (req, res) => {
             
         };
 
-
-        console.log("Being returned: ");
-        console.log(users);
+        // console.log("Being returned: ");
+        // console.log(users);
 
         // query ve result ını kaydet
+        await saveQuery(source, path, userId, repoId, users);
+
 
         // user leri dön
         return res.status(200).json(users);
@@ -67,3 +69,35 @@ export const getRecommendations = async (req, res) => {
     }
   
 };
+
+const saveQuery = async (source, path, queryOwnerId, repoId, returnedUsers)=> {
+
+    var formattedUsers = [];
+    for (var i  = 0 ; i < returnedUsers.length; i++) {;
+        var user = returnedUsers[i];
+        if (user.linked) {
+            formattedUsers.push({"name": user.data.name, "email": user.data.email});
+        } else {
+            // TODO
+        }
+    }
+    
+  
+    try {
+        Query.create({
+            queryOwnerId,
+            repoId,
+            source,
+            path,
+            returnedUsers: formattedUsers,
+        });
+      console.log("saved succesfully");
+      return true;
+    } catch (e) {
+        console.log("catch");
+
+        return e;
+    }
+
+
+}
