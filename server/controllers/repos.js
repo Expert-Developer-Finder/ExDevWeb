@@ -61,7 +61,7 @@ export const createRepo = async (req, res) => {
   // Check if the repo is in GitHub
   const checkAPIUrl = `https://api.github.com/repos/${ownerName}/${repoName}`;
 
-  // First check if it a public repo
+  // First check if it is a public repo
   const checkApiRes = await fetch(checkAPIUrl);  
   if (checkApiRes.status != 200) {
 
@@ -79,9 +79,7 @@ export const createRepo = async (req, res) => {
     }
   }
 
-  
 
-    
   // Create the repository, add the creator as a member and repository owner
   const newRepo = new Repo({
     sharedPass: hashedPassword,
