@@ -19,3 +19,5 @@ ReactDOM.render(
   ,
   document.getElementById("root")
 );
+
+//TODO react-scripts i de ekle package json a

@@ -88,7 +88,7 @@ const Register = () => {
                 <Button type="submit" fullWidth variant="contained" color="primary" className= {classes.submit}>Register</Button>
                 <Grid container justifyContent="center">
                     <Grid item>
-                        <Button href='login'> Don't have an account? Sign up</Button>
+                        <Button href='login'> Already have an account? Sign in</Button>
                     </Grid>
                 </Grid>
             </form>

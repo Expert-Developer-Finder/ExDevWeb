@@ -1,4 +1,4 @@
-import { Alert, AlertTitle, Button, Container,  Paper, TextField, Typography, InputAdornment, IconButton } from '@mui/material';
+import { Alert, AlertTitle, Button, Container,  Paper, TextField, Typography, InputAdornment, IconButton, Switch } from '@mui/material';
 import React, {useState} from 'react';
 import useStyles from "./styles.js";
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,7 +17,9 @@ const CreateRepo = () => {
     repoURL: "", 
     sharedPass: "", 
     creator: JSON.parse(localStorage.getItem("profile")).result, 
-    branch: ""
+    branch: "",
+    hasSlack: true,
+    slackUsername: ""
   };
   const [formData, setFormData] = useState(initialState);
   const [show, setShow] = useState(false);
@@ -35,6 +37,7 @@ const CreateRepo = () => {
 
   const [branches, setBranches] = useState(null);
   const [selectedBranch, setSelectedBranch] = useState(null);
+  const [hasSlack, setHasSlack] = useState(true);
   
   const showBranches = async (e)=> {
     if(!formData.repoURL) {
@@ -96,6 +99,34 @@ const CreateRepo = () => {
             type={show?"text": "password"} onChange={handleChange} name='sharedPass' required label="Shared Pass" variant='outlined' fullWidth></TextField>
           <br/>
 
+          <div className={classes.hasSlackHeader}>
+            <Typography variant='h6'>Does this repository has a relevant Slack Workspace?</Typography>
+            <div className={classes.switchContainer}>
+              <p>No</p> <Switch defaultChecked onChange={()=>{
+                if ( hasSlack ) {
+                  setFormData({ ...formData, ["hasSlack"]: false });
+                  setFormData({ ...formData, ["slackUsernames"]: "" });              
+                } else {
+                  setFormData({ ...formData, ["hasSlack"]: true });
+                }
+
+                setHasSlack(!hasSlack);
+              }}/> <p>Yes</p>
+            </div>
+          </div>
+          {
+            hasSlack? 
+            <div className="">
+              <Typography>Enter your Slack username for that workspace. Don't know where to find your username?  
+                <a href='#' target='_blank'> Look at this demo.</a>
+              </Typography>
+              <br />
+              <TextField label= "Slack Username" name='slackUsername' fullWidth required onChange={handleChange}></TextField>
+              <br />
+              <br />
+
+            </div> : <></>
+          }
           {
             !selectedBranch ?
               branches ? 

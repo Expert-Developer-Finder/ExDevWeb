@@ -31,6 +31,14 @@ export default makeStyles((theme) => ({
             backgroundColor: 'rgb(7, 177, 77, 0.42)'
           }
     },
-   
+    hasSlackHeader: {
+        display: "flex",
+        alignItems: "center"
+    },
+    switchContainer: {
+        marginLeft: 15,
+        display: "flex",
+        alignItems: "center"
+    }
   
 }));

@@ -10,6 +10,10 @@ const userSchema = mongoose.Schema({
    githubPAT: {type: String},
    avatarUrl: {type: String},
    joined_repos: { type: [String],default: []},
+   slackUsernames: {type: [{
+      repoId : {type: String, required: true},
+      slackUsername : {type: String, required: true},
+   }] },
    join_requests: {type: [{
       userId : {type: String, required: true},
       userName : {type: String, required: true},

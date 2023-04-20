@@ -32,9 +32,12 @@ const checkIfPasswordIsStrong = (pwd) => {
 };
 
 export const createRepo = async (req, res) => {
-  const { repoURL, creator, sharedPass , branch} = req.body;
+  const { repoURL, creator, sharedPass , branch, hasSlack, slackUsername} = req.body;
 
   console.log("BRANCH: " + branch);
+  console.log("hasSlack: " + hasSlack);
+  console.log("slackUsernames: " + slackUsername);
+
 
   //if (!checkIfPasswordIsStrong(sharedPass)) return res.status(400)
   //.json({message: "Your password should be at least 8 characters, should include at least one numeric character and one upper case letter, and should have one of these special chararcters: !@#$&*."});
@@ -75,6 +78,9 @@ export const createRepo = async (req, res) => {
       .json({ message: "This is not a valid repository url" });
     }
   }
+
+  
+
     
   // Create the repository, add the creator as a member and repository owner
   const newRepo = new Repo({
@@ -84,13 +90,41 @@ export const createRepo = async (req, res) => {
     repoName,
     repoURL,
     branch,
+    hasSlack,
     createdAt: new Date().toISOString(),
   });
 
   newRepo.repoOwners.push(creator); // Make Repo Owner (creator)
 
   try {
-    await newRepo.save();
+    await newRepo.save(async function(err, savedRepo) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log('Repo saved to database');
+
+      var user = await User.findById(creator._id);
+      var updatedUser = user;
+      
+      var existingSlackUserNames = updatedUser.slackUsernames;
+  
+      var repoIfSlackUsername = {
+        "repoId": savedRepo._id.valueOf(),
+        "slackUsername": slackUsername
+      }
+    
+      existingSlackUserNames.push(repoIfSlackUsername)
+      updatedUser.slackUsernames = existingSlackUserNames;
+      console.log(updatedUser);
+
+      await User.findByIdAndUpdate(updatedUser._id.valueOf(), updatedUser, {
+        new: true,
+      });
+
+      }
+    });
+
+    
     // Add repo id to user's joined_repos array
     const newRepoId = newRepo._id.valueOf();
     const user = await User.findById(creator);

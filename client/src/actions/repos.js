@@ -29,6 +29,8 @@ export const joinRepo = (formData, history, userId) => async (dispatch) => {
 
 export const createRepo = (formData, history) => async (dispatch) => {
   try {
+    console.log(formData);
+    
     const  {data} = await api.createRepo(formData);
     dispatch({ type: CREATE_REPO, payload: data });
 

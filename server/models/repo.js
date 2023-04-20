@@ -12,6 +12,7 @@ const repoSchema = mongoose.Schema({
    sharedPass : {type: String, required: true},
    branch: {type: String, required: true},
    status: {type:String, default: "creating"},
+   hasSlack: {type: String, required: true},
    join_requests: {type: [{
       userId : {type: String, required: true},
       userName : {type: String, required: true},
