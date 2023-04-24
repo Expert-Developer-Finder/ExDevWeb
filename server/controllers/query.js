@@ -145,3 +145,21 @@ export const likeExpert = async (req, res) => {
 }
 
 
+export const rateQuery = async (req, res) => {
+    const { queryId , rating, freeText} = req.body;
+
+    try {
+        const query = await Query.findById(queryId);
+
+       query.feedbackNumber = rating;
+       query.feedbackText = freeText;
+       query.feedbackGiven = true;
+
+        await Query.findByIdAndUpdate(query._id, query, { new: true });
+        return res.status(200).json("Rated query");
+    } catch(e) {
+        return res.status(404).json("Something went wrong");
+    }
+
+}
+

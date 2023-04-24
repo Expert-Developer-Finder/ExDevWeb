@@ -9,7 +9,7 @@ const querySchema = mongoose.Schema({
   createdAt: { type: Date, default: Date.now() },
   feedbackGiven: {type: Boolean, default: false},
   feedbackNumber: {type: Number, required: false},
-  feedbackTest: {type: String, required: false},
+  feedbackText: {type: String, required: false},
   returnedUsers: {type: [{
     userId: {type:String, required: false},
     name : {type: String, required: false},
