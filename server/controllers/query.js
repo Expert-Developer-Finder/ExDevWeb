@@ -76,7 +76,7 @@ const saveQuery = async (source, path, queryOwnerId, repoId, returnedUsers)=> {
     for (var i  = 0 ; i < returnedUsers.length; i++) {;
         var user = returnedUsers[i];
         if (user.linked) {
-            formattedUsers.push({"name": user.data.name, "email": user.data.email});
+            formattedUsers.push({"name": user.data.name, "email": user.data.email, "userId": user.data._id, "liked": false}  );
         } else {
             // TODO
         }
@@ -115,4 +115,33 @@ export const getQueries = async (req, res) => {
     }
 
 }
+
+export const likeExpert = async (req, res) => {
+    const { queryId , expertId} = req.body;
+    console.log(expertId);
+    try {
+        const query = await Query.findById(queryId);
+
+        var returnedUsers = query.returnedUsers;
+        for (var i = 0; i < returnedUsers.length; i++) {
+            if ( returnedUsers[i].userId == expertId){
+                console.log(JSON.stringify(returnedUsers[i]));
+                returnedUsers[i].liked = true;
+                break;
+            }
+        }
+
+        var likedUser = await User.findById(expertId);
+        likedUser.likeCount = likedUser.likeCount + 1;
+
+        await User.findByIdAndUpdate(likedUser._id, likedUser, {new: true});
+
+        await Query.findByIdAndUpdate(query._id, query, { new: true });
+        return res.status(200).json("User liked");
+    } catch(e) {
+        return res.status(404).json("Something went wrong");
+    }
+
+}
+
 

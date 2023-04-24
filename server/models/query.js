@@ -7,12 +7,14 @@ const querySchema = mongoose.Schema({
   source: { type: String, required: true },
   path: { type: String, required: true },
   createdAt: { type: Date, default: Date.now() },
-  userLiked: {type: Boolean, default: false},
+  feedbackGiven: {type: Boolean, default: false},
   feedbackNumber: {type: Number, required: false},
   feedbackTest: {type: String, required: false},
   returnedUsers: {type: [{
+    userId: {type:String, required: false},
     name : {type: String, required: false},
-    email : {type: String, required: false},    
+    email : {type: String, required: false}, 
+    liked: {type: Boolean, required: false},
    }] },
 
 });
