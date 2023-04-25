@@ -57,7 +57,8 @@ const checkIfPasswordIsStrong = (pwd) => {
 };
 
 export const signup = async (req, res) => {
-  const { email, password, firstName, lastName, confirmPassword, githubUsername, githubPAT } = req.body;
+  const { email, password, firstName, lastName, confirmPassword,
+     githubUsername, githubPAT, zoomPersonalRoom } = req.body;
 
   try {
     const existingUser = await User.findOne({ email });
@@ -93,7 +94,8 @@ export const signup = async (req, res) => {
       bio: githubUser.bio,
       avatarUrl: githubUser.avatar_url,
       githubUsername,
-      githubPAT
+      githubPAT,
+      zoomPersonalRoom
     });
     const token = jwt.sign({ email: result.email, id: result._id }, "test", {
       expiresIn: "1h",

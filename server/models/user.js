@@ -15,6 +15,7 @@ const userSchema = mongoose.Schema({
       slackUsername : {type: String, required: true},
    }] },
    likeCount : {type: Number, default: 0},
+   zoomPersonalRoom: {type: String, required : false},
    join_requests: {type: [{
       userId : {type: String, required: true},
       userName : {type: String, required: true},

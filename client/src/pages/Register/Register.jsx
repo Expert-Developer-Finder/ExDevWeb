@@ -15,7 +15,9 @@ const initialState = {
   password:"", 
   confirmPassword: "",
   githubUsername: "",
-  githubPAT: ""  
+  githubPAT: ""  ,
+  zoomPersonalRoom: ""
+
 } ;
 const Register = () => {
     const classes = useStyles(); 
@@ -57,6 +59,7 @@ const Register = () => {
                     <Input name="password" label="Password" handleChange={handleChange}  type={showPassword?"text": "password"} handlePasswordShow= {handlePasswordShow} />
                     <Input name="confirmPassword" label="Confirm Password" handleChange={handleChange}  type={showConfirmPassword?"text": "password"} handlePasswordShow= {handleConfirmPasswordShow} />
                     <Input name="githubUsername" label="GitHub Username" handleChange={handleChange}  type="text" />
+                    <Input name="zoomPersonalRoom"  label="Zoom Personal Room" handleChange={handleChange}  type="text" />
                     
                     <Typography className={classes.pat}> 
                       For the section belove, you need to create a Personal Access Token (PAT) from GitHub.
