@@ -59,6 +59,15 @@ const Register = () => {
                     <Input name="password" label="Password" handleChange={handleChange}  type={showPassword?"text": "password"} handlePasswordShow= {handlePasswordShow} />
                     <Input name="confirmPassword" label="Confirm Password" handleChange={handleChange}  type={showConfirmPassword?"text": "password"} handlePasswordShow= {handleConfirmPasswordShow} />
                     <Input name="githubUsername" label="GitHub Username" handleChange={handleChange}  type="text" />
+                    
+                    <Typography className={classes.pat}> 
+                      For the section belove, you need to provide your Personal Zoom Room Link. The steps on how to find your Personal Room Link and the reason why we need it is explained in this file:
+                      <a
+                        style={{textDecoration: "none", marginLeft:5, fontWeight: "bold"}} 
+                        href=""  target="_blank">
+                        How to get Personal Zoom Room Link
+                      </a>
+                    </Typography>
                     <Input name="zoomPersonalRoom"  label="Zoom Personal Room" handleChange={handleChange}  type="text" />
                     
                     <Typography className={classes.pat}> 
