@@ -38,6 +38,7 @@ const JoinRepo = () => {
     e.preventDefault();
     const user  = JSON.parse(localStorage.getItem("profile")).result;
     formData["userId"] = user._id;
+
     dispatch(joinRepo(formData, history, user._id));
   }
 
@@ -83,20 +84,27 @@ const JoinRepo = () => {
                     <Input handleChange={handleChange} name="repoURL" label="Repository URL" required={false}  />
                     <Divider/>
                     <br/>
-                    <Typography variant='h6'>If this repository has a Slack workspace and you are in it, 
-                    enter your Slack Member Id. Don't know where to find your Slack Member Id? <a href='#'>View this demo.</a></Typography>
+                    <Typography >If this repository has a Slack workspace and you are in it, 
+                    enter your Slack Member Id. Don't know where to find your Slack Member Id? 
+                    <a
+                        style={{textDecoration: "none", marginLeft:5, fontWeight: "bold"}} 
+                        href={require("../../assets/slack_username_join_repo.pdf")}  target="_blank">
+                        View this demo.
+                    </a>
+                    
+</Typography>
                     <Input handleChange={handleChange} fullWidth name="slackUsername" label="Slack Member Id" required={false} >
                     </Input>
                     <Divider/>
                     <br/>
                     <Typography variant='h5'>Enter Credentials</Typography>
                     <Grid container>
-                        <Typography>If you were provided a shared secret credential for this repository, please enter it</Typography>
+                        <Typography>If you were provided a shared pass credential for this repository, please enter it</Typography>
                         {formData.isChecked? 
                         <Grid item xs={12}   style={{paddingRight: 0, paddingLeft: 15, marginTop: 16 }} >
                             <TextField 
                                 name="password" 
-                                label="Shared Secret" 
+                                label="Shared Pass" 
                                 value="" 
                                 disabled fullWidth 
                                 InputProps={{ endAdornment: ( 
@@ -106,14 +114,14 @@ const JoinRepo = () => {
                                 )}} />
                         </Grid>
                             :
-                            <Input handlePasswordShow={handlePasswordShow} handleChange={handleChange} name="password" label="Shared Secret" required={false} type={showPassword ? "text" : "password"}  />
+                            <Input handlePasswordShow={handlePasswordShow} handleChange={handleChange} name="password" label="Shared Pass" required={false} type={showPassword ? "text" : "password"}  />
                         }
                     </Grid>
                     <br/>
                    
                    <Grid display={"flex"}>
                     <Checkbox {...label} checked = { formData.isChecked} onChange={handleCheckBox }  className={classes.mr} />
-                    <Typography>Check this box if you don't have a shared secret. Then a joining request will be sent to the repository owners by yor name.</Typography>
+                    <Typography>Check this box if you don't have a shared pass. Then a joining request will be sent to the repository owners by yor name.</Typography>
                    </Grid>
                     {
                         goodToGo() ? 

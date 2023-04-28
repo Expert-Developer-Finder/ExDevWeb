@@ -356,6 +356,7 @@ export const getContacts = async (req, res) => {
 
 export const getRepos = async (req, res) => {
   const { userId } = req.body;
+  console.log("GET REPOS and userid " + userId);
 
   try {
     const user = await User.findById(userId);
@@ -371,6 +372,8 @@ export const getRepos = async (req, res) => {
         reposOfUser.push(foundRepo);
       }
     }
+
+    console.log(reposOfUser);
 
     res.status(200).json( reposOfUser );
     

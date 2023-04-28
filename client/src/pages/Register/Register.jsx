@@ -64,9 +64,9 @@ const Register = () => {
                       For the section belove, you need to provide your Personal Zoom Room Link. The steps on how to find your Personal Room Link and the reason why we need it is explained in this file:
                       <a
                         style={{textDecoration: "none", marginLeft:5, fontWeight: "bold"}} 
-                        href=""  target="_blank">
+                        href={require("../../assets/zoom_personal_link.pdf")}  target="_blank">
                         How to get Personal Zoom Room Link
-                      </a>
+                    </a>
                     </Typography>
                     <Input name="zoomPersonalRoom"  label="Zoom Personal Room" handleChange={handleChange}  type="text" />
                     

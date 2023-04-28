@@ -120,7 +120,11 @@ const CreateRepo = () => {
             hasSlack? 
             <div className="">
               <Typography>Enter your repository's Slack URL and your Slack member id for that workspace. Don't know where to find these information?  
-                <a href='#' target='_blank'> Look at this demo.</a>
+                <a
+                  style={{textDecoration: "none", marginLeft:5, fontWeight: "bold"}} 
+                  href={require("../../assets/slack_username_create_repo.pdf")}  target="_blank">
+                  View this demo.
+                </a>
               </Typography>
               <br />
               <TextField label= "Slack URL" name='slackURL' fullWidth required onChange={handleChange}></TextField>

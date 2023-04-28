@@ -37,18 +37,22 @@ export const getRecommendations = async (req, res) => {
 
 
         for(var i = 0; i < experts.length; i++) {
-            const expertFromDb = await User.findOne({githubUsername: experts[i]});
+            const expertFromDb = await User.findOne({githubUsername: experts[i].name});
 
             if (expertFromDb) {
                 users.push({
                     "linked": true,
-                    "data": expertFromDb
+                    "data": expertFromDb,
+                    "commitScore": experts[i].commitScore,
+                    "prScore":experts[i].prScore,
                 });
             } else {
                 // the user is not found on our database
                 users.push({
                     "linked": false,
-                    "data": exp.data
+                    "data": exp.data,
+                    "commitScore": experts[i].commitScore,
+                    "prScore":experts[i].prScore,
                 });
             }
             

@@ -106,15 +106,21 @@ export const createRepo = async (req, res) => {
       var updatedUser = user;
       
       var existingSlackUserNames = updatedUser.slackUsernames;
+
+      var savedRepoId = savedRepo._id.valueOf();
   
       var repoIfSlackUsername = {
-        "repoId": savedRepo._id.valueOf(),
+        "repoId": savedRepoId,
         "slackUsername": slackUsername
       }
     
       existingSlackUserNames.push(repoIfSlackUsername)
       updatedUser.slackUsernames = existingSlackUserNames;
-      console.log(updatedUser);
+
+      // Add the repo to creator's owned repos list
+      var ownedRepos = updatedUser.owned_repos;
+      ownedRepos.push(savedRepoId);
+      updatedUser.owned_repos = ownedRepos;
 
       await User.findByIdAndUpdate(updatedUser._id.valueOf(), updatedUser, {
         new: true,
@@ -134,6 +140,7 @@ export const createRepo = async (req, res) => {
     } catch (error) {
       console.log(error);
     }
+
 
     // TODO: token lar alınacak
     // at this point, we can start creating the graph at Neo4j
