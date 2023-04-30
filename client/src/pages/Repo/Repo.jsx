@@ -6,7 +6,9 @@ import useStyle from "./styles";
 import SettingsIcon from '@mui/icons-material/Settings';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import HomeIcon from '@mui/icons-material/Home';
+import BarChartIcon from '@mui/icons-material/BarChart';
 import { RepoDetail, RepoJoinRequests,  RepoSettings } from '../../components';
+import StatsPage from '../StatsPage/StatsPage';
 
 
 const Repo = () => {
@@ -28,7 +30,7 @@ const Repo = () => {
           const {data: {data}} = await checkAndGetRepoWithId(repoId, {userId: user._id}); 
           setRepo(data);
           if ( data.members.includes(user._id)) {
-            console.log("TUREE");
+
             setIsMember(true);
           }
         } catch (error) {
@@ -45,7 +47,7 @@ const Repo = () => {
     <>
     {showError? 
       <Container className={classes.unauthorisedContainer}>
-        <Typography variant='h2'>{" It seems like you are not authorised to see this content :("}</Typography>
+        <Typography variant='h2'>{" It seems like you are not authorized to see this content :("}</Typography>
         <img  className={classes.img1} alt="A duck judging you"  src={require("../../assets/duck.png")} />
       </Container>:
 
@@ -66,6 +68,10 @@ const Repo = () => {
                 </Badge>
             </IconButton>
 
+            <IconButton  onClick={()=> setSelectedRoute("/stats")} className={classes.mr}>
+                <BarChartIcon fontSize="large"  color= {selectedRoute === "/stats" ? "primary": "action"}  />
+            </IconButton>
+
             <IconButton  onClick={()=> setSelectedRoute("/settings")}>
                 <SettingsIcon fontSize="large"  color= {selectedRoute === "/settings" ? "primary": "action"}  />
             </IconButton>
@@ -77,6 +83,8 @@ const Repo = () => {
             <RepoSettings repo={repo} isMember={isMember}/> :
             selectedRoute === "/requests" ?
             <RepoJoinRequests  repo={repo} setSelectedRoute={setSelectedRoute} isMember={isMember}/>:
+            selectedRoute === "/stats" ?
+            <StatsPage repo={repo}/>: 
             <RepoDetail  repo={repo} isMember={isMember} />
 
         }

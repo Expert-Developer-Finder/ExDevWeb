@@ -30,6 +30,7 @@ export const rejectJoinRequest =( repoId, userId) => API.post(`/repos/${repoId}/
 export const getJoinedMembers =( repoId) => API.get(`/repos/${repoId}/joined-members` );
 export const getRepoOwners =( repoId) => API.get(`/repos/${repoId}/repo-owners` );
 export const checkAndGetRepoWithId =(repoId, userId) => API.post(`/repos/${repoId}`, userId);
+export const qetQueriesOfARepo =(repoId) => API.post(`/query/getWithRepoId`, repoId);
 export const getBranches =(repoOwner, repoName, token) => API.post(`/repos/${repoOwner}/${repoName}/branches`, token);
 
 

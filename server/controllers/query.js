@@ -167,3 +167,16 @@ export const rateQuery = async (req, res) => {
 
 }
 
+export const getWithRepoId = async (req, res) => {
+    const { repoId } = req.body;
+    try {
+        const queries =  await Query.find({repoId: repoId});
+        return res.status(200).json(queries);
+    } catch(e) {
+        return res.status(404).json("Something went wrong");
+    }
+
+}
+
+
+

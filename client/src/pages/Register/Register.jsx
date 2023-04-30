@@ -61,7 +61,7 @@ const Register = () => {
                     <Input name="githubUsername" label="GitHub Username" handleChange={handleChange}  type="text" />
                     
                     <Typography className={classes.pat}> 
-                      For the section belove, you need to provide your Personal Zoom Room Link. The steps on how to find your Personal Room Link and the reason why we need it is explained in this file:
+                      For the section below, you need to provide your Personal Zoom Room Link. The steps on how to find your Personal Room Link and the reason why we need it is explained in this file:
                       <a
                         style={{textDecoration: "none", marginLeft:5, fontWeight: "bold"}} 
                         href={require("../../assets/zoom_personal_link.pdf")}  target="_blank">
@@ -71,7 +71,7 @@ const Register = () => {
                     <Input name="zoomPersonalRoom"  label="Zoom Personal Room" handleChange={handleChange}  type="text" />
                     
                     <Typography className={classes.pat}> 
-                      For the section belove, you need to create a Personal Access Token (PAT) from GitHub.
+                      For the section below, you need to create a Personal Access Token (PAT) from GitHub.
                       The steps on how to create a PAT and the reason why we need it is explained in this file:
                       <a
                         style={{textDecoration: "none", marginLeft:5, fontWeight: "bold"}} 

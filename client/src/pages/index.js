@@ -8,6 +8,8 @@ import Workspace from "./Workspace/Workspace";
 import JoinRepo from "./JoinRepo/JoinRepo";
 import CreateRepo from "./CreateRepo/CreateRepo";
 import Repo from "./Repo/Repo";
+import StatsPage from "./StatsPage/StatsPage";
+
 
 
 export {
@@ -20,5 +22,7 @@ export {
   Workspace,
   JoinRepo,
   CreateRepo,
-  Repo
+  Repo,
+  StatsPage
+
 };
