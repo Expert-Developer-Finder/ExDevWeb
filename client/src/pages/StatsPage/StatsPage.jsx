@@ -58,8 +58,8 @@ const StatsPage = ({repo}) => {
 
 
         <Container className={classes.container} >
-            <Typography className={classes.left} variant='h4'>Your project has been using ExDev for {getDaysFromBeginning()} days!</Typography>
-            <Typography className={classes.right} variant='h4'>{queries? queries.length: 0} times someone used ExDev to get help!</Typography>
+            <Typography className={classes.left} variant='h4'>Your project has been using ExDev for {getDaysFromBeginning()} days</Typography>
+            <Typography className={classes.right} variant='h4'>{queries? queries.length: 0} times someone used ExDev to get help</Typography>
             <Typography className={classes.left} variant='h4'>{avgScore ? "The average score you gave us is " + avgScore : "No one has given us a rating yet!"} </Typography>
             {
               quotes? 
