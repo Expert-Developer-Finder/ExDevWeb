@@ -37,14 +37,14 @@ export const getRecommendations = async (req, res) => {
 
 
         for(var i = 0; i < experts.length; i++) {
-            const expertFromDb = await User.findOne({githubUsername: experts[i].name});
+            const expertFromDb = await User.findOne({githubUsername: experts[i].authorName});
 
             if (expertFromDb) {
                 users.push({
                     "linked": true,
                     "data": expertFromDb,
-                    "commitScore": experts[i].commitScore,
-                    "prScore":experts[i].prScore,
+                    "commitScore": 0.5* experts[i].commitCount + 0.5* experts[i].recentCommitScore ,
+                    "prScore":experts[i].prKnowAboutScore,
                 });
             } else {
                 // the user is not found on our database
@@ -59,7 +59,7 @@ export const getRecommendations = async (req, res) => {
         };
 
         // console.log("Being returned: ");
-        // console.log(users);
+        console.log(users);
 
         // query ve result ını kaydet
         await saveQuery(source, path, userId, repoId, users);
@@ -95,7 +95,7 @@ const saveQuery = async (source, path, queryOwnerId, repoId, returnedUsers)=> {
             path,
             returnedUsers: formattedUsers,
         });
-      console.log("saved succesfully");
+      console.log("query saved successfully");
       return true;
     } catch (e) {
         console.log("catch");
@@ -175,8 +175,103 @@ export const getWithRepoId = async (req, res) => {
     } catch(e) {
         return res.status(404).json("Something went wrong");
     }
+}
+
+export const getStats = async (req, res) => {
+    const { repoId } = req.body;
+    try {
+        const queries =  await Query.find({repoId: repoId});
+
+        // calculate average rating
+        var ratingCount = 0;
+        var sumSoFar = 0;
+
+        // collect the text feedbacks
+        var texts = []
+
+        // collect numericRatings
+        var ratings = []
+
+        for (var i in queries) {
+            var query = queries[i];
+            if (query.feedbackGiven) {
+                sumSoFar += query.feedbackNumber;
+                ratingCount++;
+                ratings.push(query.feedbackNumber)
+
+                if( query.feedbackText != "" && query.feedbackText != null ) {
+                    texts.push({
+                        text: query.feedbackText, 
+                        rate: query.feedbackNumber, 
+                        userId: query.queryOwnerId, 
+                        createdAt: query.createdAt
+                    })
+                }
+            }
+        }
+
+        var averageRating = sumSoFar / ratingCount;
+
+        texts.sort(function(a, b) {
+            return b.rate - a.rate;
+        });
+        if (texts.length > 5) {
+            texts = texts.slice(0,5)
+        }
+
+        for (var i in texts) {
+            var query = texts[i];
+            var userOfQuery = await User.findById(query.userId);
+            var name = userOfQuery.name;
+            var avatarUrl = userOfQuery.avatarUrl;
+            query.name = name;
+            query.avatarUrl = avatarUrl;
+            texts[i] = query            
+        }
+
+        var fileNo = 0;
+        var methodNo = 0;
+        var folderNo = 0;
+        for (var i in queries) {
+            var query = queries[i];
+            if (query.source == "file") {
+                fileNo += 1
+            } else if (query.source == "folder") {
+                folderNo += 1
+            } else {
+                methodNo += 1
+            }            
+        }
+
+        var maxItem = Math.max(fileNo, folderNo)
+        maxItem = Math.max(maxItem, methodNo)
+
+        var mostQueriesOn = "file";
+        if ( maxItem == methodNo) {
+            mostQueriesOn = "method"
+        }
+        if ( maxItem == folderNo){
+            mostQueriesOn = "folder"
+        }
+
+        var result = {
+            noOfQueries: queries.length,
+            averageRating: averageRating,
+            texts: texts,
+            mostQueriesOn: mostQueriesOn,
+            fileNo: fileNo,
+            methodNo: methodNo,
+            folderNo: folderNo, 
+            ratings : ratings
+        }
+
+        return res.status(200).json(result);
+    } catch(e) {
+        return res.status(404).json("Something went wrong");
+    }
 
 }
+
 
 
 

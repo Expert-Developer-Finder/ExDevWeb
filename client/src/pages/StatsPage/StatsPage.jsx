@@ -1,16 +1,19 @@
-import { Container, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import useStyle from "./styles";
-import { qetQueriesOfARepo } from '../../api';
+import { Typography } from '@mui/material';
+import {getStats} from "../../api/index.js"
 
+import { PieChart, Pie, Sector } from 'recharts';
+import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import UserItem from './UserItem';
 
 const StatsPage = ({repo}) => {
     const classes = useStyle();
-    const [queries, setQueries] = useState(null);
-    const [avgScore, setAvgScore] = useState(null);
-    const [quotes, setQuotes] = useState(null);
+    const [stats, setStats] =  useState(null);
+    const [pieData, setPieData] = useState([])
+    const [barData, setBarData] = useState([])
 
-
+    const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042','#42ff68' ];
 
     const getDaysFromBeginning = ()=> {
         var startDate = new Date(repo.createdAt)
@@ -26,26 +29,65 @@ const StatsPage = ({repo}) => {
         const getQueries = async () => {
 
           try {
-            const data = await qetQueriesOfARepo({repoId: repo._id}); 
-            setQueries(data.data);
+            const data = await getStats({repoId: repo._id}); 
+            setStats(data.data);
 
-            var feedBackNo = 0;
-            var totalNo = 0;
-            var quotes = [];
-
-            for (var i  = 0 ; i < data.data.length; i++) {
-              var q = data.data[i];
-              if(q.feedbackGiven) {
-                feedBackNo += 1;
-                totalNo += q.feedbackNumber;
-                quotes.push( q.feedbackText)
-                
-              }
+            var no1 = 0;
+            var no2 = 0;
+            var no3 = 0;
+            var no4 = 0;
+            var no5 = 0;
+            for (var i in data.data.ratings) {
+              var rate = data.data.ratings[i];
+              if (rate == 1) no1 += 1;
+              if (rate == 2) no2 += 1;
+              if (rate == 3) no3 += 1;
+              if (rate == 4) no4 += 1;
+              if (rate == 5) no5 += 1;
             }
 
-            const avgNo = totalNo / feedBackNo;
-            setAvgScore( avgNo);
-            setQuotes(quotes);
+            var newPieData = [
+              {
+                "name": "1",
+                "value": no1
+              },
+              {
+                "name": "2",
+                "value": no2
+              },
+              {
+                "name": "3",
+                "value": no3
+              },
+              {
+                "name": "4",
+                "value": no4
+              },
+              {
+                "name": "5",
+                "value": no5
+              },
+            ]
+
+            setPieData(newPieData);
+
+            var newBarData = [
+              {
+                "name": "file",
+                "# of queries" : data.data.fileNo
+              },
+              {
+                "name": "folder",
+                "# of queries" : data.data.folderNo
+              },
+              {
+                "name": "method",
+                "# of queries" : data.data.methodNo
+              },
+            ]
+
+            setBarData(newBarData)
+
           } catch (error) {
             console.log(error);
           }
@@ -55,29 +97,92 @@ const StatsPage = ({repo}) => {
       }, []);
 
     return (
+      <div className={classes.container}>
+        <div className={classes.seperator}></div>
+          {stats == null? 
+          <Typography>Loading... </Typography>: 
+          <>
+            <Typography variant='h2'> You used ExDev {stats.noOfQueries} times in {getDaysFromBeginning()} days! </Typography>
+            <div className= {classes.row} >
+              <div className= {classes.pie}>
+                <Typography variant='h4'>Out of 5, on average, you rated ExDev {stats.averageRating}</Typography>
+                <div className= {classes.space}></div>
+
+                <Typography variant='h4'>Distribution of Ratings </Typography>
+                <ResponsiveContainer width="100%" height="100%">
+                <PieChart width={400} height={400}>
+                  <Pie
+                    data={pieData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="value"
+                  >
+                    {pieData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Legend />
+                </PieChart>
+               
+
+          
+
+                </ResponsiveContainer>
+               
+              </div>
+              <div className= {classes.bar}>
+                <Typography variant='h4' >The most queries are runned for getting help on {stats.mostQueriesOn} </Typography>
+                <div className= {classes.space}></div>
+                
+                <ResponsiveContainer width="100%" height="100%">
+
+                <BarChart width={150} height={40} data={barData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="# of queries" fill="#8884d8" />
+                </BarChart>
 
 
-        <Container className={classes.container} >
-            <Typography className={classes.left} variant='h4'>Your project has been using ExDev for {getDaysFromBeginning()} days</Typography>
-            <Typography className={classes.right} variant='h4'>{queries? queries.length: 0} times someone used ExDev to get help</Typography>
-            <Typography className={classes.left} variant='h4'>{avgScore ? "The average score you gave us is " + avgScore : "No one has given us a rating yet!"} </Typography>
-            {
-              quotes? 
-              <>
-                <Typography className={classes.center} variant='h4'>Some quotes from you</Typography>
-                {
-                  quotes.map(q=> <Typography className={classes.center}> <i>"{q}"</i> </Typography>)
-                }
-              </> : <></>
-            }
+                
+
+                </ResponsiveContainer>
+
+        
+               
+              </div>
+
+            </div>
+            <div className={classes.space}></div>
+            <Typography variant='h2'> Some quotes from you: </Typography>
+
+
+            { stats.texts.map(text =>
+              <UserItem 
+                name = {text.name} 
+                ppUrl={text.avatarUrl} 
+                text = {text.text} 
+                rate ={text.rate} 
+                createdAt ={text.createdAt} 
+              />) 
             
+            }
+          </>
+        
+        }
 
+        <div className={classes.footer}></div>
 
-
-
-        </Container>
+      </div>
 
   )
 }
 
 export default StatsPage
+
+

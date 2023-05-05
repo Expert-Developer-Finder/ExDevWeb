@@ -9,6 +9,7 @@ import {
   repoRouter,
   userRouter,
 } from "./routes/index.js";
+import nodemailer from "nodemailer";
 
 const app = express();
 dotenv.config();
@@ -26,6 +27,41 @@ app.use("/contact", contactRouter);
 app.use("/query", queryRouter);
 
 const PORT = process.env.PORT;
+
+app.post('/sendMail', (req, res) => {
+  const { toStr, subjectStr, textStr } = req.body;
+
+
+
+  // Configure mailer transporter
+  var transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true, // use SSL
+    auth: {
+        user: process.env.MAIL_ADDRESS,
+        pass: process.env.MAIL_PASS,
+    }
+  });
+
+  var mailOptions = {
+    from: process.env.MAIL_ADDRESS,
+    to: toStr,
+    subject: subjectStr,
+    text: textStr
+  };
+
+
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+
+  res.send().status(200).json("Mail sent");
+});
 
 mongoose
   .connect(process.env.CONNECTION_URL, {
