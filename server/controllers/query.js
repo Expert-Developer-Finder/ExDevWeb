@@ -5,11 +5,14 @@ import User from "../models/user.js";
 export const getRecommendations = async (req, res) => {
     const { source, path, userId, repoId } = req.body;
 
+    var methodSignature = null
+    if (source == "method") methodSignature = req.body.methodSignature
+
     try {
 
         console.log(req.body);
         
-        // graph manager den user leri al
+        // get experts from ExDevGraph
         var experts = await fetch(`${process.env.GRAPH_BASE_URL}/query/get-recommendations`, {
             method: "POST",
             body: JSON.stringify(
@@ -17,6 +20,7 @@ export const getRecommendations = async (req, res) => {
                 "source": source,
                 "path" : path,
                 "repoId" : repoId,
+                "methodSignature": methodSignature
               }
             ),
             headers: {
@@ -29,43 +33,41 @@ export const getRecommendations = async (req, res) => {
         console.log("Experts are: ");
         console.log(experts);
 
-        // o user lerin db deki karşılıklarını bul
-        // var users = [];
-
-
+        // Find the experts from the database or not
         var users =  [];
-
-
         for(var i = 0; i < experts.length; i++) {
             const expertFromDb = await User.findOne({githubUsername: experts[i].authorName});
 
             if (expertFromDb) {
+            // if (1==2) {
                 users.push({
                     "linked": true,
                     "data": expertFromDb,
+                    "commitCount": experts[i].commitCount ,
                     "commitScore": 0.5* experts[i].commitCount + 0.5* experts[i].recentCommitScore ,
                     "prScore":experts[i].prKnowAboutScore,
                 });
             } else {
+                console.log("User not in DB");
+
                 // the user is not found on our database
                 users.push({
                     "linked": false,
-                    "data": exp.data,
-                    "commitScore": experts[i].commitScore,
-                    "prScore":experts[i].prScore,
+                    "data": {authorName: experts[i].authorName, email: ""},
+                    "commitCount": experts[i].commitCount ,
+                    "commitScore":0.5* experts[i].commitCount + 0.5* experts[i].recentCommitScore ,
+                    "prScore":experts[i].prKnowAboutScore,
                 });
             }
             
         };
 
-        // console.log("Being returned: ");
         console.log(users);
 
-        // query ve result ını kaydet
+        // Save the results of the query
         await saveQuery(source, path, userId, repoId, users);
 
 
-        // user leri dön
         return res.status(200).json(users);
     } catch (error) {
         return res.status(400).json([]);
