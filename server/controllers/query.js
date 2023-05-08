@@ -38,26 +38,50 @@ export const getRecommendations = async (req, res) => {
         for(var i = 0; i < experts.length; i++) {
             const expertFromDb = await User.findOne({githubUsername: experts[i].authorName});
 
-            if (expertFromDb) {
-            // if (1==2) {
-                users.push({
-                    "linked": true,
-                    "data": expertFromDb,
-                    "commitCount": experts[i].commitCount ,
-                    "commitScore": 0.5* experts[i].commitCount + 0.5* experts[i].recentCommitScore ,
-                    "prScore":experts[i].prKnowAboutScore,
-                });
+             if (expertFromDb) {
+            //if (1==2) {
+                if (source == "method") {
+                    users.push({
+                        "linked": true,
+                        "data": expertFromDb,
+                        "creatorCount": experts[i].creatorCount ,
+                        "methodModifyScore": experts[i].methodKnowAboutScore ,
+                        "totalScore":experts[i].totalScore,
+                    });
+
+                } else {
+                    users.push({
+                        "linked": true,
+                        "data": expertFromDb,
+                        "commitCount": experts[i].commitCount ,
+                        "commitScore": 0.5* experts[i].commitCount + 0.5* experts[i].recentCommitScore ,
+                        "prScore":experts[i].prKnowAboutScore,
+                    });
+                }
             } else {
                 console.log("User not in DB");
 
                 // the user is not found on our database
-                users.push({
-                    "linked": false,
-                    "data": {authorName: experts[i].authorName, email: ""},
-                    "commitCount": experts[i].commitCount ,
-                    "commitScore":0.5* experts[i].commitCount + 0.5* experts[i].recentCommitScore ,
-                    "prScore":experts[i].prKnowAboutScore,
-                });
+                if (source == "method") {
+                    users.push({
+                        "linked": false,
+                        "data": {authorName: experts[i].authorName, email: ""},
+                        "creatorCount": experts[i].creatorCount ,
+                        "methodModifyScore": experts[i].methodKnowAboutScore ,
+                        "totalScore":experts[i].totalScore,
+                    });
+
+                } else {
+                    users.push({
+                        "linked": false,
+                        "data": {authorName: experts[i].authorName, email: ""},
+                        "commitCount": experts[i].commitCount ,
+                        "commitScore":0.5* experts[i].commitCount + 0.5* experts[i].recentCommitScore ,
+                        "prScore":experts[i].prKnowAboutScore,
+                    });
+
+                }
+                
             }
             
         };

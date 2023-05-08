@@ -105,7 +105,7 @@ const StatsPage = ({repo}) => {
             <Typography variant='h2'> You used ExDev {stats.noOfQueries} times in {getDaysFromBeginning()} days! </Typography>
             <div className= {classes.row} >
               <div className= {classes.pie}>
-                <Typography variant='h4'>Out of 5, on average, you rated ExDev {stats.averageRating}</Typography>
+                <Typography variant='h4'>Out of 5, on average, you rated ExDev {stats.averageRating.toPrecision(2)}</Typography>
                 <div className= {classes.space}></div>
 
                 <Typography variant='h4'>Distribution of Ratings </Typography>

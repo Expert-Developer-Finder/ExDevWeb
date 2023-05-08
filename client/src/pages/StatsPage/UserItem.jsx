@@ -26,7 +26,7 @@ const UserItem = ({ name, ppUrl, text , rate , createdAt }) => {
 
         <Typography> <i>{ formatDate() } </i></Typography>
       </div>
-      <Typography className={classes.ml} variant='h5'><i> "{text}"" </i></Typography>
+      <Typography className={classes.ml} variant='h5'><i> "{text}" </i></Typography>
       <Typography className={classes.ml}>{name} rated {rate}/5 </Typography>
       
     </div>
