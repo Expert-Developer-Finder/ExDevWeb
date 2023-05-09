@@ -38,8 +38,8 @@ export const getRecommendations = async (req, res) => {
         for(var i = 0; i < experts.length; i++) {
             const expertFromDb = await User.findOne({githubUsername: experts[i].authorName});
 
-             if (expertFromDb) {
-            //if (1==2) {
+            if (expertFromDb) {
+            // if (1==2) {
                 if (source == "method") {
                     users.push({
                         "linked": true,
@@ -56,6 +56,8 @@ export const getRecommendations = async (req, res) => {
                         "commitCount": experts[i].commitCount ,
                         "commitScore": 0.5* experts[i].commitCount + 0.5* experts[i].recentCommitScore ,
                         "prScore":experts[i].prKnowAboutScore,
+                        "totalScore":0.5* experts[i].commitCount + 0.5* experts[i].recentCommitScore  + experts[i].prKnowAboutScore,
+
                     });
                 }
             } else {
@@ -78,6 +80,7 @@ export const getRecommendations = async (req, res) => {
                         "commitCount": experts[i].commitCount ,
                         "commitScore":0.5* experts[i].commitCount + 0.5* experts[i].recentCommitScore ,
                         "prScore":experts[i].prKnowAboutScore,
+                        "totalScore":0.5* experts[i].commitCount + 0.5* experts[i].recentCommitScore  + experts[i].prKnowAboutScore,
                     });
 
                 }
