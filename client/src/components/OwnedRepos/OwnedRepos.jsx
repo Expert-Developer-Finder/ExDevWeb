@@ -2,6 +2,7 @@ import {  Container, Typography } from '@mui/material';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import OwnedRepoItem from './OwnedRepoItem/OwnedRepoItem';
+import Loader from '../../constants/Loader';
 
 
 const OwnedRepos = () => {
@@ -19,7 +20,7 @@ const OwnedRepos = () => {
                   <OwnedRepoItem key={repo._id} repo ={repo} />
                 )})
               }
-            </> :<>Loading</>
+            </> :<Loader/>
         }
          
 

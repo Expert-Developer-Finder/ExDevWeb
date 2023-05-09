@@ -2,7 +2,7 @@ import {  Container, Typography } from '@mui/material';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import JoinedRepoItem from './JoinedRepoItem/JoinedRepoItem';
-
+import Loader from "../../constants/Loader"
 
 const JoinedRepos = () => {
   const repos = useSelector((state)=>state.repos).joinedRepos.data;
@@ -20,7 +20,7 @@ const JoinedRepos = () => {
                   <JoinedRepoItem key={repo._id} repo ={repo} />
                 )})
               }
-            </> :<>Loading</>
+            </> : <Loader/>
         }
 
     </Container>

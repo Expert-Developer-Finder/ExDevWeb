@@ -9,6 +9,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import { RepoDetail, RepoJoinRequests,  RepoSettings } from '../../components';
 import StatsPage from '../StatsPage/StatsPage';
+import Loader from '../../constants/Loader';
 
 
 const Repo = () => {
@@ -51,7 +52,7 @@ const Repo = () => {
         <img  className={classes.img1} alt="A duck judging you"  src={require("../../assets/duck.png")} />
       </Container>:
 
-      !repo? <Typography>Loading...</Typography> : 
+      !repo? <Loader/>: 
         
       <Container className={classes.container}>
         <Container className={classes.appBar}>

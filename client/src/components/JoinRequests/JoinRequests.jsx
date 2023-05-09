@@ -1,12 +1,11 @@
 import React from 'react';
 import {  Container, Typography } from '@mui/material';
 import RequestItem from '../RequestItem/RequestItem';
+import Loader from '../../constants/Loader';
 
 const JoinRequests = () => {
   const user = JSON.parse(localStorage.getItem("profile")).result;
-  console.log(user);
   const requests = user.join_requests;
-  console.log(requests);
 
   return (
 <Container>
@@ -20,7 +19,7 @@ const JoinRequests = () => {
           <RequestItem key={request._id} request ={request} repoView={false} />
         )})
       }
-    </> :<>Loading...</>
+    </> :<Loader/>
 }
 
 </Container>  )

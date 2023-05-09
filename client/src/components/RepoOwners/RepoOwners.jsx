@@ -2,6 +2,8 @@ import { Typography, Container } from '@mui/material';
 import React, {useEffect, useState} from 'react'
 import MemberItem from "../MemberItem/MemberItem";
 import * as api from "../../api";
+import Loader from '../../constants/Loader';
+import { sleep } from '../../constants/helper';
 
 
 const RepoOwners = ({repo, isMember}) => {
@@ -12,7 +14,6 @@ const RepoOwners = ({repo, isMember}) => {
 
     const fcn = async ()  => {
       const {data} = await api.getRepoOwners(repo._id);
-
       console.log(data.repoOwners);
       setOwners(data.repoOwners);
     }
@@ -26,7 +27,7 @@ const RepoOwners = ({repo, isMember}) => {
     <Container>
 
       {
-        !owners ? <Typography>Loading...</Typography> :
+        !owners ? <Loader/>:
         owners.length == 0 ? <Typography>No owners</Typography> :
         <>
 

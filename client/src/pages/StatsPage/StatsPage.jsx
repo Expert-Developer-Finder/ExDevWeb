@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react'
 import useStyle from "./styles";
 import { Typography } from '@mui/material';
 import {getStats} from "../../api/index.js"
-
 import { PieChart, Pie, Sector } from 'recharts';
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import UserItem from './UserItem';
+import { sleep } from '../../constants/helper';
+import Loader from '../../constants/Loader';
 
 const StatsPage = ({repo}) => {
     const classes = useStyle();
@@ -23,13 +24,15 @@ const StatsPage = ({repo}) => {
         let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
         return TotalDays
     }
-  
+
+    
     useEffect( ()=> {
       
         const getQueries = async () => {
 
           try {
             const data = await getStats({repoId: repo._id}); 
+            await sleep(1500);
             setStats(data.data);
 
             var no1 = 0;
@@ -100,8 +103,10 @@ const StatsPage = ({repo}) => {
       <div className={classes.container}>
         <div className={classes.seperator}></div>
           {stats == null? 
-          <Typography>Loading... </Typography>: 
           <>
+            <Loader/>
+          </>
+          : <>
             <Typography variant='h2'> You used ExDev {stats.noOfQueries} times in {getDaysFromBeginning()} days! </Typography>
             <div className= {classes.row} >
               <div className= {classes.pie}>

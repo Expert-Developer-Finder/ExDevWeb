@@ -5,6 +5,7 @@ import {useDispatch} from "react-redux";
 import { getOwnedRepos, getJoinedRepos } from '../../actions/repos';
 import { JoinedRepos, OwnedRepos , JoinRequests} from '../../components';
 import useStyle from "./styles.js";
+import Loader from '../../constants/Loader';
 
 const Workspace = () => {
   const classes = useStyle();
@@ -21,7 +22,7 @@ const Workspace = () => {
   
   return (
    <>
-     { !user ? <>Loading</> : 
+     { !user ? <Loader/> : 
       <Container className= {classes.container} >
         <Typography variant='h3'>Welcome {user.name.split(" ")[0]} </Typography>
         <Divider className={classes.divider} />

@@ -2,16 +2,13 @@ import { Typography, Container } from '@mui/material';
 import React, {useEffect, useState} from 'react'
 import MemberItem from "../MemberItem/MemberItem";
 import * as api from "../../api";
+import Loader from '../../constants/Loader';
+import {sleep} from "../../constants/helper"
 
 
 const RepoMembers = ({repo, isMember}) => {
 
   const [members, setMembers ] = useState(null);
-
-
-  console.log("EGE:");
-  console.log(isMember);
-
 
   useEffect(() => {
 
@@ -29,7 +26,7 @@ const RepoMembers = ({repo, isMember}) => {
     <Container>
 
       {
-        !members ? <Typography>Loading...</Typography> :
+        !members ? <Loader/> :
         members.length == 0 ? <Typography>No members</Typography> :
         <>
 
