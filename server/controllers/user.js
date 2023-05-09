@@ -9,7 +9,19 @@ import { returnContacts } from "./contact.js";
 dotenv.config();
 
 export const signin = async (req, res) => {
-  
+  res.setHeader("Access-Control-Allow-Credentials", true);
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  // another common pattern
+  // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET,OPTIONS,PATCH,DELETE,POST,PUT"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
+  );
+
   const { email, password } = req.body;
   try {
     const existingUser = await User.findOne({ email });
@@ -57,25 +69,36 @@ const checkIfPasswordIsStrong = (pwd) => {
 };
 
 export const signup = async (req, res) => {
-  const { email, password, firstName, lastName, confirmPassword,
-     githubUsername, githubPAT, zoomPersonalRoom } = req.body;
+  const {
+    email,
+    password,
+    firstName,
+    lastName,
+    confirmPassword,
+    githubUsername,
+    githubPAT,
+    zoomPersonalRoom,
+  } = req.body;
 
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser)
       return res.status(400).json({ message: "User already exist!" });
 
-    const githubUser = await fetch(`https://api.github.com/users/${githubUsername}`).then(async res => {
-        if ( res.status == 404) {
-          return;
-        } else {
-          return await res.json();
-        }
+    const githubUser = await fetch(
+      `https://api.github.com/users/${githubUsername}`
+    ).then(async (res) => {
+      if (res.status == 404) {
+        return;
+      } else {
+        return await res.json();
       }
-    )
-    if(!githubUser ) 
-      return res.status(404).json({ message: "No user at GitHub could be found with the given GitHub username!" });
-
+    });
+    if (!githubUser)
+      return res.status(404).json({
+        message:
+          "No user at GitHub could be found with the given GitHub username!",
+      });
 
     // uncomment when you want to check for strong passwords
 
@@ -95,7 +118,7 @@ export const signup = async (req, res) => {
       avatarUrl: githubUser.avatar_url,
       githubUsername,
       githubPAT,
-      zoomPersonalRoom
+      zoomPersonalRoom,
     });
     const token = jwt.sign({ email: result.email, id: result._id }, "test", {
       expiresIn: "1h",
@@ -140,7 +163,6 @@ export const deleteAccount = async (req, res) => {
       }
     }
 
-
     const user = await User.findByIdAndDelete(userId);
     res.status(200).json("User deleted successfully");
   } catch (e) {
@@ -161,14 +183,14 @@ export const getOwnedRepos = async (req, res) => {
 
 export const getAllUsers = async (req, res) => {
   try {
-    User.find({}, function(err, users) {
+    User.find({}, function (err, users) {
       var userArr = [];
-  
-      users.forEach(function(user) {
+
+      users.forEach(function (user) {
         userArr.push(user);
       });
-  
-      res.send(userArr);  
+
+      res.send(userArr);
     });
   } catch (e) {
     console.log(e);
@@ -244,7 +266,7 @@ export const changePassword = async (req, res) => {
 };
 export const updateProfile = async (req, res) => {
   const { userId } = req.params;
-  const updatedUser = req.body
+  const updatedUser = req.body;
 
   try {
     await User.findByIdAndUpdate(updatedUser._id.valueOf(), updatedUser, {
@@ -336,7 +358,7 @@ export const demoteOwner = async (req, res) => {
 };
 
 export const getContacts = async (req, res) => {
-  const { userId, repoId } = req.body;;
+  const { userId, repoId } = req.body;
   var contacts = [];
   try {
     var contactList = await returnContacts({
@@ -347,12 +369,11 @@ export const getContacts = async (req, res) => {
       contacts.push(contactList[i]);
     }
 
-    res.status(200).json( contacts );
+    res.status(200).json(contacts);
   } catch (e) {
     res.status(500).json({ message: "Something went wrong!!" });
   }
 };
-
 
 export const getRepos = async (req, res) => {
   const { userId } = req.body;
@@ -361,12 +382,12 @@ export const getRepos = async (req, res) => {
   try {
     const user = await User.findById(userId);
     if (user == null) {
-      res.status(404).json( "User not found!" );
+      res.status(404).json("User not found!");
     }
     var reposIdsOfUser = [...user.joined_repos, ...user.owned_repos];
 
     var reposOfUser = [];
-    for(var i = 0; i <reposIdsOfUser.length ; i++){
+    for (var i = 0; i < reposIdsOfUser.length; i++) {
       var foundRepo = await Repo.findById(reposIdsOfUser[i]);
       if (foundRepo) {
         reposOfUser.push(foundRepo);
@@ -375,11 +396,8 @@ export const getRepos = async (req, res) => {
 
     console.log(reposOfUser);
 
-    res.status(200).json( reposOfUser );
-    
+    res.status(200).json(reposOfUser);
   } catch (error) {
     res.status(500).json({ message: "Something went wrong!!" });
-    
   }
-  
 };
