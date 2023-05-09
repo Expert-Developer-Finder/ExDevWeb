@@ -705,10 +705,6 @@ export const updateWeights = async (req, res) => {
 
 export const getWeights = async (req, res) => {
   const  {repoId } = req.body;
-
-  console.log("hi ege");
-  console.log(repoId);
-
   try {
     // find the repository from its repoOwner/repoName relation
     const repo = await Repo.findById(repoId)

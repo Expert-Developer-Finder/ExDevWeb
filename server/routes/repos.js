@@ -27,6 +27,8 @@ const repoRouter = express.Router();
 
 repoRouter.post("/create", createRepo);
 repoRouter.post("/join", joinRepo);
+repoRouter.post("/get-weights", getWeights);
+
 repoRouter.post(`/:repoId`, checkAndGetRepoWithId);
 repoRouter.post(`/:repoId`, checkAndGetRepoWithId);
 repoRouter.post(`/:repoId/change-shared-pass`, changeSharedPass);
@@ -44,7 +46,6 @@ repoRouter.get("/:userId/joined-repos", getJoinedRepos);
 repoRouter.post("/:repoOwner/:repoName/branches", getReposBranches);
 repoRouter.post("/:repoOwner/:repoName/update-status", updateStatus);
 repoRouter.post("/:repoOwner/:repoName/set-weights", updateWeights);
-repoRouter.post("/get-weights", getWeights);
 
 
 

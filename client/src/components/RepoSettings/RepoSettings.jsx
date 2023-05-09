@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Grid, Button, TextField, Typography, Container, Divider} from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import {  useParams } from "react-router-dom";
@@ -9,6 +9,7 @@ import { changeSharedPass } from "../../actions/repos";
 import { Alert, AlertTitle } from "@mui/material";
 import { CLEAR_ERROR } from "../../constants/actionTypes";
 import * as api from "../../api";
+import Loader from "../../constants/Loader";
 
 
 const passwordChangeInitialState = {
@@ -25,10 +26,10 @@ const RepoSettings = ({ repo, setSelectedRoute , isMember }) => {
   const { error, errorMessage } = useSelector((state) => state.repos);
 
   const [passwordForm, setPasswordForm] = useState(passwordChangeInitialState);
-  const [devNo, setDevNo] = useState(5);
-  const [wCommit, setWCommit] = useState(1);
-  const [wPR, setWPR] = useState(1);
-  const [wRecency, setWRecency] = useState(0.5);
+  const [devNo, setDevNo] = useState(null);
+  const [wCommit, setWCommit] = useState(null);
+  const [wPR, setWPR] = useState(null);
+  const [wRecency, setWRecency] = useState(null);
   const handlePasswordChange = (e) => {
     setPasswordForm({ ...passwordForm, [e.target.name]: e.target.value });
   };
@@ -39,16 +40,23 @@ const RepoSettings = ({ repo, setSelectedRoute , isMember }) => {
 
   };
 
+  useEffect(()=> {
+    
+    const fcn = async ()  => {
+      const res = await api.getWeights({"repoId": repo._id})
+      const oldWeights = res.data;
+      setDevNo(oldWeights.devNo);
+      setWCommit(oldWeights.weightCommit);
+      setWRecency(oldWeights.weightRecency);
+      setWPR(oldWeights.weightPR);
+    }
+
+    fcn();
+  
+  }, [])
+
   const saveChanges = async()=> {
-    console.log("clicked");
-    console.log(devNo);
-    console.log(wCommit);
-    console.log(wPR);
-    console.log(wRecency);
-
-    const res = await api.getWeights(repo._id)
-    console.log(res);
-
+    
     const newWeights = {
       "repoId": repo._id,
       "devNo": devNo,
@@ -58,7 +66,8 @@ const RepoSettings = ({ repo, setSelectedRoute , isMember }) => {
     }
 
     const {data} = await api.updateWeights( repo.ownerName, repo.repoName, newWeights)
-    console.log(data);
+
+    alert("Saved Changes");
 
   }
 
@@ -71,9 +80,11 @@ const RepoSettings = ({ repo, setSelectedRoute , isMember }) => {
     </>
   }
 
+
   return (
     <Container className={classes.container}>
       <Typography variant="h3">Settings</Typography>
+      
 
       <Grid
         container
