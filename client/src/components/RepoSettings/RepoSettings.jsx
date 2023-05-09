@@ -33,6 +33,11 @@ const RepoSettings = ({ repo, setSelectedRoute , isMember }) => {
 
   };
 
+  const saveChanges = ()=> {
+    console.log("clicked");
+
+  }
+
   if (isMember) {
     return <>
       <Container>
@@ -53,14 +58,14 @@ const RepoSettings = ({ repo, setSelectedRoute , isMember }) => {
       >
         <Grid item xs={12}>
           <Typography variant="h5">
-            How many developers should be recommended after the algroithm is
-            runned?
+            How many developers should be recommended after the algorithm is
+            ran?
           </Typography>
         </Grid>
         <Grid className={classes.mt} item xs={4}>
           <NumberPicker
             className={classes.picker}
-            defaultValue={1}
+            defaultValue={5}
             step={1}
             max={5}
             min={1}
@@ -100,26 +105,6 @@ const RepoSettings = ({ repo, setSelectedRoute , isMember }) => {
         flexDirection="row"
       >
         <Grid item xs={7} md={4}>
-          <Typography>Testers who tested the code part</Typography>
-        </Grid>
-        <Grid item xs={4}>
-          <NumberPicker
-            className={classes.picker}
-            defaultValue={1}
-            step={1}
-            max={5}
-            min={1}
-          />
-        </Grid>
-      </Grid>
-
-      <Grid
-        container
-        className={classes.mt}
-        alignItems="center"
-        flexDirection="row"
-      >
-        <Grid item xs={7} md={4}>
           <Typography>Reviewers of pull requests of that code part</Typography>
         </Grid>
         <Grid item xs={4}>
@@ -133,6 +118,14 @@ const RepoSettings = ({ repo, setSelectedRoute , isMember }) => {
         </Grid>
       </Grid>
 
+
+      <Divider className={classes.divider} />
+      <Typography variant="h5">
+        To what extend, the recency is important? For example, 
+        to what extend do you think that someone who committed 
+        one year ago is less knowledgeable than someone who committed one year ago? 
+      </Typography>
+
       <Grid
         container
         className={classes.mt}
@@ -140,25 +133,23 @@ const RepoSettings = ({ repo, setSelectedRoute , isMember }) => {
         flexDirection="row"
       >
         <Grid item xs={7} md={4}>
-          <Typography>
-            Developers who opened issues about the code part
-          </Typography>
+          <Typography>Developers who modified the code part</Typography>
         </Grid>
         <Grid item xs={4}>
           <NumberPicker
             className={classes.picker}
-            defaultValue={1}
-            step={1}
-            max={5}
-            min={1}
+            defaultValue={0.5}
+            step={0.1}
+            max={1}
+            min={0}
           />
         </Grid>
       </Grid>
-
       <Button
         className={classes.mt}
         fullWidth
         variant="contained"
+        onClick={saveChanges}
         color="primary"
       >
         Save
