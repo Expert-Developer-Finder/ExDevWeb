@@ -15,6 +15,10 @@ const app = express();
 dotenv.config();
 app.use(express.json());
 
+app.get('/hw', (req, res) => {
+  res.send('Hello World!')
+})
+
 
 
 app.use(bodyParser.json({ limit: "30mb", extended: "true" }));
