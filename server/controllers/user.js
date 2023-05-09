@@ -9,7 +9,18 @@ import { returnContacts } from "./contact.js";
 dotenv.config();
 
 export const signin = async (req, res) => {
+  res.setHeader("Access-Control-Allow-Credentials", true);
   res.setHeader("Access-Control-Allow-Origin", "*");
+  // another common pattern
+  // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET,OPTIONS,PATCH,DELETE,POST,PUT"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
+  );
 
   const { email, password } = req.body;
   try {
@@ -84,12 +95,10 @@ export const signup = async (req, res) => {
       }
     });
     if (!githubUser)
-      return res
-        .status(404)
-        .json({
-          message:
-            "No user at GitHub could be found with the given GitHub username!",
-        });
+      return res.status(404).json({
+        message:
+          "No user at GitHub could be found with the given GitHub username!",
+      });
 
     // uncomment when you want to check for strong passwords
 

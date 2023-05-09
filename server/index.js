@@ -15,11 +15,12 @@ const app = express();
 dotenv.config();
 app.use(express.json());
 
+var cors = require("cors");
+
 app.use(bodyParser.json({ limit: "30mb", extended: "true" }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: "true" }));
 app.use(bodyParser.json()); // for parsing application/json
 app.use(cors());
-
 
 app.use("/user", userRouter);
 app.use("/repos", repoRouter);
@@ -28,35 +29,32 @@ app.use("/query", queryRouter);
 
 const PORT = process.env.PORT;
 
-app.post('/sendMail', (req, res) => {
+app.post("/sendMail", (req, res) => {
   const { toStr, subjectStr, textStr } = req.body;
-
-
 
   // Configure mailer transporter
   var transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
+    host: "smtp.gmail.com",
     port: 465,
     secure: true, // use SSL
     auth: {
-        user: process.env.MAIL_ADDRESS,
-        pass: process.env.MAIL_PASS,
-    }
+      user: process.env.MAIL_ADDRESS,
+      pass: process.env.MAIL_PASS,
+    },
   });
 
   var mailOptions = {
     from: process.env.MAIL_ADDRESS,
     to: toStr,
     subject: subjectStr,
-    text: textStr
+    text: textStr,
   };
 
-
-  transporter.sendMail(mailOptions, function(error, info){
+  transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
       console.log(error);
     } else {
-      console.log('Email sent: ' + info.response);
+      console.log("Email sent: " + info.response);
     }
   });
 
