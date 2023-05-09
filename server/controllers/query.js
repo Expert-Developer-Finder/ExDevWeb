@@ -56,6 +56,7 @@ export const getRecommendations = async (req, res) => {
                         "commitCount": experts[i].commitCount ,
                         "commitScore": 0.5* experts[i].commitCount + 0.5* experts[i].recentCommitScore ,
                         "prScore":experts[i].prKnowAboutScore,
+                        "reviewScore": experts[i].reviewKnowAboutScore,
                         "totalScore":0.5* experts[i].commitCount + 0.5* experts[i].recentCommitScore  + experts[i].prKnowAboutScore,
 
                     });
@@ -80,6 +81,7 @@ export const getRecommendations = async (req, res) => {
                         "commitCount": experts[i].commitCount ,
                         "commitScore":0.5* experts[i].commitCount + 0.5* experts[i].recentCommitScore ,
                         "prScore":experts[i].prKnowAboutScore,
+                        "reviewScore": experts[i].reviewKnowAboutScore,
                         "totalScore":0.5* experts[i].commitCount + 0.5* experts[i].recentCommitScore  + experts[i].prKnowAboutScore,
                     });
 
