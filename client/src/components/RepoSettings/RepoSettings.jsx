@@ -46,6 +46,9 @@ const RepoSettings = ({ repo, setSelectedRoute , isMember }) => {
     console.log(wPR);
     console.log(wRecency);
 
+    const res = await api.getWeights(repo._id)
+    console.log(res);
+
     const newWeights = {
       "repoId": repo._id,
       "devNo": devNo,
@@ -54,7 +57,7 @@ const RepoSettings = ({ repo, setSelectedRoute , isMember }) => {
       "weightRecency": wRecency
     }
 
-    const {data} = await api.updateWeights( newWeights)
+    const {data} = await api.updateWeights( repo.ownerName, repo.repoName, newWeights)
     console.log(data);
 
   }

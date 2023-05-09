@@ -683,44 +683,46 @@ const sendMail = (toStr , subjectStr, textStr) => {
 }
 
 export const updateWeights = async (req, res) => {
-  const  {repoId, devNo} = req.body;
+  const  {weightCommit, weightPR, weightRecency, repoId, devNo} = req.body;
 
-  console.log(req.body);
+  try {
+    // find the repository from its repoOwner/repoName relation
+    const repo = await Repo.findById(repoId)
+    
+    repo.weightCommit = weightCommit;
+    repo.weightPR = weightPR;
+    repo.weightRecency = weightRecency;
+    repo.devNo = devNo;
+
+    await Repo.findByIdAndUpdate(repoId, repo, { new: true });
+    
+    return res.status(200).json("Weights updated")
+  } catch (error) {
+    return res.status(error.status).json({"message": error.message})
+  }
+
+};
+
+export const getWeights = async (req, res) => {
+  const  {repoId } = req.body;
+
+  console.log("hi ege");
   console.log(repoId);
-  console.log(devNo);
 
-  return res.status(200).json("ok")
+  try {
+    // find the repository from its repoOwner/repoName relation
+    const repo = await Repo.findById(repoId)
 
-  // try {
-  //   // find the repository from its repoOwner/repoName relation
-  //   const repo = await Repo.findOne({ ownerName: repoOwner, repoName });
-  //   const repoId = repo._id.toString();
-  //   const repoOwnerIds = repo.repoOwners;
+    const weights = {
+      "weightCommit" :  repo.weightCommit,
+      "weightPR": repo.weightPR ,
+      "weightRecency": repo.weightRecency,
+      "devNo": repo.devNo
+    }
 
-    
-  //   if (repo.status == "creating" && newStatus == "ready") {
-  //     // if update from creating to ready, we need to inform the repository owners
-  //     for (var i = 0; i < repoOwnerIds.length; i++){
-  //       const ownerId = repoOwnerIds[i];
-  //       const owner = await User.findById(ownerId);
-  //       var ownerEmail = owner.email;
-  
-  //       var textStr = "Dear " +  owner.name + ",\n"
-  //       textStr = textStr + "Your repository of " + repoOwner + "/" + repoName + " is ready to operate. Now, you can use our VS Code extension to start getting help as well as other members of your repository!\n"     
-  //       textStr = textStr + "Best Wishes,\nExpert Developer Finder Team"
-  
-  //       sendMail( ownerEmail, "ExDev: Your repository is ready!", textStr)
-  //     }
-
-  //   }
-
-  //   // Finally, actually update the status of the repository
-  //   repo.status = newStatus
-  //   await Repo.findByIdAndUpdate(repoId, repo, { new: true });
-    
-  //   return res.status(200).json("Ok")
-  // } catch (error) {
-  //   return res.status(error.status).json({"message": error.message})
-  // }
+    return res.status(200).json(weights)
+  } catch (error) {
+    return res.status(error.status).json({"message": error.message})
+  }
 
 };

@@ -19,7 +19,8 @@ import {
   getAllRepos,
   getReposBranches,
   updateStatus,
-  updateWeights
+  updateWeights,
+  getWeights
 } from "../controllers/repos.js";
 
 const repoRouter = express.Router();
@@ -43,6 +44,8 @@ repoRouter.get("/:userId/joined-repos", getJoinedRepos);
 repoRouter.post("/:repoOwner/:repoName/branches", getReposBranches);
 repoRouter.post("/:repoOwner/:repoName/update-status", updateStatus);
 repoRouter.post("/:repoOwner/:repoName/set-weights", updateWeights);
+repoRouter.post("/get-weights", getWeights);
+
 
 
 

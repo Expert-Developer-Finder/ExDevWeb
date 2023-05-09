@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = axios.create({baseURL:"http://localhost:5000"});
+const API = axios.create({baseURL:"https://ex-dev-web-lhev.vercel.app"});
 
 API.interceptors.request.use((req)=> {
     if(localStorage.getItem("profile") ){
@@ -34,6 +34,7 @@ export const getQueriesOfARepo =(repoId) => API.post(`/query/getWithRepoId`, rep
 export const getStats =(repoId) => API.post(`/query/getStats`, repoId);
 export const getBranches =(repoOwner, repoName, token) => API.post(`/repos/${repoOwner}/${repoName}/branches`, token);
 export const updateWeights =(repoOwner, repoName, weights) => API.post(`/repos/${repoOwner}/${repoName}/set-weights`, weights);
+export const getWeights =( repoId) => API.post(`/repos/get-weights`, repoId);
 
 
 

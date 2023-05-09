@@ -14,6 +14,10 @@ const repoSchema = mongoose.Schema({
    status: {type:String, default: "creating"},
    hasSlack: {type: String, required: true},
    slackURL: {type: String, default: ""},
+   weightCommit: {type:Number, default: 1},
+   weightPR: {type:Number, default: 1},
+   weightRecency: {type:Number, default: 0.5},
+   devNo: {type:Number, default: 3},
    join_requests: {type: [{
       userId : {type: String, required: true},
       userName : {type: String, required: true},
