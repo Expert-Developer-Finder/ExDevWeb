@@ -33,6 +33,7 @@ export const checkAndGetRepoWithId =(repoId, userId) => API.post(`/repos/${repoI
 export const getQueriesOfARepo =(repoId) => API.post(`/query/getWithRepoId`, repoId);
 export const getStats =(repoId) => API.post(`/query/getStats`, repoId);
 export const getBranches =(repoOwner, repoName, token) => API.post(`/repos/${repoOwner}/${repoName}/branches`, token);
+export const updateWeights =(repoOwner, repoName, weights) => API.post(`/repos/${repoOwner}/${repoName}/set-weights`, weights);
 
 
 

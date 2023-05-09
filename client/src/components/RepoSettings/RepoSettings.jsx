@@ -8,6 +8,8 @@ import NumberPicker from "react-widgets/NumberPicker";
 import { changeSharedPass } from "../../actions/repos";
 import { Alert, AlertTitle } from "@mui/material";
 import { CLEAR_ERROR } from "../../constants/actionTypes";
+import * as api from "../../api";
+
 
 const passwordChangeInitialState = {
   oldPassword: "",
@@ -23,6 +25,10 @@ const RepoSettings = ({ repo, setSelectedRoute , isMember }) => {
   const { error, errorMessage } = useSelector((state) => state.repos);
 
   const [passwordForm, setPasswordForm] = useState(passwordChangeInitialState);
+  const [devNo, setDevNo] = useState(5);
+  const [wCommit, setWCommit] = useState(1);
+  const [wPR, setWPR] = useState(1);
+  const [wRecency, setWRecency] = useState(0.5);
   const handlePasswordChange = (e) => {
     setPasswordForm({ ...passwordForm, [e.target.name]: e.target.value });
   };
@@ -33,10 +39,26 @@ const RepoSettings = ({ repo, setSelectedRoute , isMember }) => {
 
   };
 
-  const saveChanges = ()=> {
+  const saveChanges = async()=> {
     console.log("clicked");
+    console.log(devNo);
+    console.log(wCommit);
+    console.log(wPR);
+    console.log(wRecency);
+
+    const newWeights = {
+      "repoId": repo._id,
+      "devNo": devNo,
+      "weightCommit": wCommit,
+      "weightPR": wPR,
+      "weightRecency": wRecency
+    }
+
+    const {data} = await api.updateWeights( newWeights)
+    console.log(data);
 
   }
+
 
   if (isMember) {
     return <>
@@ -65,7 +87,8 @@ const RepoSettings = ({ repo, setSelectedRoute , isMember }) => {
         <Grid className={classes.mt} item xs={4}>
           <NumberPicker
             className={classes.picker}
-            defaultValue={5}
+            value={devNo} 
+            onChange={(value)=>setDevNo(value)}
             step={1}
             max={5}
             min={1}
@@ -90,7 +113,8 @@ const RepoSettings = ({ repo, setSelectedRoute , isMember }) => {
         <Grid item xs={4}>
           <NumberPicker
             className={classes.picker}
-            defaultValue={1}
+            value={wCommit} 
+            onChange={(value)=>setWCommit(value)}
             step={1}
             max={5}
             min={1}
@@ -110,7 +134,8 @@ const RepoSettings = ({ repo, setSelectedRoute , isMember }) => {
         <Grid item xs={4}>
           <NumberPicker
             className={classes.picker}
-            defaultValue={1}
+            value={wPR} 
+            onChange={(value)=>setWPR(value)}
             step={1}
             max={5}
             min={1}
@@ -138,7 +163,8 @@ const RepoSettings = ({ repo, setSelectedRoute , isMember }) => {
         <Grid item xs={4}>
           <NumberPicker
             className={classes.picker}
-            defaultValue={0.5}
+            value={wRecency} 
+            onChange={(value)=>setWRecency(value)}
             step={0.1}
             max={1}
             min={0}
