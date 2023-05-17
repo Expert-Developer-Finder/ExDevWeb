@@ -320,10 +320,17 @@ export const joinRepo = async (req, res) => {
 };
 
 export const getRepo = async (req, res) => {
+
   const repo = await Repo.findById(req.params.id)
     .then((repo) => res.json(repo))
     .catch((error) => res.json(error));
 };
+export const getRepoName = async (req, res) => {
+    const repo = await Repo.findById(req.params.id)    
+    const response = {"owner":repo.ownerName, "name": repo.repoName }
+
+    return res.json(response);
+  };
 
 export const getOwnedRepos = async (req, res) => {
   const { userId } = req.params;

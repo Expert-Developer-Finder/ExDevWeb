@@ -382,7 +382,7 @@ export const getRepos = async (req, res) => {
   try {
     const user = await User.findById(userId);
     if (user == null) {
-      res.status(404).json("User not found!");
+      return res.status(404).json("User not found!");
     }
     var reposIdsOfUser = [...user.joined_repos, ...user.owned_repos];
 

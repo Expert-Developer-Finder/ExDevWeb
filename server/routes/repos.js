@@ -18,6 +18,7 @@ import {
   getRandomX,
   getAllRepos,
   getReposBranches,
+  getRepoName,
   updateStatus,
   updateWeights,
   getWeights
@@ -51,10 +52,11 @@ repoRouter.post("/:repoOwner/:repoName/set-weights", updateWeights);
 
 
 repoRouter.get("/all", getAllRepos);
-
 repoRouter.put("/add-member", addMember);
 
 repoRouter.put("/add-repo-owner", addRepoOwner);
+repoRouter.get("/name/:id", getRepoName);
+
 repoRouter.get("/:id", getRepo);
 
 export default repoRouter;

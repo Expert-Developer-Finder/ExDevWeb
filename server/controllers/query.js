@@ -1,5 +1,7 @@
 import Query from "../models/query.js";
 import User from "../models/user.js";
+import Repo from "../models/repo.js";
+
 
 
 export const getRecommendations = async (req, res) => {
@@ -57,7 +59,7 @@ export const getRecommendations = async (req, res) => {
                         "commitScore": 0.5* experts[i].commitCount + 0.5* experts[i].recentCommitScore ,
                         "prScore":experts[i].prKnowAboutScore,
                         "reviewScore": experts[i].reviewKnowAboutScore,
-                        "totalScore":0.5* experts[i].commitCount + 0.5* experts[i].recentCommitScore  + experts[i].prKnowAboutScore,
+                        "totalScore": experts[i].totalScore
 
                     });
                 }
@@ -82,7 +84,7 @@ export const getRecommendations = async (req, res) => {
                         "commitScore":0.5* experts[i].commitCount + 0.5* experts[i].recentCommitScore ,
                         "prScore":experts[i].prKnowAboutScore,
                         "reviewScore": experts[i].reviewKnowAboutScore,
-                        "totalScore":0.5* experts[i].commitCount + 0.5* experts[i].recentCommitScore  + experts[i].prKnowAboutScore,
+                        "totalScore":experts[i].totalScore,
                     });
 
                 }
@@ -91,7 +93,8 @@ export const getRecommendations = async (req, res) => {
             
         };
 
-        console.log(users);
+        const repo = await Repo.findById(repoId)
+        users = users.slice(0,repo.devNo)
 
         // Save the results of the query
         await saveQuery(source, path, userId, repoId, users);
