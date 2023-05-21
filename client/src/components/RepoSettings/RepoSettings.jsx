@@ -172,7 +172,7 @@ const RepoSettings = ({ repo, setSelectedRoute , isMember }) => {
         flexDirection="row"
       >
         <Grid item xs={7} md={4}>
-          <Typography>Developers who modified the code part</Typography>
+          <Typography>Enter a number between 0 and 1 (0 means don't care about the recency at all)</Typography>
         </Grid>
         <Grid item xs={4}>
           <NumberPicker

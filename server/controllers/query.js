@@ -13,6 +13,8 @@ export const getRecommendations = async (req, res) => {
     try {
 
         console.log(req.body);
+
+        var repository = await Repo.findById(repoId);
         
         // get experts from ExDevGraph
         var experts = await fetch(`${process.env.GRAPH_BASE_URL}/query/get-recommendations`, {
@@ -22,7 +24,8 @@ export const getRecommendations = async (req, res) => {
                 "source": source,
                 "path" : path,
                 "repoId" : repoId,
-                "methodSignature": methodSignature
+                "methodSignature": methodSignature,
+                "repo": repository,
               }
             ),
             headers: {
@@ -36,71 +39,29 @@ export const getRecommendations = async (req, res) => {
         console.log(experts);
 
         // Find the experts from the database or not
-        var users =  [];
+       
         for(var i = 0; i < experts.length; i++) {
             const expertFromDb = await User.findOne({githubUsername: experts[i].authorName});
 
             if (expertFromDb) {
             // if (1==2) {
-                if (source == "method") {
-                    users.push({
-                        "linked": true,
-                        "data": expertFromDb,
-                        "creatorCount": experts[i].creatorCount ,
-                        "methodModifyScore": experts[i].methodKnowAboutScore ,
-                        "totalScore":experts[i].totalScore,
-                    });
-
-                } else {
-                    users.push({
-                        "linked": true,
-                        "data": expertFromDb,
-                        "commitCount": experts[i].commitCount ,
-                        "commitScore": 0.5* experts[i].commitCount + 0.5* experts[i].recentCommitScore ,
-                        "prScore":experts[i].prKnowAboutScore,
-                        "reviewScore": experts[i].reviewKnowAboutScore,
-                        "totalScore": experts[i].totalScore
-
-                    });
-                }
+               experts[i].linked = true;
+               experts[i].data = expertFromDb;
             } else {
-                console.log("User not in DB");
-
                 // the user is not found on our database
-                if (source == "method") {
-                    users.push({
-                        "linked": false,
-                        "data": {authorName: experts[i].authorName, email: ""},
-                        "creatorCount": experts[i].creatorCount ,
-                        "methodModifyScore": experts[i].methodKnowAboutScore ,
-                        "totalScore":experts[i].totalScore,
-                    });
-
-                } else {
-                    users.push({
-                        "linked": false,
-                        "data": {authorName: experts[i].authorName, email: ""},
-                        "commitCount": experts[i].commitCount ,
-                        "commitScore":0.5* experts[i].commitCount + 0.5* experts[i].recentCommitScore ,
-                        "prScore":experts[i].prKnowAboutScore,
-                        "reviewScore": experts[i].reviewKnowAboutScore,
-                        "totalScore":experts[i].totalScore,
-                    });
-
-                }
-                
+                console.log("User not in DB");
+                experts[i].linked = false;
+                experts[i].data = {name: experts[i].authorName, email:  experts[i].email, zoomPersonalRoom: null, slackUsernames:null};   
             }
             
         };
 
-        const repo = await Repo.findById(repoId)
-        users = users.slice(0,repo.devNo)
+        console.log(experts);
 
         // Save the results of the query
-        await saveQuery(source, path, userId, repoId, users);
+        await saveQuery(source, path, userId, repoId, experts);
 
-
-        return res.status(200).json(users);
+        return res.status(200).json(experts);
     } catch (error) {
         return res.status(400).json([]);
         

@@ -80,6 +80,18 @@ export const createRepo = async (req, res) => {
   }
 
 
+  let githubRepoCreatedAt= await fetch(`https://api.github.com/repos/${ownerName}/${repoName}`)
+  .then(response => response.json())
+  .then(data => {
+    const firstCommitDate = data.created_at
+    return Date.parse(firstCommitDate);
+  })
+  .catch(error => console.error(error));
+
+  console.log(githubRepoCreatedAt);
+
+
+
   // Create the repository, add the creator as a member and repository owner
   const newRepo = new Repo({
     sharedPass: hashedPassword,
@@ -90,6 +102,7 @@ export const createRepo = async (req, res) => {
     branch,
     hasSlack,
     slackURL,
+    githubRepoCreatedAt,
     createdAt: new Date().toISOString(),
   });
 

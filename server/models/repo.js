@@ -6,6 +6,7 @@ const repoSchema = mongoose.Schema({
    repoName : {type: String, required: true},
    repoURL : {type: String, required: true},
    createdAt: {type: Date, default: new Date()},
+   githubRepoCreatedAt:  {type: Date, required: true},
    creator: {type: String, require: true},
    repoOwners: { type: [String],default: []},
    members: { type: [String],default: []},
