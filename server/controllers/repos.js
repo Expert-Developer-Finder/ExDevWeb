@@ -71,6 +71,8 @@ export const createRepo = async (req, res) => {
     };
 
     const checkApiRes2 = await fetch(checkAPIUrl, config); 
+    console.log("la bu nası atıyo");
+    console.log(checkApiRes2);
 
     if (checkApiRes2.status != 200) {
       return res
@@ -80,17 +82,24 @@ export const createRepo = async (req, res) => {
   }
 
 
-  let githubRepoCreatedAt= await fetch(`https://api.github.com/repos/${ownerName}/${repoName}`)
-  .then(response => response.json())
+  let githubRepoCreatedAt= await fetch(`https://api.github.com/repos/${ownerName}/${repoName}`, 
+  {
+    method: 'GET',
+    headers: { "Authorization": `Bearer ${creator.githubPAT}` },
+  })
+  .then(response => {
+    var inJson = response.json()
+    return inJson
+  })
   .then(data => {
     const firstCommitDate = data.created_at
+    console.log( `The first commit date of the repo is ${firstCommitDate}`);
     return Date.parse(firstCommitDate);
   })
-  .catch(error => console.error(error));
-
-  console.log(githubRepoCreatedAt);
+  .catch(error => console.log(error));
 
 
+  console.log("GitHub repo crated at: "+  githubRepoCreatedAt);
 
   // Create the repository, add the creator as a member and repository owner
   const newRepo = new Repo({
@@ -171,6 +180,8 @@ export const createRepo = async (req, res) => {
           "Content-type": "application/json; charset=UTF-8"
       }
     }) 
+
+    console.log(`${process.env.GRAPH_BASE_URL}/graph/create was sent`);
     res.status(201).json(newRepo);
   } catch (error) {
     res.status(409).json({ message: error.message });
